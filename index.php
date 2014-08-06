@@ -10,8 +10,10 @@ and open the template in the editor.
         <title></title>
     </head>
     <body>
+        novo
         <?php
         // put your code here
         ?>
+        puxa vida
     </body>
 </html>
