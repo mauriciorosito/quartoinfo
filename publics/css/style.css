@@ -1,0 +1,61 @@
+body{
+	background-color: #F8F8FF;
+}
+.tabela-teste{
+	border: 1px solid black;
+	border-radius: 6px;
+}
+
+th{
+	color: #0000CD;
+}
+
+a:visited{
+	color: #4169E1;
+}
+a:link{
+	color: #4169E1;
+}
+#palavra{
+	float:left;
+	width:25%;
+	margin-left:23px;
+
+}
+
+#data{
+
+	width:25%;
+	margin-left:230px;
+
+}
+#tipomaterial{
+	
+	width:25%;
+	margin-left:455px;
+	margin-top:-74px;
+
+}
+
+#botaopesquisar{
+	margin-left:46%;
+	margin-bottom: 10px;
+
+
+}
+
+#pesquisa{
+	padding:15;
+	border-radius:10px;
+	-moz-border-radius:10px;
+	-webkit-border-radius: 10px;
+	width:60%;
+	border:1px solid grey;
+	margin-left:250px;
+}
+
+.corTabela th{
+	background-color: #C6E081;
+	color: white;
+	
+}
