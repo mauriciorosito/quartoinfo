@@ -10,7 +10,7 @@ and open the template in the editor.
         <title></title>
     </head>
     <body>
-        novo online
+        novo online mesmo
         <?php
         // put your code here
         ?>
