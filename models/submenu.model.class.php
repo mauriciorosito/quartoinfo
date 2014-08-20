@@ -2,53 +2,49 @@
 
 class subMenu{
     public $idSubMenu;
-    public $titulo;
-    public $tipo;
-    public $descricao;
+    public $title;
+    public $type;
+    public $description;
     public $idMenu;
     
-public function getIdSubMenu() {
-return $this->idSubMenu;
-}
+    public function getIdSubMenu() {
+        return $this->idSubMenu;
+    }
 
-public function getTitulo() {
-return $this->titulo;
-}
+    public function getTitle() {
+        return $this->title;
+    }
 
-public function getTipo() {
-return $this->tipo;
-}
+    public function getType() {
+        return $this->type;
+    }
 
-public function getDescricao() {
-return $this->descricao;
-}
+    public function getDescription() {
+        return $this->description;
+    }
 
-public function getIdMenu() {
-return $this->idMenu;
-}
+    public function getIdMenu() {
+        return $this->idMenu;
+    }
 
-public function setIdSubMenu($idSubMenu) {
-$this->idSubMenu = $idSubMenu;
-}
+    public function setIdSubMenu($idSubMenu) {
+        $this->idSubMenu = $idSubMenu;
+    }
 
-public function setTitulo($titulo) {
-$this->titulo = $titulo;
-}
+    public function setTitle($title) {
+        $this->title = $title;
+    }
 
-public function setTipo($tipo) {
-$this->tipo = $tipo;
-}
+    public function setType($type) {
+        $this->type = $type;
+    }
 
-public function setDescricao($descricao) {
-$this->descricao = $descricao;
-}
+    public function setDescription($description) {
+        $this->description = $description;
+    }
 
-public function setIdMenu($idMenu) {
-$this->idMenu = $idMenu;
-}
-
-
-}
-
-
-
+    public function setIdMenu($idMenu) {
+        $this->idMenu = $idMenu;
+    }
+   
+}    
