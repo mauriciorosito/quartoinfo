@@ -2,41 +2,42 @@
 
 class Menu{
     public $idMenu;
-    public $titulo;
-    public $localizacao;
-    public $descricao;
+    public $title;
+    public $localization;
+    public $description;
     
     public function getIdMenu() {
         return $this->idMenu;
     }
 
-    public function getTitulo() {
-        return $this->titulo;
+    public function getTitle() {
+        return $this->title;
     }
 
-    public function getLocalizacao() {
-        return $this->localizacao;
+    public function getLocalization() {
+        return $this->localization;
     }
 
-    public function getDescricao() {
-        return $this->descricao;
+    public function getDescription() {
+        return $this->description;
     }
 
     public function setIdMenu($idMenu) {
         $this->idMenu = $idMenu;
     }
 
-    public function setTitulo($titulo) {
-        $this->titulo = $titulo;
+    public function setTitle($title) {
+        $this->title = $title;
     }
 
-    public function setLocalizacao($localizacao) {
-        $this->localizacao = $localizacao;
+    public function setLocalization($localization) {
+        $this->localization = $localization;
     }
 
-    public function setDescricao($descricao) {
-        $this->descricao = $descricao;
+    public function setDescription($description) {
+        $this->description = $description;
     }
+
 
 
 }
