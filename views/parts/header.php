@@ -132,7 +132,7 @@
                                                                                 <form class="navbar-form navbar-right" role="search" action="advanced_search.php" method="post">
                                                                                     <div class="form-group">
                                                                                         <label for="pesquisar"> 
-                                                                                            <input type="text" id="pesquisar" class="form-control col-lg-3 col-md-3 col-sm-3 col-xs-3" placeholder="Pesquisar">
+                                                                                            <input name="pesquisa" type="text" id="pesquisar" class="form-control col-lg-3 col-md-3 col-sm-3 col-xs-3" placeholder="Pesquisar">
                                                                                         </label> 
 
                                                                                     </div>
