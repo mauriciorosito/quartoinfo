@@ -39,7 +39,6 @@ class ControllerUser extends Controller {
                 $_SESSION['limited'] = 'P';
                 header('location: professor.php');
             }
-            
         }
         return false;
     }

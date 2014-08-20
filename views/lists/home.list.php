@@ -2,6 +2,7 @@
 <!-- Login http://www.html5dev.com.br/category/bootstrap/-->
 
 <?php
+session_start();
 include_once("../../controllers/content.control.php");
 include_once("../../controllers/contentMedia.control.php");
 include_once("../../controllers/media.control.php");
