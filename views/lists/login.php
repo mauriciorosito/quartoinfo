@@ -32,6 +32,7 @@
 								  <div class="checkbox">
 									<label>
 									  <input type="checkbox"><span style="float: left;">Lembrar Email</span>
+                                                                          <a style="float: left; margin-left: -20px;" href="recuperar.php">Esqueci minha senha</a>
 									</label>
 								  </div>
 								</div>
