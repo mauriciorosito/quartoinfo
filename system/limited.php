@@ -16,8 +16,8 @@ class Limited {
         if (!isset($_SESSION['limited']) || !in_array($_SESSION['limited'], $permission)) {
             if (isset($_SESSION['counter'])) {
                 if ($_SESSION['counter'] > 3) {
-                    error_log("DFJBASFJINSDKBFSWFIWE NVHFWEU8FHISDNMFJBHA SDK");
-                    //header('location: http://www.screaminggoatpiano.com');
+                    echo "<script> window.location.href = 'http://www.screaminggoatpiano.com' </script>";
+                    die();
                 }
                 $_SESSION['counter'] ++;
             } else {
