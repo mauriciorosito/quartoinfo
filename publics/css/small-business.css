@@ -1,4 +1,4 @@
-@media (max-width: @screen-sm) {
+/*@media (max-width: @screen-sm) {
   .btn-group-responsive {
     margin-bottom: -10px;
     .btn {
@@ -10,6 +10,7 @@
     }
   }
 }
+*/
 .container {
     margin-top: 20px;  
 }
@@ -95,8 +96,9 @@ footer {
 
 
 #logo{
-	position: absolute z-index:999; 
-	padding:;
+	position: absolute; 
+        z-index:999; 
+	
 
 	
 }
