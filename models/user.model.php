@@ -1,85 +1,100 @@
 <?php
-	class User {
-		private $idUser;
-		private $idProfile;
-		private $idCourse;
-		private $email;
-		private $login;
-		private $hash;
-		private $reminder;
-		private $reminderResponse;
-		private $canReceiveContent;
 
-		public function setIdUser($idUser){
-			$this->idUser = $idUser;
-		}
+class User {
 
-		public function getIdUser(){
-			return $this->idUser;
-		}
+    private $idUser;
+    private $idProfile;
+    private $idCourse;
+    private $email;
+    private $login;
+    private $hash;
+    private $reminder;
+    private $reminderResponse;
+    private $canReceiveContent;
+    private $type;
+   
 
-		public function setIdProfile($idProfile){
-			$this->idProfile = $idProfile;
-		}
+    
+    public function getType() {
+        return $this->type;
+    }
 
-		public function getIdProfile(){
-			return $this->idProfile;
-		}
+    public function setType($type) {
+        $this->type = $type;
+    }
 
-		public function setIdCourse($idCourse){
-			$this->idCourse = $idCourse;
-		}
+    public function setIdUser($idUser) {
+        $this->idUser = $idUser;
+    }
 
-		public function getIdCourse(){
-			return $this->idCourse;
-		}
+    public function getIdUser() {
+        return $this->idUser;
+    }
 
-		public function setEmail($email){
-			$this->email = $email;
-		}
+    public function setIdProfile($idProfile) {
+        $this->idProfile = $idProfile;
+    }
 
-		public function getEmail(){
-			return $this->email;
-		}
+    public function getIdProfile() {
+        return $this->idProfile;
+    }
 
-		public function setLogin($login){
-			$this->login = $login;
-		}
+    public function setIdCourse($idCourse) {
+        $this->idCourse = $idCourse;
+    }
 
-		public function getLogin(){
-			return $this->login;
-		}
+    public function getIdCourse() {
+        return $this->idCourse;
+    }
 
-		public function setHash($hash){
-			$this->hash = $hash;
-		}
+    public function setEmail($email) {
+        $this->email = $email;
+    }
 
-		public function getHash(){
-			return $this->hash;
-		}
+    public function getEmail() {
+        return $this->email;
+    }
 
-		public function setReminder($reminder){
-			$this->reminder = $reminder;
-		}
+    public function setLogin($login) {
+        $this->login = $login;
+    }
 
-		public function getReminder(){
-			return $this->reminder;
-		}
+    public function getLogin() {
+        return $this->login;
+    }
 
-		public function setReminderResponse($reminderResponse){
-			$this->reminderResponse = $reminderResponse;
-		}
+    public function setHash($hash) {
+        $this->hash = $hash;
+    }
 
-		public function getReminderResponse(){
-			return $this->reminderResponse;
-		}
+    public function getHash() {
+        return $this->hash;
+    }
 
-		public function setCanReceiveContent($canReceiveContent){
-			$this->canReceiveContent = $canReceiveContent;
-		}
+    public function setReminder($reminder) {
+        $this->reminder = $reminder;
+    }
 
-		public function getCanReceiveContent(){
-			return $this->canReceiveContent;
-		}
-	}
+    public function getReminder() {
+        return $this->reminder;
+    }
+
+    public function setReminderResponse($reminderResponse) {
+        $this->reminderResponse = $reminderResponse;
+    }
+
+    public function getReminderResponse() {
+        return $this->reminderResponse;
+    }
+
+    public function setCanReceiveContent($canReceiveContent) {
+        $this->canReceiveContent = $canReceiveContent;
+    }
+
+    public function getCanReceiveContent() {
+        return $this->canReceiveContent;
+    }
+
+}
+
 ?>
