@@ -148,7 +148,9 @@
                                                                         </div>
                                                                     </nav>
                                                                     <div id="path">
-                                                                        Caminho > Página
+                                                                        <ol class="breadcrumb">
+                                                                        <?php echo $caminho ?>
+                                                                        </ol>
                                                                     </div>
                                                                 </div>
                                                             </div>
