@@ -1,39 +1,44 @@
-﻿<?php
+<?php
     include_once("../parts/header.php");
     include ("../../packages/database/config.php");
     include ("../../packages/database/database.class.php");
+    require '../../packages/PHPMailer/PHPMailerAutoload.php';
 
+        $email = $_POST['email'];
 
-   if(isset($_POST['botao'])){
+        $query = mysql_query("SELECT * FROM user WHERE email = '".$email."'");
 
-  	   $db = new Includes\Db();
-	    $lines = $db->row('SELECT * FROM user WHERE email = :email', array(
-			'email' => $_POST['email'],
-		));
+        if(mysql_num_rows($query) > 0){
+
+	$consulta = mysql_fetch_array($query);
 	
-if($lines['email'] <> '' ){
-	$senhaRecuperada = $lines['hash'];
+	$senha_banco = $consulta["hash"];
+}   
+       if(isset($_POST['botao'])){
+        $mail = new PHPMailer;
+        $mail->isSMTP();                                      // Set mailer to use SMTP
+        $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
+        $mail->SMTPAuth = true;                               // Enable SMTP authentication
+        $mail->Username = 'luiza.rodrigues@bento.ifrs.edu.br';                 // SMTP username
+        $mail->Password = 'duendeolavo';                           // SMTP password
+        $mail->SMTPSecure = 'tls';                            // Enable encryption, 'ssl' also accepted
+        $mail->Port= 587;
 
-	$email = $lines['email'];
-  $msg = "
-              <h2 style='font-family:Verdana;'>Recuperação de Senha</h2><br/>
-              <div style='Verdana; font-size:10pt;'>
-                       Sua senha é: <span style='font-weight: bold;' .$senhaRecuperada.</span>
-              </div>";
+        $mail->From = $_POST['email'];
+        $mail->addAddress('luiza.rodrigues@bento.ifrs.edu.br');     // Add a recipient
+        $mail->addBCC('luiza.rodrigues@bento.ifrs.edu.br');
 
-$mensagem = $msg;
-$destinatario = $email;
-$assunto = "Recuperação de senha IFRS BG";
-$headers = "Bcc: [email]pa.guido@hotmail.com[/email]";
+        $mail->isHTML(true);                                  // Set email format to HTML
 
-ini_set('sendmail_from', 'pa.guido@hotmail.com');
-mail($destinatario, $assunto, $mensagem, $headers);
+        $mail->Subject = 'Email de recuperação de senha';
+        $mail->Body    = 'A sua senha é:'.$senha_banco;
 
-}else{
-  echo "Não Consta na base de dados";
-
+        if(!$mail->send()) {
+                echo 'A mensagem não pôde ser enviada, tente novamente mais tarde.';
+        } else {
+                echo 'A recuperacao de senha foi enviada com sucesso!';	
+        }
 }
-   }
 ?>
  
 <meta charset="utf-8">

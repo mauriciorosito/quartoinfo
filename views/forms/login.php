@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 include_once("../parts/header.php");
 include_once('../../controllers/user.control.php');
 $mensagem = '';
@@ -43,8 +43,8 @@ if (isset($_POST['submit'])) {
                     <div class="col-sm-offset-3 col-sm-10">
                         <div class="checkbox">
                             <label>
-                                <input type="checkbox"><span style="float: left;">Mantenha-me conectado</span>
-                                <a style="float: left; margin-left: -20px;" href="recuperar.php">Esqueci minha senha</a>
+                                <input type="checkbox"><span style="float: left;">Mantenha-me conectado</span><br><br>
+                                <a style="float: left; margin-left: -20px;" href="../lists/recuperar.php">Esqueci minha senha</a>
                             </label>
                         </div>
                     </div>
