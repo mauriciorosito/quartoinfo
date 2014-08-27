@@ -140,6 +140,8 @@
                                                                                                 </span>
                                                                                             </div>
                                                                                         </label>
+                                                                                        <br>
+                                                                                            <a href="advanced_search.php"><i>Pesquisa Avançada</i></a>
                                                                                     </div>
                                                                                 </form>
                                                                             </div>
