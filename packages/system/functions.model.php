@@ -66,24 +66,18 @@
 	} 
 		public function pagination($total, $page = 1, $limit = 10) {
 		$num_page=ceil($total/$limit);
-		echo '<ul>';
+		echo '<ul class="pagination"    >';
 		error_reporting( error_reporting() & ~E_NOTICE );
 		  for($i=1;$i<=$num_page;$i++)
 		  {
 			  if($i==$page)
 			  {
-				 echo '<li><a class="btn btn-primary">'.$i.'</a></li>';
+				 echo '<li class="active"><a class="page" id="banana">'.$i.'</a></li>';
 			  }
 				else
 			 {
 				//todo fazer com ifisset o echo dos inputs
-				echo '<form action="advanced_search.php" method="post">
-				<input type="hidden" name="pesquisa" value="'.$_POST["pesquisa"].'">
-				<input type="hidden" name="tipo" value="'.$_POST["tipo"].'">
-				<input type="hidden" name="submit" value="'.$_POST["submit"].'">
-				<input type="hidden" name="intervalo" value="'.$_POST["intervalo"].'">
-				<li><input class="btn btn-default" type="submit" name="page" value="'.$i.'"></li>
-				</form>';
+                                echo '<li><a class="page">'.$i.'</a></li>';
 			  }
 		   }
 		  echo'</ul>';
