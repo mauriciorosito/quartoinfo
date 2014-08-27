@@ -43,7 +43,7 @@ if (isset($_POST['submit'])) {
                     <div class="col-sm-offset-3 col-sm-10">
                         <div class="checkbox">
                             <label>
-                                <input type="checkbox"><span style="float: left;">Lembrar Email</span>
+                                <input type="checkbox"><span style="float: left;">Mantenha-me conectado</span>
                                 <a style="float: left; margin-left: -20px;" href="recuperar.php">Esqueci minha senha</a>
                             </label>
                         </div>

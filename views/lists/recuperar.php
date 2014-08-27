@@ -1,7 +1,7 @@
 ﻿<?php
-	include_once("../parts/header.php");
+    include_once("../parts/header.php");
     include ("../../packages/database/config.php");
-	include ("../../packages/database/database.class.php");
+    include ("../../packages/database/database.class.php");
 
 
    if(isset($_POST['botao'])){
@@ -18,7 +18,7 @@ if($lines['email'] <> '' ){
   $msg = "
               <h2 style='font-family:Verdana;'>Recuperação de Senha</h2><br/>
               <div style='Verdana; font-size:10pt;'>
-                       Sua senha é: <span style='font-weight: bold;' $senhaRecuperada</span>
+                       Sua senha é: <span style='font-weight: bold;' .$senhaRecuperada.</span>
               </div>";
 
 $mensagem = $msg;
