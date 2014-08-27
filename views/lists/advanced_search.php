@@ -8,7 +8,7 @@ $controllerContent = new ControllerContent();
 <!-- Login http://www.html5dev.com.br/category/bootstrap/-->
 
 <?php
-$caminho = "<li><a href='home.list.php'>Home</a></li><li class='active'>Home</li>";
+$caminho = "<li><a href='home.list.php'>Home</a></li><li class='active'>Pesquisa Avançada</li>";
 include_once("../parts/header.php");
 ?>
 
