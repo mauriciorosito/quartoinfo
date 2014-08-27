@@ -1,11 +1,20 @@
 <?php
 
 class ProfileCategory {
-
+    
+    private $idProfileCategory;
     private $idProfile;
     private $idCategory;
     private $permType; //edit, view, add, delete
+    
+    public function getIdProfileCategory() {
+        return $this->idProfileCategory;
+    }
 
+    public function setIdProfileCategory($idProfileCategory) {
+        $this->idProfileCategory = $idProfileCategory;
+    }
+    
     public function getIdProfile() {
         return $this->idProfile;
     }
