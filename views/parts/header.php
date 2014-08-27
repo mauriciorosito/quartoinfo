@@ -131,13 +131,16 @@
                                                                                 </ul>
                                                                                 <form class="navbar-form navbar-right" role="search" action="advanced_search.php" method="post">
                                                                                     <div class="form-group">
-                                                                                        <label for="pesquisar"> 
-                                                                                            <input name="pesquisa" type="text" id="pesquisar" class="form-control col-lg-3 col-md-3 col-sm-3 col-xs-3" placeholder="Pesquisar">
-                                                                                        </label> 
-
+                                                                                        <label for="pesquisar">
+                                                                                           <div class="input-group">
+                                                                                             <input name="pesquisa" type="text" id="pesquisar"  class="form-control col-lg-1 col-md-1 col-sm-1 col-xs-1" placeholder="Pesquisar">
+                                                                                              <span class="input-group-btn">
+                                                                                                        <button type="submit" class="btn btn-default" name="submit">
+                                                                                                        <span class="glyphicon glyphicon-search"></span></button>
+                                                                                                </span>
+                                                                                            </div>
+                                                                                        </label>
                                                                                     </div>
-                                                                                    <button type="submit" class="btn btn-default" name="submit"><span class="glyphicon glyphicon-search"></span></button>
-                                                                                    <a href="advanced_search.php"><i>Pesquisa Avançada</i></a>
                                                                                 </form>
                                                                             </div>
                                                                         </div>
