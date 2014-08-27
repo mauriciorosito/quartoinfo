@@ -17,7 +17,7 @@
 								<li><a href="fale_perguntas.php">Perguntas Frequentes</a></li>
 							</ul>
 						</div>
-						<div id="conteudo"  class="col-sm-6 class="well">	
+						<div id="conteudo"  class="col-sm-6" class="well">	
 						<form action='sendEmail' role='form'>
 							<label>Nome </label>
 							<input type='text' name='nome' class='form-control' placeholder='Informe seu nome'>
