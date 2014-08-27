@@ -122,7 +122,9 @@ $controllerMedia = new ControllerMedia();
 						  </div>
 						</nav>
 												<div id="path">
-						Caminho > Página
+						<ol class="breadcrumb">
+                                                    <li class="active">Home</li>
+                                                  </ol>
 						</div>
 
 					</div>
