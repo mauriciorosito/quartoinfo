@@ -36,7 +36,11 @@ footer {
 
 /* Sidebar navigation */
 .navbar-form{width:216px;}
-.form-group{width:130px;}
+.form-group{
+    //NAO ALTERAR ESTILOS DO BOOTSTRAP NO CÓDIGO FONTE DELES!
+    //CRIEM UMA CLASSE PARA ISSO
+    //width:130px;
+}
 .nav-sidebar {
     margin-right: -21px; /* 20px padding + 1px border */
     margin-bottom: 20px;
