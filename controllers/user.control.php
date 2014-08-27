@@ -27,18 +27,8 @@ class ControllerUser extends Controller {
         if ($line[0]['hash'] == $user->getHash()) {
 
             $_SESSION['idUser'] = $line[0]['idUser'];
-            if ($line[0]['type'] == 'E') {
-                $_SESSION['limited'] = 'E';
-                header('location: ../lists/estudante.php');
-            }
-            if ($line[0]['type'] == 'A') {
-                $_SESSION['limited'] = 'A';
-                header('location: content.form.php');
-            }
-            if ($line[0]['type'] == 'P') {
-                $_SESSION['limited'] = 'P';
-                header('location: professor.php');
-            }
+
+            header('location: content.form.php');
         }
         return false;
     }
@@ -120,7 +110,7 @@ class ControllerUser extends Controller {
 
         return $user;
     }
-    
+
     protected function selectByProfile($user) {
         $db = new Includes\Db();
         $lines = $db->query("select * from user where idProfile = :idProfile", array(
@@ -146,7 +136,7 @@ class ControllerUser extends Controller {
 
             $users[] = $user;
         }
-        
+
         return $users;
     }
 
