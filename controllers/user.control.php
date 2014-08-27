@@ -197,7 +197,7 @@ class ControllerUser extends Controller {
 
         $ret2 = $db->query("delete from profile where IdPrfile = :idUser", array(
             'idUser' => $user->getIdUser(),
-        )); // ???? verificar!!!!!
+        )); // ???? verificar!!!
 
         $ret1 = $db->query("delete from user where idUser = :idUser", array(
             'idUser' => $user->getIdUser(),
