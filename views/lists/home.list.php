@@ -73,7 +73,7 @@ $controllerMedia = new ControllerMedia();
 						<button type="button" class="btn btn-default" style="margin-top:15px;">Cores</button>
 					</ul>
 						<div class="btn-group" style="margin-top:15px;">
-						  <button type="button" class="btn" onclick="location.href='../../views/forms/login.php'">Login</button>
+						  <button type="button" class="btn" onclick="location.href='../../views/lists/login.php'">Login</button>
 						  <button type="button" class="btn" onclick="location.href='../../views/forms/content.form.php?action=insert'">Cadastrar</button>
 						</div>
 					</div>
