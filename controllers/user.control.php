@@ -25,8 +25,8 @@ class ControllerUser extends Controller {
         session_start();
         $db = new Includes\Db();
         $line = $db->query("SELECT * FROM user WHERE email=:email", array(
-        	'email' => $user->getEmail(),	
-	));
+            'email' => $user->getEmail(),
+        ));
 
         if ($line[0]['hash'] == $user->getHash()) {
             $_SESSION['idUser'] = $line[0]['idUser'];
@@ -58,21 +58,21 @@ class ControllerUser extends Controller {
             $user->setIdCourse($line["idCourse"]);
             $user->setEmail($line["email"]);
             $user->setName($line["name"]);
-            $user->setPhoto($line["photo"]);
+            //$user->setPhoto($line["photo"]);
             $user->setRegistration($line["registration"]);
             $user->setAbout($line["about"]);
             $user->setLogin($line["login"]);
             $user->setHash($line["hash"]);
             $user->setReminder($line["reminder"]);
             $user->setReminderResponse($line["reminderResponse"]);
-            $user->setCanReceiveContent($line["canReceiveContent"]);
-            $user->setType($line["type"]);
+            //$user->setCanReceiveContent($line["canReceiveContent"]);
+            //$user->setType($line["type"]);
 
 
-            $profile = new Profile();
-            $profile->setIdProfile($user->getIdUser());
-            $controllerProfile = new ControllerProfile();
-            $profile = $controllerProfile->actionControl('selectOne', $profile);
+//            $profile = new Profile();
+//            $profile->setIdProfile($user->getIdUser());
+//            $controllerProfile = new ControllerProfile();
+//            $profile = $controllerProfile->actionControl('selectOne', $profile);
             //$content->set_Medias($contentMedia);
 
 
@@ -98,7 +98,6 @@ class ControllerUser extends Controller {
         $user->setIdCourse($lines[0]["idCourse"]);
         $user->setEmail($lines[0]["email"]);
         $user->setName($lines[0]["name"]);
-        $user->setPhoto($lines[0]["photo"]);
         $user->setRegistration($lines[0]["registration"]);
         $user->setAbout($lines[0]["about"]);
         $user->setLogin($lines[0]["login"]);
@@ -194,6 +193,32 @@ class ControllerUser extends Controller {
                     'canReceiveContent' => $user->getCanReceiveContent(),
                     'type' => $user->getType(),
         ));
+    }
+
+    protected function updatePassword($user) {
+        $db = new Includes\Db();
+        return $db->query('update user set hash =  :hash, where idUser = :idUser', array(
+                    'hash' => $user->getHash(),
+        ));
+    }
+
+    protected function generatePassword() {
+        $new_password = uniqid(rand());
+        return $new_password;
+    }
+
+    protected function checkEmail($email) {
+        $db = new Includes\Db();
+        $lines = $db->query("select * from user where email = :email", array(
+            'email' => $email,
+        ));
+        if (isset($lines[0]["idUser"])) {
+            $user = new User();
+            $user->setIdUser($lines[0]["idUser"]);
+            return $user;
+        } else {
+            return false;
+        }
     }
 
     protected function delete($user) {
