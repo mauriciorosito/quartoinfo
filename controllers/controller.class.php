@@ -72,6 +72,9 @@ abstract class Controller {
             case "updatePassword":
                 return $this->updatePassword($obj);
                 break;
+            case "selectAllCategories":
+                return $this->selectAllCategories($obj);
+                break;
         }
     }
 

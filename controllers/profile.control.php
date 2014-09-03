@@ -91,12 +91,19 @@ class ControllerProfile extends Controller {
         }
     }
     
-    public function selectAllCategories() {
+    protected function selectAllCategories() {
         $db = new Includes\Db();
         $lines = $db->query("select * from category");
         $categories = array();
         
         return $lines;
+    }
+    
+    protected function selectMaxId() {
+        $db = new Includes\Db();
+        $lines = $db->query("select max(idProfile) as  id from profile");
+        
+        return $lines[0]['id'];
     }
 
 //put your code heree
