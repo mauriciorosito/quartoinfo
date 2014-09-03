@@ -118,7 +118,8 @@ if(!isset($_POST['pesquisa'])) $contents = $controllerContent->actionControl('se
 								foreach($resultados as $resultado){
 						?>
 						<tr>
-							<td><?php echo $resultado["publisher"]; ?></td>
+                                                        <td><?php echo $resultado["idContent"]; ?></td>
+                                                        <td><?php echo $resultado["publisher"]; ?></td>
 							<td><?php echo $resultado["source"]; ?></td>
 							<td><?php echo $resultado["title"]; ?></td>
 							<td><?php echo $resultado["text"]; ?></td>
@@ -126,6 +127,9 @@ if(!isset($_POST['pesquisa'])) $contents = $controllerContent->actionControl('se
                                                         <td><?php echo $resultado["postDate"]; ?></td>
                                                         <td><?php echo $resultado["expirationDate"]; ?></td>
                                                         <td><?php echo $resultado["type"]; ?></td>
+                                                        <td>Categorias</td>
+                                                        <td>Mídias</td>
+                                                        <td><a href="../forms/content.form.php?action=update&idContent=<?php echo $resultado["idContent"]; ?> " class="btn btn-default">Editar</a> <a href="../forms/content.form.php?action=delete&idContent=<?php echo $resultado["idContent"]; ?>" class="btn btn-default">Excluir</a></td>
 						</tr>
 						<?php
 								}

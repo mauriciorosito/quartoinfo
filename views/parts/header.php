@@ -71,7 +71,7 @@
                                                                     </ul>
                                                                     <div class="btn-group" style="margin-top:15px;">
                                                                         <button type="button" class="btn" onclick="location.href = 'login.php'">Login</button>
-                                                                        <button type="button" class="btn" onclick="location.href = '../forms/content.form.php?action=insert'">Cadastro</button>
+                                                                        <button type="button" class="btn" onclick="location.href = '../forms/user.form.php?action=insert'">Cadastro</button>
                                                                     </div>
                                                                 </div>
                                                             </div>

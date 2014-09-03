@@ -41,7 +41,7 @@ class ControllerUser extends Controller {
                 header('location: content.list.php');
             } else{
                 $_SESSION['limited'] = 'E';
-                header('location: estudante.php');
+                header('location: student.list.php');
             }
         } 
         return false;
@@ -155,14 +155,13 @@ class ControllerUser extends Controller {
 
     protected function insert($user) {
         $db = new Includes\Db();
-        return $db->query('insert into user (idUser, idProfile, idCourse, email, name, photo, registration, about, login, hash, reminder, reminderResponse, canReceiveContent, type) values 
-		(NULL, :idProfile, :idCourse, :email, :login, :hash, :reminder
-		, :reminderResponse, :canReceiveContent, :type) ', array(
+        return $db->query('insert into user (idUser, idProfile, idCourse, email, name, registration, about, login, hash, reminder, reminderResponse, canReceiveContent) values 
+		(NULL, :idProfile, :idCourse, :email, :name, :registration, :about, :login, :hash, :reminder
+		, :reminderResponse, :canReceiveContent) ', array(
                     'idProfile' => $user->getIdProfile(),
                     'idCourse' => $user->getIdCourse(),
                     'email' => $user->getEmail(),
                     'name' => $user->getName(),
-                    'photo' => $user->getPhoto(),
                     'registration' => $user->getRegistration(),
                     'about' => $user->getAbout(),
                     'login' => $user->getLogin(),
@@ -170,20 +169,18 @@ class ControllerUser extends Controller {
                     'reminder' => $user->getReminder(),
                     'reminderResponse' => $user->getReminderResponse(),
                     'canReceiveContent' => $user->getCanReceiveContent(),
-                    'type' => $user->getType(),
         ));
     }
 
     protected function update($user) {
         $db = new Includes\Db();
-        return $db->query('update user set idProfile = :idProfile, idCourse = :idCourse, email = :email, name = :name, photo = :photo, registration = :registration, about = :about, login = :login
+        return $db->query('update user set idProfile = :idProfile, idCourse = :idCourse, email = :email, name = :name, registration = :registration, about = :about, login = :login
 		, hash =  :hash, reminder =  :reminder, reminderResponse = :reminderResponse
-		, canReceiveContent = :canReceiveContent, type = :type where idUser = :idUser', array(
+		, canReceiveContent = :canReceiveContent, where idUser = :idUser', array(
                     'idProfile' => $user->getIdProfile(),
                     'idCourse' => $user->getIdCourse(),
                     'email' => $user->getEmail(),
                     'name' => $user->getName(),
-                    'photo' => $user->getPhoto(),
                     'registration' => $user->getRegistration(),
                     'about' => $user->getAbout(),
                     'login' => $user->getLogin(),
@@ -191,7 +188,6 @@ class ControllerUser extends Controller {
                     'reminder' => $user->getReminder(),
                     'reminderResponse' => $user->getReminderResponse(),
                     'canReceiveContent' => $user->getCanReceiveContent(),
-                    'type' => $user->getType(),
         ));
     }
 
