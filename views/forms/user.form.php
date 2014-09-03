@@ -6,12 +6,17 @@ include_once("../parts/header.php");
 <!-- contentE -->
 
 <?php
-include_once("../../controllers/content.control.php");
-include_once("../../controllers/media.control.php");
+include_once("../../models/course.model.php");
+include_once("../../models/user.model.php");
+include_once("../../controllers/course.control.php");
+include_once("../../controllers/user.control.php");
 
 /* echo "<pre>";
   print_r($_SESSION);
   die; */
+
+$cc = new ControllerCourse();
+$arrayCursos = $cc->actionControl("selectAll");
 
 if (isset($_GET["action"], $_GET["idContent"])) {
     if ($_GET["action"] == "delete") {
@@ -47,8 +52,8 @@ if (isset($_GET["action"], $_GET["idContent"])) {
 }
 
 if (isset($_POST["action"])) {
-    $user = new Content();
-    $user->setIdProfile($_POST["idProfile"]);
+    $user = new User();
+    $user->setIdProfile(2);
     $user->setIdCourse($_POST["idCourse"]);
     $user->setEmail($_POST["email"]);
     $user->setLogin($_POST["login"]);
@@ -62,10 +67,10 @@ if (isset($_POST["action"])) {
     $cu = new ControllerUser();
     $cu->actionControl($_POST["action"], $user);
 
-    //header("location: ../lists/content.list.php");
+    header("location: ../lists/student.list.php");
 }
 ?>
-<form action="content.form.php" method="post" enctype="multipart/form-data">
+<form action="user.form.php" method="post" enctype="multipart/form-data">
     <input type="hidden" name="action" value="<?php
     if (isset($_GET["action"])) {
         echo $_GET["action"];
@@ -76,6 +81,7 @@ if (isset($_POST["action"])) {
         echo $_GET["idContent"];
     }
     ?>">
+    <input type="hidden" name="canReceiveContent" value="0">
     <table style="width:100%;padding:10px;">
         <tr>
             <td>Nome: <input type="text" name="name" class="form-control" value="<?php
@@ -97,20 +103,32 @@ if (isset($_POST["action"])) {
                 ?>"><br></td>
             <td>Curso: 
                 <select class="form-control" name="idCourse">
-                    
+                    <?php
+                    foreach ($arrayCursos as $curso) {
+                        echo "<option value='" . $curso->getIdCourse() . "'>" . $curso->getName() . "</option>";
+                    }
+                    ?>
                 </select>
             </td>
-            
+
         </tr>
         <tr>
-            <td>Senha:<input type="password" name="hash" class="form-control"  value="<?php
-                if (isset($user) && $user->getPostDate() != "") {
-                    echo $user->getPostDate();
-                }
-                ?>"><br></td>
+            <td>Senha:<input type="password" name="hash" class="form-control"  value=""><br></td>
             <td>Número da matrícula: <input type="text" name="registration" class="form-control" value="<?php
                 if (isset($user) && $user->getRegistration() != "") {
                     echo $user->getRegistration();
+                }
+                ?>"><br></td>			
+        </tr>
+        <tr>
+            <td>Pergunta para a Recuperação de Senha:<input type="etxt" name="reminder" class="form-control"  value="<?php
+                if (isset($user) && $user->getReminder() != "") {
+                    echo $user->getReminder();
+                }
+                ?>"><br></td>
+            <td>Resposta para a Recuperação de Senha:<input type="etxt" name="reminderResponse" class="form-control"  value="<?php
+                if (isset($user) && $user->getReminderResponse() != "") {
+                    echo $user->getReminderResponse();
                 }
                 ?>"><br></td>			
         </tr>
@@ -121,7 +139,7 @@ if (isset($_POST["action"])) {
                     }
                     ?> </textarea><br></td>
         </tr>
-       
+
     </table>
     <input type="submit" name="button" value="<?php
     if (isset($_GET["action"])) {
