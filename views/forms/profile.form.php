@@ -15,10 +15,11 @@ if(isset($_GET['action']) || isset($_POST['action'])){
         $profile->setIs_admin($_POST['id_admin']);
         $pControl->actionControl("update",$profile);
         $views = $_POST['views'];
+        $creates = $_POST['create'];
         $edits = $_POST['edit'];
         $deletes = $_POST['delete'];
         foreach($views as $view){
-            
+//            if(in_array) VERIFICAR SE ESTÁ EM TODOS OS ARRAY DAEEE CRIA is_admin
         }
     }
 } else{
@@ -61,9 +62,10 @@ if(isset($_GET['action']) || isset($_POST['action'])){
         <?php
         foreach ($categories as $category) {
             echo "<h4>Categoria " . $category['name'] . ":</h4>";
-            echo "<div class='checkbox'><input type='checkbox' name='view[]' value='".$category['idUser']."'>Visualizar</div>";
-            echo "<div class='checkbox'><input type='checkbox' name='edit[]' value='".$category['idUser']."'>Editar</div>";
-            echo "<div class='checkbox'><input type='checkbox' name='delete[]' value='".$category['idUser']."'>Excluir</div>";
+            echo "<div class='checkbox'><input type='checkbox' name='view[]' value='".$category['idCategory']."'>Visualizar</div>";
+            echo "<div class='checkbox'><input type='checkbox' name='create[]' value='".$category['idCategory']."'>Criar</div>";
+            echo "<div class='checkbox'><input type='checkbox' name='edit[]' value='".$category['idCategory']."'>Editar</div>";
+            echo "<div class='checkbox'><input type='checkbox' name='delete[]' value='".$category['idCategory']."'>Excluir</div>";
         }
         ?>
 
