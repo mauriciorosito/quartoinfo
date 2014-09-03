@@ -11,6 +11,11 @@
  *
  * @author kathiane.050996
  */
+
+include_once("../../packages/database/database.class.php");
+include_once("controller.class.php");
+include_once("../../models/profile.model.php");
+
 class ControllerProfile extends Controller {
 
     protected function selectAll() {
@@ -18,14 +23,10 @@ class ControllerProfile extends Controller {
         $lines = $db->query("select * from profile");
         $profiles = array();
         foreach ($lines as $line) {
-            $profile = new Profile();
+            $profile = new \models\Profile();
             $profile->setIdProfile($line["idProfile"]);
             $profile->setName($line["name"]);
-            $profile->setIs_admin($line["is_admin"]);
-            $profile->setCan_edit($line["can_edit"]);
-            $profile->setCan_view($line["can_view"]);
-            $profile->setCan_create($line["can_create"]);
-            $profile->setCan_delete($line["can_delete"]);
+            $profile->setDescription($line["description"]);
 
             $profiles[] = $profile;
         }
@@ -92,6 +93,14 @@ class ControllerProfile extends Controller {
         } else {
             return false;
         }
+    }
+    
+    public function selectAllCategories() {
+        $db = new Includes\Db();
+        $lines = $db->query("select * from category");
+        $categories = array();
+        
+        return $lines;
     }
 
 //put your code heree

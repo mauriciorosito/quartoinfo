@@ -1,6 +1,23 @@
 <!-- Cabeçalho -->
 <?php
 include_once("../parts/header.php");
+include_once("../../controllers/profile.control.php");
+
+$controllerProfile = new ControllerProfile();
+$categories = $controllerProfile->selectAllCategories();
+var_dump($categories);
+
+//        $content = new Content();
+//        $content->setIdContent($_GET["idContent"]);
+//        $cc = new ControllerContent();
+//        $cc->actionControl($_GET["action"], $content);
+//        header("location: ../lists/content.list.php");
+//
+//        $content = new Content();
+//        $content->setIdContent($_GET["idContent"]);
+//        $cc = new ControllerContent();
+//        $content = $cc->actionControl("selectOne", $content);
+    
 ?>
 <!-- Fim do cabeçalho -->
 
@@ -34,26 +51,16 @@ include_once("../parts/header.php");
         <input type="submit" class="btn btn-success" name="button" value="Cadastrar">
     </div>
     <div class="col-md-6">
-        <label> Categorias de Visualização: </label>
-        <div class="checkbox">
-            <label>
-                <input type="checkbox"> Check me out
-            </label>
-        </div>
-        <br>
-        <label> Categorias de Edição: </label>
-        <div class="checkbox">
-            <label>
-                <input type="checkbox"> Check me out
-            </label>
-        </div>
-        <br>
-        <label> Categorias de Publicação: </label>
-        <div class="checkbox">
-            <label>
-                <input type="checkbox"> Check me out
-            </label>
-        </div>
+        <?php
+            foreach($categories as $category){
+                echo "<label>Categorias ".$category['name']."<label>";
+                echo "<input type='checkbox' name='view".$category['idCategory']."[]'>Visualizar";
+                echo "<input type='checkbox' name='edit".$category['idCategory']."[]'>Editar";
+                echo "<input type='checkbox' name='delete".$category['idCategory']."[]'>Excluir";
+                
+            }
+        ?>
+        
     </div>
 </form>
 <!-- Fim do conteúdo-->

@@ -10,10 +10,14 @@ class ControllerCourse extends Controller {
         $lines = $db->query('select * from course where idCourse = :idCourse', array(
             'idCourse' => $course->getIdCourse(),
         ));
-        $course = new Course();
-        $course->setIdCourse($lines[0]["idCourse"]);
-        $course->setName($lines[0]["name"]);
-        return $course;
+        if(isset($lines[0])) {
+            $course = new Course();
+            $course->setIdCourse($lines[0]["idCourse"]);
+            $course->setName($lines[0]["name"]);
+            return $course;
+        }else{
+            return 0;
+        }
     }
 
     protected function selectAll() {
