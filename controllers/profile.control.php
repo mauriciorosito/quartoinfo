@@ -11,6 +11,11 @@
  *
  * @author kathiane.050996
  */
+
+include_once("../../packages/database/database.class.php");
+include_once("controller.class.php");
+include_once("../../models/profile.model.php");
+
 class ControllerProfile extends Controller {
 
     protected function selectAll() {
@@ -92,6 +97,14 @@ class ControllerProfile extends Controller {
         } else {
             return false;
         }
+    }
+    
+    public function selectAllCategories() {
+        $db = new Includes\Db();
+        $lines = $db->query("select * from category");
+        $categories = array();
+        
+        return $lines;
     }
 
 //put your code heree
