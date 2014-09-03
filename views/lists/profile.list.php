@@ -1,11 +1,12 @@
 ﻿<?php
+include_once("../../controllers/controller.class.php");
 include_once("../../controllers/profile.control.php");
 
 //$controllerContent = new ControllerContent();
 //$contents = $controllerContent->actionControl('selectAllEvents');
 
-$cUser = new ControllerUser();
-$users = $cUser->actionControl("selectAll");
+$cProfile = new ControllerProfile();
+$profiles = $cProfile->actionControl("selectAll");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,19 +50,18 @@ $users = $cUser->actionControl("selectAll");
                         <tr>
                             <th><center>#</center></th>
                             <th><center>Nome</center></th>
-                            <th><center>Email</center></th>
-                            <th><center>Sobre</center></th>
+                            <th><center>Descrição</center></th>
                             <th width="20%"><center>Ações</center></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($users as $user) {
+                        <?php 
+                        foreach ($profiles as $profile) {
                             ?>
                             <tr>
-                                <td><input type="checkbox" id="marcado<?php echo $user->getIdUser(); ?>"></td>
-                                <td><?php echo $user->getName(); ?></td>
-                                <td><?php echo $user->getEmail(); ?></td>
-                                <td><?php echo $user->getAbout(); ?></td>
+                                <td><input type="checkbox" id="marcado<?php echo $profile->getIdProfile(); ?>"></td>
+                                <td><?php echo $profile->getName(); ?></td>
+                                <td><?php echo $profile->getDescription(); ?></td>
                                 <td>
                                     <center>
                                         <div class="btn-group">

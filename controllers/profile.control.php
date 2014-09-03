@@ -23,14 +23,10 @@ class ControllerProfile extends Controller {
         $lines = $db->query("select * from profile");
         $profiles = array();
         foreach ($lines as $line) {
-            $profile = new Profile();
+            $profile = new \models\Profile();
             $profile->setIdProfile($line["idProfile"]);
             $profile->setName($line["name"]);
-            $profile->setIs_admin($line["is_admin"]);
-            $profile->setCan_edit($line["can_edit"]);
-            $profile->setCan_view($line["can_view"]);
-            $profile->setCan_create($line["can_create"]);
-            $profile->setCan_delete($line["can_delete"]);
+            $profile->setDescription($line["description"]);
 
             $profiles[] = $profile;
         }
