@@ -4,31 +4,38 @@ include_once("../parts/header.php");
 include_once("../../controllers/profile.control.php");
 
 $controllerProfile = new ControllerProfile();
-$categories = $controllerProfile->selectAllCategories();
-var_dump($categories);
+$categories = $controllerProfile->actionControl('selectAllCategories');
 
-//        $content = new Content();
-//        $content->setIdContent($_GET["idContent"]);
-//        $cc = new ControllerContent();
-//        $cc->actionControl($_GET["action"], $content);
-//        header("location: ../lists/content.list.php");
-//
-//        $content = new Content();
-//        $content->setIdContent($_GET["idContent"]);
-//        $cc = new ControllerContent();
-//        $content = $cc->actionControl("selectOne", $content);
-    
-?>
+if(isset($_GET['action']) || isset($_POST['action'])){
+    if($_POST['action'] == "insert" ){
+        $pControl = new ControllerProfile();
+        $profile = new models\Profile();
+        $profile->setName($_POST['name']);
+        $profile->setDescription($_POST['description']);
+        $profile->setIs_admin($_POST['id_admin']);
+        $pControl->actionControl("update",$profile);
+        $views = $_POST['views'];
+        $edits = $_POST['edit'];
+        $deletes = $_POST['delete'];
+        foreach($views as $view){
+            
+        }
+    }
+} else{
+   //header('location:profile.list.php');
+}
+?> 
 <!-- Fim do cabeçalho -->
 
 <!-- Conteúdo -->
 <hr class="BVerde">
-<?php
-//include_once("../../controllers/profile.control.php");
-?>
-<form action="profile.form.php" method="post" enctype="multipart/form-data">
+<form action="profile.form.php" method="post">
     <div class="col-md-6">
-        <input type="hidden" name="action" value="">
+        <input type="hidden" name="action" value="<?php
+        if (isset($_GET["action"])) {
+            echo $_GET["action"];
+        }
+        ?>">
         <input type="hidden" name="idProfile" value="<?php
         if (isset($_GET["idProfile"])) {
             echo $_GET["idProfile"];
@@ -52,15 +59,14 @@ var_dump($categories);
     </div>
     <div class="col-md-6">
         <?php
-            foreach($categories as $category){
-                echo "<label>Categorias ".$category['name']."<label>";
-                echo "<input type='checkbox' name='view".$category['idCategory']."[]'>Visualizar";
-                echo "<input type='checkbox' name='edit".$category['idCategory']."[]'>Editar";
-                echo "<input type='checkbox' name='delete".$category['idCategory']."[]'>Excluir";
-                
-            }
+        foreach ($categories as $category) {
+            echo "<h4>Categoria " . $category['name'] . ":</h4>";
+            echo "<div class='checkbox'><input type='checkbox' name='view[]' value='".$category['idUser']."'>Visualizar</div>";
+            echo "<div class='checkbox'><input type='checkbox' name='edit[]' value='".$category['idUser']."'>Editar</div>";
+            echo "<div class='checkbox'><input type='checkbox' name='delete[]' value='".$category['idUser']."'>Excluir</div>";
+        }
         ?>
-        
+
     </div>
 </form>
 <!-- Fim do conteúdo-->

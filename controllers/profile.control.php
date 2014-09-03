@@ -102,6 +102,13 @@ class ControllerProfile extends Controller {
         
         return $lines;
     }
+    
+    protected function selectMaxId() {
+        $db = new Includes\Db();
+        $lines = $db->query("select max(idProfile) as  id from profile");
+        
+        return $lines[0]['id'];
+    }
 
 //put your code heree
 }
