@@ -22,8 +22,8 @@ class ControllerUser extends Controller {
         session_start();
         $db = new Includes\Db();
         $line = $db->query("SELECT * FROM user WHERE email=:email", array(
-        	'email' => $user->getEmail(),	
-	));
+            'email' => $user->getEmail(),
+        ));
 
         if ($line[0]['hash'] == $user->getHash()) {
 
@@ -181,6 +181,32 @@ class ControllerUser extends Controller {
                     'canReceiveContent' => $user->getCanReceiveContent(),
                     'type' => $user->getType(),
         ));
+    }
+
+    protected function updatePassword($user) {
+        $db = new Includes\Db();
+        return $db->query('update user set hash =  :hash, where idUser = :idUser', array(
+                    'hash' => $user->getHash(),
+        ));
+    }
+
+    protected function generatePassword() {
+        $new_password = uniqid(rand());
+        return $new_password;
+    }
+
+    protected function checkEmail($email) {
+        $db = new Includes\Db();
+        $lines = $db->query("select * from user where email = :email", array(
+            'email' => $email,
+        ));
+        if (isset($lines[0]["idUser"])) {
+            $user = new User();
+            $user->setIdUser($lines[0]["idUser"]);
+            return $user;
+        } else {
+            return false;
+        }
     }
 
     protected function delete($user) {
