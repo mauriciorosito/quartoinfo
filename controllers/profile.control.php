@@ -99,7 +99,7 @@ class ControllerProfile extends Controller {
         }
     }
     
-    public function selectAllCategories() {
+    protected function selectAllCategories() {
         $db = new Includes\Db();
         $lines = $db->query("select * from category");
         $categories = array();
