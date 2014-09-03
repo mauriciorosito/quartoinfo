@@ -11,7 +11,7 @@
  *
  * @author kathiane.050996
  */
-class Profile extends Controller {
+class ControllerProfile extends Controller {
 
     protected function selectAll() {
         $db = new Includes\Db();

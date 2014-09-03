@@ -14,6 +14,9 @@
 include_once("../../packages/database/database.class.php");
 include_once("controller.class.php");
 include_once("../../models/user.model.php");
+include_once("../../models/profile.model.php");
+include_once("../../models/user.model.php");
+include_once("../../controllers/profile.control.php");
 
 class ControllerUser extends Controller {
 
@@ -26,11 +29,21 @@ class ControllerUser extends Controller {
         ));
 
         if ($line[0]['hash'] == $user->getHash()) {
-
             $_SESSION['idUser'] = $line[0]['idUser'];
-
-            header('location: content.form.php');
-        }
+            
+            $p = new Profile();
+            $p->setIdProfile($line[0]["idProfile"]);
+            $cp = new ControllerProfile();
+            $profile = $cp->actionControl("selectOne", $p);
+            
+            if ($profile->getIs_admin() == 1) {
+                $_SESSION['limited'] = 'A';
+                header('location: content.list.php');
+            } else{
+                $_SESSION['limited'] = 'E';
+                header('location: estudante.php');
+            }
+        } 
         return false;
     }
 
