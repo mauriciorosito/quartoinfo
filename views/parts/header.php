@@ -132,12 +132,12 @@
                                                                                 <form class="navbar-form navbar-right" role="search" action="advanced_search.php" method="post">
                                                                                     <div class="form-group" style="margin-left:-15%;">
                                                                                         <label for="pesquisar">
-                                                                                           <div class="input-group">
-                                                                                             <input name="pesquisa" type="text" id="pesquisar"  class="form-control col-lg-1 col-md-1 col-sm-1 col-xs-1" placeholder="Pesquisar">
-                                                                                              <span class="input-group-btn">
+                                                                                            <div class="input-group">
+                                                                                                <input name="pesquisa" type="text" id="pesquisar"  class="form-control col-lg-1 col-md-1 col-sm-1 col-xs-1" placeholder="Pesquisar">
+                                                                                                    <span class="input-group-btn">
                                                                                                         <button type="submit" class="btn btn-default" name="submit">
-                                                                                                        <span class="glyphicon glyphicon-search"></span></button>
-                                                                                                </span>
+                                                                                                            <span class="glyphicon glyphicon-search"></span></button>
+                                                                                                    </span>
                                                                                             </div>
                                                                                         </label>
                                                                                         <br>
@@ -149,7 +149,9 @@
                                                                     </nav>
                                                                     <div id="path">
                                                                         <ol class="breadcrumb">
-                                                                        <?php echo $caminho ?>
+                                                                            <?php if (isset($caminho)) {
+                                                                                echo $caminho;
+                                                                            } ?>
                                                                         </ol>
                                                                     </div>
                                                                 </div>
