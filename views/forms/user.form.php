@@ -18,13 +18,13 @@ include_once("../../controllers/user.control.php");
 $cc = new ControllerCourse();
 $arrayCursos = $cc->actionControl("selectAll");
 
-if (isset($_GET["action"], $_GET["idContent"])) {
+if (isset($_GET["action"], $_GET["idUser"])) {
     if ($_GET["action"] == "delete") {
         $user = new User();
         $user->setIdUser($_GET["idUser"]);
         $cu = new ControllerUser();
         $cu->actionControl($_GET["action"], $user);
-        header("location: ../forms/login.php");
+        header("location: ../lists/login.php");
     } else {
         $user = new User();
         $user->setIdUser($_GET["idUser"]);

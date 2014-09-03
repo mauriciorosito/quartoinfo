@@ -13,4 +13,6 @@ $limited->check(array('E'));
 
 ?>
 
+<a href="../../views/forms/user.form.php?action=delete&idUser=<?php echo $_SESSION["idUser"]; ?>" class="btn"><i class="glyphicon glyphicon-trash"></i>&nbsp;Excluir Conta</a>
+
 <a href="../../system/logout.php" class="btn"><i class="glyphicon glyphicon-log-out"></i>&nbsp;Sair</a>

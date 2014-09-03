@@ -38,14 +38,10 @@ class ControllerProfile extends Controller {
         $lines = $db->query('select * from profile where idProfile = :idProfile', array(
             'idProfile' => $profile->getIdProfile(),
         ));
-        $profile = new Profile();
+        $profile = new \models\Profile();
         $profile->setIdProfile($lines[0]["idProfile"]);
         $profile->setName($lines[0]["name"]);
         $profile->setIs_admin($lines[0]["is_admin"]);
-        $profile->setCan_edit($lines[0]["can_edit"]);
-        $profile->setCan_view($lines[0]["can_view"]);
-        $profile->setCan_create($lines[0]["can_create"]);
-        $profile->setCan_delete($lines[0]["can_delete"]);
 
         return $profile;
     }

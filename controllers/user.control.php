@@ -31,7 +31,7 @@ class ControllerUser extends Controller {
         if ($line[0]['hash'] == $user->getHash()) {
             $_SESSION['idUser'] = $line[0]['idUser'];
             
-            $p = new Profile();
+            $p = new \models\Profile();
             $p->setIdProfile($line[0]["idProfile"]);
             $cp = new ControllerProfile();
             $profile = $cp->actionControl("selectOne", $p);
@@ -220,15 +220,15 @@ class ControllerUser extends Controller {
     protected function delete($user) {
         $db = new Includes\Db();
 
-        $ret2 = $db->query("delete from profile where IdPrfile = :idUser", array(
+        /*$ret2 = $db->query("delete from profile where IdProfile = :idUser", array(
             'idUser' => $user->getIdUser(),
-        )); // ???? verificar!!!
+        )); // ???? verificar!!!*/
 
         $ret1 = $db->query("delete from user where idUser = :idUser", array(
             'idUser' => $user->getIdUser(),
         ));
 
-        if ($ret1 && $ret2) {
+        if ($ret1) {
             return true;
         } else {
             return false;
