@@ -193,13 +193,14 @@ class ControllerUser extends Controller {
 
     protected function updatePassword($user) {
         $db = new Includes\Db();
-        return $db->query('update user set hash =  :hash, where idUser = :idUser', array(
-                    'hash' => $user->getHash(),
+        return $db->query('update user set hash =  :hash where idUser = :idUser', array(
+                    'hash' => $user->getHash(),'idUser'=>$user->getIdUser()
         ));
     }
 
     protected function generatePassword() {
         $new_password = uniqid(rand());
+        $new_password = substr($new_password, 0, 7); 
         return $new_password;
     }
 

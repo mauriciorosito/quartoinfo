@@ -18,38 +18,38 @@ if (isset($_POST['botao'])) {
     $user = $controllerUser->actionControl('checkEmail', $_POST['email']);
 
     if ($user->getIdUser()) {
-        $new = $controllerUser->actionControl('generatePassword');
+        $new_password = $controllerUser->actionControl('generatePassword');
         $u = new User();
         $u->setIdUser($user->getIdUser());
-        $u->setHash($new);
+        $u->setHash($new_password);
         $controllerUser->actionControl('updatePassword', $u);
-        echo "Senha enviada por e-mail!";
+       
+
+        $mail = new PHPMailer;
+        $mail->isSMTP();                                      // Set mailer to use SMTP
+        $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
+        $mail->SMTPAuth = true;                               // Enable SMTP authentication
+        $mail->Username = 'quartoinfosuporte@gmail.com';                 // SMTP username
+        $mail->Password = '4infosuporte';                           // SMTP password
+        $mail->SMTPSecure = 'tls';                            // Enable encryption, 'ssl' also accepted
+        $mail->Port = 587;
+
+        $mail->From = $_POST['email'];
+        $mail->addAddress('quartoinfosuporte@gmail.com');     // Add a recipient
+        $mail->addBCC('quartoinfosuporte@gmail.com');
+
+        $mail->isHTML(true);                                  // Set email format to HTML
+
+        $mail->Subject = 'Email de recuperação de senha';
+        $mail->Body = 'A sua senha é:' . $new_password;
+
+        if (!$mail->send()) {
+            echo 'A mensagem não pôde ser enviada, tente novamente mais tarde.';
+        } else {
+            echo 'A recuperacao de senha foi enviada com sucesso!';
+        }
     } else {
         echo "Este e-mail não existe!";
-    }
-
-    $mail = new PHPMailer;
-    $mail->isSMTP();                                      // Set mailer to use SMTP
-    $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
-    $mail->SMTPAuth = true;                               // Enable SMTP authentication
-    $mail->Username = 'quartoinfosuporte@gmail.com';                 // SMTP username
-    $mail->Password = '4infosuporte';                           // SMTP password
-    $mail->SMTPSecure = 'tls';                            // Enable encryption, 'ssl' also accepted
-    $mail->Port = 587;
-
-    $mail->From = $_POST['email'];
-    $mail->addAddress('quartoinfosuporte@gmail.com');     // Add a recipient
-    $mail->addBCC('quartoinfosuporte@gmail.com');
-
-    $mail->isHTML(true);                                  // Set email format to HTML
-
-    $mail->Subject = 'Email de recuperação de senha';
-    $mail->Body = 'A sua senha é:' . $new_password;
-
-    if (!$mail->send()) {
-        echo 'A mensagem não pôde ser enviada, tente novamente mais tarde.';
-    } else {
-        echo 'A recuperacao de senha foi enviada com sucesso!';
     }
 }
 ?>
