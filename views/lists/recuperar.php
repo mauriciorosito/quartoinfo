@@ -10,14 +10,15 @@ require ("../../packages/PHPMailer/PHPMailerAutoload.php");
   enviar no email(selecionar um)
   subsituitr senha no banco */
 
-if (isset($_POST['botao'])) {
+if(isset($_POST['botao'])) {
     $controllerUser = new ControllerUser();
+    $mensagemEmail = '';
 
     $user = new User();
 
     $user = $controllerUser->actionControl('checkEmail', $_POST['email']);
 
-    if ($user->getIdUser()) {
+    if ($user != false) {
         $new_password = $controllerUser->actionControl('generatePassword');
         $u = new User();
         $u->setIdUser($user->getIdUser());
@@ -40,16 +41,17 @@ if (isset($_POST['botao'])) {
 
         $mail->isHTML(true);                                  // Set email format to HTML
 
-        $mail->Subject = 'Email de recuperação de senha';
-        $mail->Body = 'A sua senha é:' . $new_password;
+        $mail->Subject = 'IFRS - Email de recuperação de senha';
+        $mail->Body = 'A sua nova senha é:' . $new_password;
 
         if (!$mail->send()) {
-            echo 'A mensagem não pôde ser enviada, tente novamente mais tarde.';
+            $mensagemEmail = 'A mensagem não pôde ser enviada, tente novamente mais tarde.';
         } else {
-            echo 'A recuperacao de senha foi enviada com sucesso!';
+            $mensagemEmail = 'A recuperacao de senha foi enviada com sucesso!';
         }
-    } else {
-        echo "Este e-mail não existe!";
+    }
+    else{
+        $mensagemEmail = 'Este e-mail não existe!';
     }
 }
 ?>
@@ -78,7 +80,9 @@ if (isset($_POST['botao'])) {
 
 
                 <div class="form-group">
+                    <p><b><?php if(isset($mensagemEmail)){ echo $mensagemEmail;} ?></b></p>
                     <div class="col-sm-offset-3 col-sm-10">
+                      
                         <button type="submit" name="botao" style="margin-left:-150px;" class="btn btn-default">Recuperar senha</button>
 
                     </div>
