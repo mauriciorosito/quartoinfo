@@ -106,5 +106,15 @@ class ControllerProfile extends Controller {
         return $lines[0]['id'];
     }
 
+    
+    protected function updateProfileCategory($profilecategory) {
+        $db = new Includes\Db();
+        return $db->query('update profilecategory set idProfile = :idProfile, idProfile = :idCategory, permType = :permType where idProfileCategory = :idProfileCategory', array(
+                    'idProfile' => $profile->getIdProfile(),
+                    'idProfile' => $profile->getIdCategory(),
+                    'permType' => $profile->getPermType(),
+                    'idProfileCategory' => $profile->getIdProfileCategory(),
+        ));
+    }
 //put your code heree
 }

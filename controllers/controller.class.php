@@ -75,6 +75,9 @@ abstract class Controller {
             case "selectAllCategories":
                 return $this->selectAllCategories($obj);
                 break;
+            case "updateProfileCategory":
+                return $this->updateProfileCategory($obj);
+                break;
         }
     }
 
