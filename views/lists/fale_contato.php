@@ -2,7 +2,7 @@
 	include_once("../parts/header.php");
 	include_once("../../packages/database/config.php");
 	include_once("../../packages/database/database.class.php");
-	require_once '../../packages/PHPMailer/PHPMailerAutoload.php';
+/*	require_once '../../packages/PHPMailer/PHPMailerAutoload.php';
 	
 	if(isset($_POST['enviarEmail'])){
         $mail = new PHPMailer;
@@ -31,7 +31,7 @@
         } else {
                 echo 'Seu email foi enviado com sucesso!';	
         }
-}
+}*/
 ?>
 	
 	
