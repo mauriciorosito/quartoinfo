@@ -108,7 +108,7 @@ if (isset($_POST["action"])) {
                         echo "<option value='" . $curso->getIdCourse() . "'>" . $curso->getName() . "</option>";
                     }
                     ?>
-                </select>
+                </select><br>
             </td>
 
         </tr>
@@ -141,11 +141,19 @@ if (isset($_POST["action"])) {
         </tr>
 
     </table>
-    <input type="submit" name="button" value="<?php
+    <?php
     if (isset($_GET["action"])) {
-        echo ucwords($_GET["action"]);
+        if (ucwords($_GET["action"]) == "Insert") {
+            echo "<button class='btn btn-default' type='submit' name='button'><i class='glyphicon glyphicon-ok-circle'></i>&nbsp;Cadastrar</button>";
+        } elseif (ucwords($_GET["action"]) == "Update") {
+            echo "<button class='btn btn-default' type='submit' name='button'><i class='glyphicon glyphicon-ok-circle'></i>&nbsp;Salvar</button>";
+        } else {
+            echo "<button class='btn btn-default' type='submit' name='button'><i class='glyphicon glyphicon-trash'></i>&nbsp;Excluir</button>";
+        }
     }
-    ?>"><br>
+    ?>
+    <button class="btn btn-default" type="reset" name="reset"><i class="glyphicon glyphicon-repeat"></i>&nbsp;Limpar Campos</button>
+    <br>
 </form>
 
 <script type="text/javascript">

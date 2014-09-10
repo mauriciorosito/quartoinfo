@@ -30,13 +30,13 @@ if (isset($_POST['submit'])) {
                 <div class="form-group" style="width:auto;">
                     <label for="inputEmail3" class="col-sm-3 control-label">Email</label>
                     <div class="col-sm-5">
-                        <input type="email" class="form-control" id="inputEmail3"  name="email" placeholder="Email" style="width: 280px; height: 40px;">
+                        <input type="email" class="form-control" id="inputEmail3"  name="email" placeholder="Email" style="width: 280px; height: 40px;" required>
                     </div>
                 </div>
                 <div class="form-group" style="width:auto;">
                     <label for="inputPassword3" class="col-sm-3 control-label">Senha</label>
                     <div class="col-sm-5">
-                        <input type="password" class="form-control" id="inputPassword3" name="hash" placeholder="Password" style="width: 280px; height: 40px;">
+                        <input type="password" class="form-control" id="inputPassword3" name="hash" placeholder="Password" style="width: 280px; height: 40px;" required>
                     </div>
                 </div>
                 <div class="form-group" style="width:auto;">

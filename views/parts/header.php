@@ -70,7 +70,7 @@
                                                                     <button type="button" class="btn btn-default" style="margin-top:15px;">Cores</button>
                                                                     </ul>
                                                                     <div class="btn-group" style="margin-top:15px;">
-                                                                        <button type="button" class="btn" onclick="location.href = 'login.php'">Login</button>
+                                                                        <button type="button" class="btn" onclick="location.href = '../lists/login.php'">Login</button>
                                                                         <button type="button" class="btn" onclick="location.href = '../forms/user.form.php?action=insert'">Cadastro</button>
                                                                     </div>
                                                                 </div>
