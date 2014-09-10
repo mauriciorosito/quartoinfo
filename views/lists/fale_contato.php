@@ -1,10 +1,11 @@
 <?php
+	if(isset($_POST['enviarEmail'])) $caminho = "email enviado";
 	include_once("../parts/header.php");
 	include_once("../../packages/database/config.php");
 	include_once("../../packages/database/database.class.php");
-/*	require_once '../../packages/PHPMailer/PHPMailerAutoload.php';
+	require_once '../../packages/PHPMailer/PHPMailerAutoload.php';
 	
-	if(isset($_POST['enviarEmail'])){
+	/*(if(isset($_POST['enviarEmail'])){
         $mail = new PHPMailer;
         $mail->isSMTP();                                      // Set mailer to use SMTP
         $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
@@ -27,9 +28,9 @@
         $mail->Body   = $_POST['comentario'];
 
         if(!$mail->send()) {
-                echo 'A mensagem não pôde ser enviada, tente novamente mais tarde.';
+                $caminho =  'A mensagem não pôde ser enviada, tente novamente mais tarde.';
         } else {
-                echo 'Seu email foi enviado com sucesso!';	
+                $caminho = 'Seu email foi enviado com sucesso!';	
         }
 }*/
 ?>
@@ -51,14 +52,14 @@
 								<li><a href="fale_perguntas.php">Perguntas Frequentes</a></li>
 							</ul>
 						</div>
-						<div id="conteudo"  class="col-sm-6-well">	
-						<form action='fale_contato.php' role='form'>
+						<div id="conteudo"  class="col-sm-6 class="well">	
+						<form action='fale_contato.php' role='form' method="post">
 							<label>Nome </label>
-							<input type='text' name='nome' class='form-control' placeholder='Informe seu nome'>
+							<input required type='text' name='nome' class='form-control' placeholder='Informe seu nome'>
 							<label>Email </label>
-							<input type='email' name='email' class='form-control' placeholder='Informe seu e-mail'>
+							<input required type='email' name='email' class='form-control' placeholder='Informe seu e-mail'>
 							<label>Comentario</label>
-							<textarea class='form-control' name='comentario'></textarea>
+							<textarea required class='form-control' name='comentario'></textarea>
 						<label>Contato</label>
 						<select name='contatos' class='form-control'>
 							<option disabled>Selecione o destinatário</option>
