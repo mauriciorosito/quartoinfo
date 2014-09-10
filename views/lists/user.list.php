@@ -7,6 +7,11 @@ include_once("../../controllers/course.control.php");
 //$controllerContent = new ControllerContent();
 //$contents = $controllerContent->actionControl('selectAllEvents');
 
+require_once('../../system/limited.php');
+
+$limited = new Limited();
+$limited->check(array('A'));
+
 $cUser = new ControllerUser();
 $users = $cUser->actionControl("selectAll");
 ?>
@@ -47,6 +52,7 @@ $users = $cUser->actionControl("selectAll");
         <div id="content">
             <div class="container img-rounded BVerde">
                 <a href="#" class="btn btn-default standard-margin-10">Inserir Usuário</a> 
+                <a href="../../system/logout.php" class="btn btn-default standard-margin-10">Sair</a> 
                 <table class="table table-striped table-condensed table-bordered table-hover">
                     <thead>
                         <tr>

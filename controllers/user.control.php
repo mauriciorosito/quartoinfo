@@ -24,8 +24,9 @@ class ControllerUser extends Controller {
 
         session_start();
         $db = new Includes\Db();
-        $line = $db->query("SELECT * FROM user WHERE email=:email", array(
+        $line = $db->query("SELECT * FROM user WHERE email=:email OR login=:login", array(
             'email' => $user->getEmail(),
+            'login' => $user->getEmail()
         ));
 
         if ($line[0]['hash'] == $user->getHash()) {

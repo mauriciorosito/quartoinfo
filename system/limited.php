@@ -16,7 +16,7 @@ class Limited {
         if (!isset($_SESSION['limited']) || !in_array($_SESSION['limited'], $permission)) {
             if (isset($_SESSION['counter'])) {
                 if ($_SESSION['counter'] > 3) {
-                    echo "<script> window.location.href = 'http://www.screaminggoatpiano.com' </script>";
+                    echo "<script> window.location.href = 'http://www.youtube.com/user/ivanbucco' </script>";
                     die();
                 }
                 $_SESSION['counter'] ++;

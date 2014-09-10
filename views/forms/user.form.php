@@ -15,6 +15,8 @@ include_once("../../controllers/user.control.php");
   print_r($_SESSION);
   die; */
 
+require_once('../../system/limited.php');
+
 $cc = new ControllerCourse();
 $arrayCursos = $cc->actionControl("selectAll");
 
@@ -67,7 +69,7 @@ if (isset($_POST["action"])) {
     $cu = new ControllerUser();
     $cu->actionControl($_POST["action"], $user);
 
-    header("location: ../lists/student.list.php");
+    echo "<script>$('#ol-caminho').html('Cadastro Realizado com Sucesso !!!');</script>";
 }
 ?>
 <form action="user.form.php" method="post" enctype="multipart/form-data">
@@ -88,19 +90,19 @@ if (isset($_POST["action"])) {
                 if (isset($user) && $user->getName() != "") {
                     echo $user->getName();
                 }
-                ?>"><br></td>
+                ?>" required><br></td>
             <td>Login: <input type="text" name="login" class="form-control" value="<?php
                 if (isset($user) && $user->getLogin() != "") {
                     echo $user->getLogin();
                 }
-                ?>"><br></td>
+                ?>" required><br></td>
         </tr>
         <tr>
-            <td>Email: <input type="text" name="email" class="form-control" value="<?php
+            <td>Email: <input type="email" name="email" class="form-control" value="<?php
                 if (isset($user) && $user->getEmail() != "") {
                     echo $user->getEmail();
                 }
-                ?>"><br></td>
+                ?>" required><br></td>
             <td>Curso: 
                 <select class="form-control" name="idCourse">
                     <?php
@@ -113,24 +115,24 @@ if (isset($_POST["action"])) {
 
         </tr>
         <tr>
-            <td>Senha:<input type="password" name="hash" class="form-control"  value=""><br></td>
+            <td>Senha:<input type="password" name="hash" class="form-control"  value="" required><br></td>
             <td>Número da matrícula: <input type="text" name="registration" class="form-control" value="<?php
                 if (isset($user) && $user->getRegistration() != "") {
                     echo $user->getRegistration();
                 }
-                ?>"><br></td>			
+                ?>" required><br></td>			
         </tr>
         <tr>
             <td>Pergunta para a Recuperação de Senha:<input type="etxt" name="reminder" class="form-control"  value="<?php
                 if (isset($user) && $user->getReminder() != "") {
                     echo $user->getReminder();
                 }
-                ?>"><br></td>
+                ?>" required><br></td>
             <td>Resposta para a Recuperação de Senha:<input type="etxt" name="reminderResponse" class="form-control"  value="<?php
                 if (isset($user) && $user->getReminderResponse() != "") {
                     echo $user->getReminderResponse();
                 }
-                ?>"><br></td>			
+                ?>" required><br></td>			
         </tr>
         <tr>
             <td colspan=2>Sobre: <textarea name="about" value="" class="textarea form-control" placeholder="Enter text ..." style="width: 810px; height: 200px"> <?php

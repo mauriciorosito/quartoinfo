@@ -148,7 +148,7 @@
                                                                         </div>
                                                                     </nav>
                                                                     <div id="path">
-                                                                        <ol class="breadcrumb">
+                                                                        <ol class="breadcrumb" id="ol-caminho">
                                                                             <?php if (isset($caminho)) {
                                                                                 echo $caminho;
                                                                             } ?>
