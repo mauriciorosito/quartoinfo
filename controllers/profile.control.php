@@ -76,24 +76,14 @@ class ControllerProfile extends Controller {
     protected function delete($profile) {
         $db = new Includes\Db();
 
-        $ret2 = $db->query("delete from profile where IdProfile = :idProfile", array(
+        return $db->query("delete from profile where IdProfile = :idProfile", array(
             'idProfile' => $profile->getIdProfile(),
-        )); // ???? verificar!!!!!
-
-        $ret1 = $db->query("delete from profile where idProfile = :idProfile", array(
-            'idProfile' => $profile->getIdProfile(),
-        ));
-
-        if ($ret1 && $ret2) {
-            return true;
-        } else {
-            return false;
-        }
+        )); 
     }
     
     protected function selectAllCategories() {
         $db = new Includes\Db();
-        $lines = $db->query("select * from category");
+        $lines = $db->query("select * from idProfile");
         $categories = array();
         
         return $lines;
@@ -106,6 +96,13 @@ class ControllerProfile extends Controller {
         return $lines[0]['id'];
     }
 
+    protected function deleteProfileCategory($profilecategory) {
+        $db = new Includes\Db();
+
+        return $db->query("delete from profilecategory where idProfileCategory = :idProfileCategory", array(
+            'idProfileCategory' => $profile->getIdProfileCategory(),
+        ));
+    }
     
     protected function updateProfileCategory($profilecategory) {
         $db = new Includes\Db();
