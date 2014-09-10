@@ -51,11 +51,11 @@ $users = $cUser->actionControl("selectAll");
                     <thead>
                         <tr>
                             <th><center>#</center></th>
-                            <th><center>Nome</center></th>
-                            <th><center>Email</center></th>
-                            <th><center>Sobre</center></th>
-                            <th width="20%"><center>Ações</center></th>
-                        </tr>
+                    <th><center>Nome</center></th>
+                    <th><center>Email</center></th>
+                    <th><center>Sobre</center></th>
+                    <th width="20%"><center>Ações</center></th>
+                    </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($users as $user) {
@@ -66,12 +66,13 @@ $users = $cUser->actionControl("selectAll");
                                 <td><?php echo $user->getEmail(); ?></td>
                                 <td><?php echo $user->getAbout(); ?></td>
                                 <td>
-                                    <center>
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-default" title='Editar' href="#"><span class="glyphicon glyphicon-edit"></span></button>
-                                            <button type="button" class="btn btn-default" title='Excluir' href="#"><span class="glyphicon glyphicon-trash"></span></button>
-                                        </div>
-                                    </center>
+                        <center>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default" title='Editar' href="#"><span class="glyphicon glyphicon-edit"></span></button>
+                                <a href="../../views/forms/user.form.php?action=delete&idUser=<?php echo $user->getIdUser(); ?>"class="btn btn-default" title='Excluir'><span class="glyphicon glyphicon-trash"></span></a>
+
+                            </div>
+                        </center>
                         </td>
                         </tr>
                     <?php } ?>
