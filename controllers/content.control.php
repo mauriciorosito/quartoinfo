@@ -95,6 +95,11 @@ class ControllerContent extends Controller {
 		$lines = $db->query("select * from content where idContent = :idContent", array(
 			'idContent' => $content->getIdContent(),
 		));
+		
+		if($lines == null) {
+			return null;
+		}
+		
 		$content = new Content();
 		$content->setIdContent($lines[0]["idContent"]);
 		$content->setPublisher($lines[0]["publisher"]);
@@ -124,7 +129,7 @@ class ControllerContent extends Controller {
 	}
 	protected function selectAll(){
 		$db = new database();
-	    $lines = $db->select("select * from content order by postDate desc");
+	    $lines = $db->select("select * from content where type<>'P' order by postDate desc");
 	    $contents = array();
 	    foreach($lines as $line){
 		   $content = new Content();
@@ -238,6 +243,38 @@ class ControllerContent extends Controller {
 			$content->setDescription($line["description"]);
 			$content->setPostDate($line["postDate"]);
 			$content->setExpirationDate($line["expirationDate"]);
+			$content->setType($line["type"]);
+
+			$contentMedia = new contentMedia;
+			$contentMedia->setIdContent($content->getIdContent());
+			$controllerContentMedia = new ControllerContentMedia();
+			$contentMedia = $controllerContentMedia->actionControl('selectAll', $contentMedia);
+			$content->set_Medias($contentMedia);
+
+
+			$contentCategory = new contentCategory;
+			$contentCategory->setIdContent($content->getIdContent());
+			$controllerContentMedia = new ControllerContentCategory();
+			$contentCategory = $controllerContentMedia->actionControl('selectAll', $contentCategory);
+			$content->set_Category($contentCategory);
+
+			$contents[] = $content;
+		}
+		return $contents;
+	}
+	
+	protected function selectAllPages(){
+		$db = new Includes\Db();
+		$lines = $db->query("select * from content where type='P'");
+		$contents = array();
+		foreach($lines as $line){
+			$content = new Content();
+			$content->setIdContent($line["idContent"]);
+			$content->setPublisher($line["publisher"]);
+			$content->setSource($line["source"]);
+			$content->setTitle($line["title"]);
+			$content->setText($line["text"]);
+			$content->setDescription($line["description"]);
 			$content->setType($line["type"]);
 
 			$contentMedia = new contentMedia;

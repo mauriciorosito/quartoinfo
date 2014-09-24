@@ -50,7 +50,7 @@ class ControllerUser extends Controller {
 
     protected function selectAll() {
         $db = new Includes\Db();
-        $lines = $db->query("select * from user");
+        $lines = $db->query("select * from user order by name");
         $users = array();
         foreach ($lines as $line) {
             $user = new User();
@@ -85,8 +85,52 @@ class ControllerUser extends Controller {
 
             $users[] = $user;
         }
+        
         return $users;
     }
+    
+    protected function selectAllDescending() {
+        $db = new Includes\Db();
+        $lines = $db->query("select * from user order by name desc");
+        $users = array();
+        foreach ($lines as $line) {
+            $user = new User();
+            $user->setIdUser($line["idUser"]);
+            $user->setIdProfile($line["idProfile"]);
+            $user->setIdCourse($line["idCourse"]);
+            $user->setEmail($line["email"]);
+            $user->setName($line["name"]);
+            //$user->setPhoto($line["photo"]);
+            $user->setRegistration($line["registration"]);
+            $user->setAbout($line["about"]);
+            $user->setLogin($line["login"]);
+            $user->setHash($line["hash"]);
+            $user->setReminder($line["reminder"]);
+            $user->setReminderResponse($line["reminderResponse"]);
+            //$user->setCanReceiveContent($line["canReceiveContent"]);
+            //$user->setType($line["type"]);
+
+
+//            $profile = new Profile();
+//            $profile->setIdProfile($user->getIdUser());
+//            $controllerProfile = new ControllerProfile();
+//            $profile = $controllerProfile->actionControl('selectOne', $profile);
+            //$content->set_Medias($contentMedia);
+
+
+            $course = new Course();
+            $course->setIdCourse($user->getIdCourse());
+            $controllerCourse = new ControllerCourse();
+            $course = $controllerCourse->actionControl('selectOne', $course);
+            //$contentCategory->set_Category($contentCategory);
+
+            $users[] = $user;
+        }
+        
+        return $users;
+    }
+    
+    
 
     protected function selectOne($user) {
         $db = new Includes\Db();
