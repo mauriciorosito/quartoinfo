@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 include_once("../parts/header.php");
 include_once('../../system/limited.php');
 
@@ -140,7 +140,12 @@ if (isset($_POST["action"])) {
             }
         }
     }
-    header("location: ../lists/content.list.php");
+	if($_POST["type"] == 'P') {
+		header("location: ../lists/page.list.php?p=$maxIdC");
+	}
+	else {
+		header("location: ../lists/content.list.php");
+	}
 }
 ?>
 <form action="content.form.php" method="post" enctype="multipart/form-data">
@@ -151,19 +156,8 @@ if (isset($_POST["action"])) {
     echo $_GET["idContent"];
 } ?>">
     <table style="width:100%;padding:10px;">
-        <tr>
-            <td>Título: <input type="text" name="title" class="form-control" value="<?php if (isset($content) && $content->getTitle() != "") {
-    echo $content->getTitle();
-} ?>"><br></td>
-            <td>Fonte: <input type="text" name="source" class="form-control" value="<?php if (isset($content) && $content->getSource() != "") {
-    echo $content->getSource();
-} ?>"><br></td>
-        </tr>
-        <tr>
-            <td>Descrição: <input type="text" name="description" class="form-control" value="<?php if (isset($content) && $content->getDescription() != "") {
-    echo $content->getDescription();
-} ?>"><br></td>
-            <td>Tipo do conteúdo: <select name="type" class="form-control">
+		<tr>
+			<td>Tipo do conteúdo: <select name="type" class="form-control" id="tipo">
                     <option  value="N" <?php if (isset($content) && $content->getType() == "N") {
     echo "selected";
 } ?>> Notícia</option>
@@ -173,14 +167,30 @@ if (isset($_POST["action"])) {
                     <option value="O" <?php if (isset($content) && $content->getType() == "O") {
     echo "selected";
 } ?>> Oportunidades</option>
+<option value="P" <?php if (isset($content) && $content->getType() == "P") {
+    echo "selected";
+} ?>> Página</option>
                 </select>
             </td>
+		</tr>
+            <td>Título: <input type="text" name="title" class="form-control" value="<?php if (isset($content) && $content->getTitle() != "") {
+    echo $content->getTitle();
+} ?>"><br></td>
+            <td id="source">Fonte: <input type="text" name="source" class="form-control" value="<?php if (isset($content) && $content->getSource() != "") {
+    echo $content->getSource();
+} ?>"><br></td>
         </tr>
         <tr>
-            <td>Visualizar desde:<input type="text" name="postDate" class="form-control" pattern="[0-3]{1}[0-9]{1}/[0-1]{1}[0-9]{1}/[2]{1}[0-9]{3}" data-mask="99/99/9999" placeholder="Data"  value="<?php if (isset($content) && $content->getPostDate() != "") {
+            <td>Descrição: <input type="text" name="description" class="form-control" value="<?php if (isset($content) && $content->getDescription() != "") {
+    echo $content->getDescription();
+} ?>"><br></td>
+            
+        </tr>
+        <tr>
+            <td id="data1">Visualizar desde:<input type="text" name="postDate" class="form-control" pattern="[0-3]{1}[0-9]{1}/[0-1]{1}[0-9]{1}/[2]{1}[0-9]{3}" data-mask="99/99/9999" placeholder="Data"  value="<?php if (isset($content) && $content->getPostDate() != "") {
     echo $content->getPostDate();
 } ?>"><br></td>
-            <td>Visualizar até: <input type="text" name="expirationDate" class="form-control" pattern="[0-3]{1}[0-9]{1}/[0-1]{1}[0-9]{1}/[2]{1}[0-9]{3}" data-mask="99/99/9999" placeholder="Data" value="<?php if (isset($content) && $content->getExpirationDate() != "") {
+            <td id="data2">Visualizar até: <input type="text" name="expirationDate" class="form-control" pattern="[0-3]{1}[0-9]{1}/[0-1]{1}[0-9]{1}/[2]{1}[0-9]{3}" data-mask="99/99/9999" placeholder="Data" value="<?php if (isset($content) && $content->getExpirationDate() != "") {
     echo $content->getExpirationDate();
 } ?>"><br></td>			
         </tr>
@@ -205,7 +215,7 @@ if (isset($_POST["action"])) {
             </td>
         </tr>
     </table>
-    <input type="submit" name="button" value="<?php if (isset($_GET["action"])) {
+    <input type="submit" class="btn btn-primary" name="button" value="<?php if (isset($_GET["action"])) {
     echo ucwords($_GET["action"]);
 } ?>"><br>
 </form>
@@ -238,6 +248,23 @@ if (isset($_POST["action"])) {
         var node1 = document.getElementById('destino');
         node1.removeChild(node1.childNodes[0]);
     }
+	
+	$('#tipo')
+		.change(function () {
+			tipo = $( "#tipo option:selected" ).text();
+			
+			if (tipo == ' Página') {
+				$('#data1').hide();
+				$('#data2').hide();
+				$('#source').hide();
+			}
+			else {
+				$('#data1').show();
+				$('#data2').show();
+				$('#source').show();
+			}
+		})
+	.change();
 </script>
 
 <!-- FIM DO contentE-->
