@@ -85,6 +85,7 @@ class ControllerUser extends Controller {
 
             $users[] = $user;
         }
+        
         return $users;
     }
     
@@ -125,6 +126,7 @@ class ControllerUser extends Controller {
 
             $users[] = $user;
         }
+        
         return $users;
     }
     

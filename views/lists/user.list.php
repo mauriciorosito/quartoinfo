@@ -13,7 +13,16 @@ $limited = new Limited();
 $limited->check(array('A'));
 
 $cUser = new ControllerUser();
-$users = $cUser->actionControl("selectAll");
+
+if (isset($_GET["ordenacao"])) {
+    if ($_GET["ordenacao"] == "desc") {
+        $users = $cUser->actionControl("selectAllDescending");
+    } else {
+        $users = $cUser->actionControl("selectAll");
+    }
+} else {
+    $users = $cUser->actionControl("selectAll");
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,10 +58,33 @@ $users = $cUser->actionControl("selectAll");
     </head>
 
     <body>
+
+        <?php include_once '../parts/navigation_admin.php'; ?>
+
         <div id="content">
             <div class="container img-rounded BVerde">
-                <a href="#" class="btn btn-default standard-margin-10">Inserir Usuário</a> 
-                <a href="../../system/logout.php" class="btn btn-default standard-margin-10">Sair</a> 
+                <div class="row standard-margin-10">
+                    <div class="col-md-6 col-sm-12 col-xs-12">
+                        <div class="btn-group">
+                            <a href="" class="btn btn-success">Ordenar por:</a>
+                            <a href="user.list.php?ordenacao=asc" class="btn btn-default">Nome - Crescente</a>
+                            <a href="user.list.php?ordenacao=desc" class="btn btn-default">Nome - Decrescente</a>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 col-xs-12">
+                        <div class="btn-group pull-right">
+                            <a href="../forms/user.form.php" class="btn btn-default">
+                                <i class="glyphicon glyphicon-plus-sign"></i>
+                                &nbsp; Inserir Usuário
+                            </a> 
+                            <a href="../../system/logout.php" class="btn btn-default">
+                                <i class="glyphicon glyphicon-off"></i>
+                                &nbsp; Sair
+                            </a>
+                        </div> 
+                    </div>
+                </div>
+                <hr/>
                 <table class="table table-striped table-condensed table-bordered table-hover">
                     <thead>
                         <tr>
