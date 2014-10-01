@@ -18,12 +18,36 @@ if (isset($_GET['action']) && $_GET['action'] == "delete") {
     header("location: submenu.list.php");
 }
 ?>
+
+<div class="col-md-12"><h1><center>Lista de Itens do Menu</center></h1><hr></div>
+
+<div class="col-md-4"><a class="btn btn-default" href="../forms/submenu.form.php?action=insert">Criar Novo</a></div>
+
+<form class="form-horizontal" onsubmit="return false;">
+
+    <div class="col-md-4">
+        <div class="form-group">
+            <label for="order" class="col-sm-4 control-label">Ordenar por</label>
+            <div class="col-sm-8">
+            <select id="order" class="form-control" name="order">
+                <option value="localization">Localização</option>
+                <option value="a-z">Nome A-Z</option>
+                <option value="z-a">Nome Z-A</option>
+            </select>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+           <label for="filter" class="col-sm-4 control-label">Filtrar por:</label>
+           <div class="col-sm-8">
+                <input class="form-control" id="filter" type="text" name="filter">
+           </div>
+        </div>
+    </div>
+</form>
 <table class="table table-striped table-condensed table-hover">
     <thead>
-        <tr>
-            <td colspan="6" align="center"><h1>Lista de Itens do Submenu</h1></td>
-        </tr>
-        <tr><td><input class="btn btn-default" type="button" name="newMenu" value="Criar Novo"></td></tr>
         <tr>
             <td width="20%">Url</td>
             <td>Título</td>
@@ -49,9 +73,12 @@ if (isset($_GET['action']) && $_GET['action'] == "delete") {
             echo "<td>" . $submenu->getTitle() . "</td>";
             echo "<td>" . $submenu->getType() . "</a></td>";
             echo "<td colspan='2'>" . $submenu->getDescription() . "</td>";
-            echo "<td colspan='2'><a href='../forms'>Alterar</a>";
-            echo "|";
-            echo "<a href='submenu.list.php?action=delete&idSubMenu='" . $submenu->getIdSubMenu() . ">Remover</a></td>";
+            echo "<td>"
+            . "<div class='btn-group'>"
+            . "<a class='btn btn-default' href='submenu.list.php?action=update&idSubMenu=" . $submenu->getIdSubMenu() . "'><span class='glyphicon glyphicon-pencil'></span></a>
+                        <a class='btn btn-default' href='submenu.list.php?action=delete&idSubMenu=" . $submenu->getIdSubMenu() . "'><span class='glyphicon glyphicon-trash'></span></a>"
+            . "</div></td>";
+            
         }
         ?>
     </tbody>

@@ -14,25 +14,30 @@ if (isset($_GET['action']) && $_GET['action'] == "delete" && isset($_GET['idMenu
 }
 ?>
 
-<div class="col-md-12"><h1><center>Lista de Itens do Menu</center></h1><hr></div>
+<div class="col-md-12"><h1><center>Listagem de Menus</center></h1><hr></div>
 
 <div class="col-md-4"><a class="btn btn-default" href="../forms/menu.form.php?action=insert">Criar Novo</a></div>
 
 <form class="form-horizontal" onsubmit="return false;">
+
     <div class="col-md-4">
         <div class="form-group">
-            <span>Ordenar por</span>
-            <select class="form-control" name="order">
+            <label for="order" class="col-sm-4 control-label">Ordenar por</label>
+            <div class="col-sm-8">
+            <select id="order" class="form-control" name="order">
                 <option value="localization">Localização</option>
                 <option value="a-z">Nome A-Z</option>
                 <option value="z-a">Nome Z-A</option>
             </select>
+            </div>
         </div>
     </div>
     <div class="col-md-4">
         <div class="form-group">
-           <label for="filter" class="control-label">Filtrar por:</label>
-           <input class="form-control" id="filter" type="text" name="filter">
+           <label for="filter" class="col-sm-4 control-label">Filtrar por:</label>
+           <div class="col-sm-8">
+                <input class="form-control" id="filter" type="text" name="filter">
+           </div>
         </div>
     </div>
 </form>
@@ -101,6 +106,7 @@ if (isset($_GET['action']) && $_GET['action'] == "delete" && isset($_GET['idMenu
 <script type="text/javascript" src="../../publics/js/rhinoslider-1.05.js"></script>
 <script type="text/javascript" src="../../publics/js/mousewheel.js"></script>
 <script type="text/javascript" src="../../publics/js/easing.js"></script>
+
 </body>
 
 </html>
