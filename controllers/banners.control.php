@@ -4,9 +4,21 @@ include_once("controller.class.php");
 include_once("../../models/banners.model.php");
 
 class ControllerBanners extends Controller {
+    public $total;
+    
     protected function selectAll(){
-	$db = new Includes\Db();
-        $lines = $db->query("select * from banners order by id ");
+        list($page) = func_get_args();
+        $page = (($page - 1) * 10);
+        $db = new Includes\Db();
+        $lines = $db->query(
+            "select * from banners order by id limit :page, 10",
+            array('page'=>$page)
+        );
+        
+        $this->total = $db->query(
+            "select count(*) from banners order by id"
+        );
+        
         $banners = array();
         foreach($lines as $line){
             $banner = new Banners();
@@ -56,5 +68,25 @@ class ControllerBanners extends Controller {
         $query = "delete from banners where id='".$obj->getId()."'";
         $line = $db->query($query);
         return $line;
+    }
+    protected function search($name){
+	$db = new Includes\Db();
+        $lines = $db->query(
+           "select * from banners where name :name",
+            array('name'=>$name)
+        );
+        $banners = array();
+        foreach($lines as $line){
+            $banner = new Banners();
+            $banner->setId($line["id"]);
+            $banner->setTitle($line["title"]);
+            $banner->setDescription($line["description"]);
+            $banner->setHref($line["href"]);
+            $banner->setSrc($line["src"]);
+            $banner->setAlt($line["alt"]);
+            $banner->setType($line["type"]);
+            $banners[] = $banner;
+        }
+        return $banners;
     }
 }
