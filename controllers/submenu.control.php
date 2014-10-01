@@ -18,6 +18,7 @@ class ControllerSubMenu extends Controller {
                 $submenu->setType($lines[0]["type"]);
 		$submenu->setDescription($lines[0]["description"]);
                 $submenu->setIdCategory($lines[0]["idCategory"]);
+                $submenu->setIdMenu($lines[0]["idMenu"]);
 		return $submenu;
 	}
 
@@ -62,9 +63,9 @@ class ControllerSubMenu extends Controller {
 	
 	protected function insert($submenu){
 		$db = new Includes\Db();
-                $submenu = new Submenu();
+                print_r($submenu);
 		return $db->query('insert into submenu (url, type, title, description, idMenu, idCategory) values 
-		(:title, :description, :localization)',array(
+		(:url, :type, :title, :description, :idMenu, :idCategory)',array(
 			'url' => $submenu->getUrl(),
                         'type' => $submenu->getType(),
                         'title' => $submenu->getTitle(),
@@ -82,8 +83,8 @@ class ControllerSubMenu extends Controller {
         //a fazer
 	protected function update($contentMedia){
 		$db = new Includes\Db();
-		return $db->query('update contentMedia set isMain = :isMain , idContent = :idContent, 
-		IdMedia = :idMedia where IdContentMedia = :idContentMedia', array(
+		return $db->query('update submenu set position = :position , url = :url, 
+		title = :title, type = :type, description = :description, idCategory = :idCategory, idPage = :idPage, where idSubMenu = :idSubMenu', array(
 			'isMain' => $contentMedia->getIsMain(),
 			'idContent' => $contentMedia->getIdContent(),
 			'idMedia' => $contentMedia->getIdMedia(),

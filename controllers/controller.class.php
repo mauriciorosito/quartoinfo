@@ -59,7 +59,7 @@ abstract class Controller {
             case "selectIdMedia":
                 return $this->selectIdMedia($obj);
                 break;
-
+            
             case "selectMedias":
                 return $this->selectMedias($obj);
                 break;
@@ -80,6 +80,9 @@ abstract class Controller {
                 break;
             case "updateProfileCategory":
                 return $this->updateProfileCategory($obj);
+                break;
+            case "selectAllFromMenu":
+                return $this->selectAllFromMenu($obj);
                 break;
         }
     }

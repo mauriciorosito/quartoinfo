@@ -8,6 +8,7 @@ require_once "../../models/submenu.model.php";
 if (isset($_GET['idMenu'])) {
     $idMenu = $_GET['idMenu'];
 }
+
 if (isset($_GET['action']) && $_GET['action'] == "delete") {
     $cM = new ControllerMenu();
 
@@ -73,17 +74,20 @@ if (isset($_GET['action']) && $_GET['action'] == "delete") {
             echo "<td>" . $submenu->getTitle() . "</td>";
             echo "<td>" . $submenu->getType() . "</a></td>";
             echo "<td colspan='2'>" . $submenu->getDescription() . "</td>";
-            echo "<td>"
-            . "<div class='btn-group'>"
-            . "<a class='btn btn-default' href='submenu.list.php?action=update&idSubMenu=" . $submenu->getIdSubMenu() . "'><span class='glyphicon glyphicon-pencil'></span></a>
-                        <a class='btn btn-default' href='submenu.list.php?action=delete&idSubMenu=" . $submenu->getIdSubMenu() . "'><span class='glyphicon glyphicon-trash'></span></a>"
-            . "</div></td>";
-            
+            echo "<td colspan='2'><div title='Alterar' class='btn-group'><a class='btn btn-default' href='../forms/submenu.form.php?action=update&idSubMenu=" . $submenu->getIdSubMenu() . "'><span class='glyphicon glyphicon-pencil'></span></a>";
+            echo "<a  title='Excluir' class='btn btn-default' href='submenu.list.php?action=delete&idSubMenu=" . $submenu->getIdSubMenu() . "'><span class='glyphicon glyphicon-trash'></span></a></div></td>";
         }
+       
         ?>
     </tbody>
 </table>
-
+<?php
+if (empty($submenus)) {
+    echo "<div class='col-md-12'><div class='alert alert-info' role='alert'>
+                    <strong>Alerta!</strong> Não há nenhum item de menu cadastrado, insira um novo!
+                  </div> </div";
+}
+?>
 <script type="text/javascript" charset="utf-8">
 </script>
 
