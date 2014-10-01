@@ -13,17 +13,36 @@ if (isset($_GET['action']) && $_GET['action'] == "delete" && isset($_GET['idMenu
     header("location: menu.list.php");
 }
 ?>
+
+<div class="col-md-12"><h1><center>Lista de Itens do Menu</center></h1><hr></div>
+
+<div class="col-md-4"><a class="btn btn-default" href="../forms/menu.form.php?action=insert">Criar Novo</a></div>
+
+<form class="form-horizontal" onsubmit="return false;">
+    <div class="col-md-4">
+        <div class="form-group">
+            <span>Ordenar por</span>
+            <select class="form-control" name="order">
+                <option value="localization">Localização</option>
+                <option value="a-z">Nome A-Z</option>
+                <option value="z-a">Nome Z-A</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+           <label for="filter" class="control-label">Filtrar por:</label>
+           <input class="form-control" id="filter" type="text" name="filter">
+        </div>
+    </div>
+</form>
 <table class="table table-striped table-condensed table-hover">
     <thead>
         <tr>
-            <td colspan="6" align="center"><h1>Lista de Itens do Menu</h1></td>
-        </tr>
-        <tr><td><a href="../forms/menu.form.php?action=insert">Criar Novo</a><td></tr>
-        <tr>
-            <td>Posição</td>
-            <td>Título</td>
-            <td colspan="2">Descrição</td>
-            <td colspan="2">Ações</td>
+            <td><h4>Localização</h4></td>
+            <td><h4>Título</h4></td>
+            <td><h4>Descrição</h4></td>
+            <td></td>
         </tr>
     </thead>
     <tbody data-link="row" class="rowlink">
@@ -32,13 +51,24 @@ if (isset($_GET['action']) && $_GET['action'] == "delete" && isset($_GET['idMenu
         $menus = $cM->actionControl("selectAll");
 
         foreach ($menus as $menu) {
-
             echo "<tr>";
-            echo "<td>" . $menu->getLocalization() . "</td>";
-            echo "<td><a href='menu.list?idMenu=" . $menu->getIdMenu() . "'>" . $menu->getTitle() . "</a></td>";
-            echo "<td colspan='2'>" . $menu->getDescription() . "</td>";
-            echo "<td colspan='2'><a href='menu.list.php?action=update&idMenu=" . $menu->getIdMenu() . "'>Alterar</a> |
-                     <a href='menu.list.php?action=delete&idMenu=" . $menu->getIdMenu() . "'>Remover</a></td>";
+            switch ($menu->getLocalization()) {
+                case "E":
+                    echo "<td>Acima</td>";
+                    break;
+                case "L";
+                    echo "<td>Lateral</td>";
+                    break;
+            }
+            echo "<td>"
+            . "<a href='menu.list?idMenu=" . $menu->getIdMenu() . "'>" . $menu->getTitle() . "</a>"
+            . "</td>";
+            echo "<td>" . $menu->getDescription() . "</td>";
+            echo "<td>"
+            . "<div class='btn-group'>"
+            . "<a class='btn btn-default' href='menu.list.php?action=update&idMenu=" . $menu->getIdMenu() . "'><span class='glyphicon glyphicon-pencil'></span></a>
+                        <a class='btn btn-default' href='menu.list.php?action=delete&idMenu=" . $menu->getIdMenu() . "'><span class='glyphicon glyphicon-trash'></span></a>"
+            . "</div></td>";
         }
         ?>
     </tbody>

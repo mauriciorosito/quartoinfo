@@ -1,10 +1,12 @@
 ﻿<?php
 include_once("../parts/header.php");
 include_once('../../system/limited.php');
-//include_once("../../controllers/submenu.controller.php");
-//include_once("../../models/submenu.model.php");
+include_once("../../controllers/submenu.control.php");
+include_once("../../controllers/content.control.php");
+include_once("../../models/submenu.model.php");
 require_once "../../controllers/menu.control.php";
 require_once "../../models/menu.model.php";
+require_once "../../models/content.model.php";
 
 //$limited = new Limited();
 //$limited->check(array('A'));
@@ -13,14 +15,40 @@ require_once "../../models/menu.model.php";
 <hr class="BVerde">
 <!-- contentE -->
 <?php
-    //código para inserir e atualizar
-?>
-<form action="menu.form.php" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="action" value="<?php
-    if (isset($_GET["action"])) {
-        echo $_GET["action"];
+   require_once "../../controllers/submenu.control.php";
+    require_once "../../models/submenu.model.php";
+if (isset($_POST['action'])) {
+    $cSm = new ControllerSubMenu();
+    $smenu = new subMenu();
+    if ($_POST['action'] == 'insert') {
+        @$smenu->setDescription($_POST['description']);
+        @$smenu->setTitle($_POST['title']);
+        @$smenu->setIdMenu($_POST['idMenu']);
+        @$smenu->setType($_POST['type']);
+        @$smenu->setUrl($_POST['url']);
+        @$smenu->setIdCategory($_POST['category']);
+        $cSm->actionControl("insert", $smenu);
+        header("location: submenu.form.php");
     }
-    ?>">
+    if ($_POST['action'] == 'update') {
+        $smenu->setDescription($_POST['description']);
+        $smenu->setIdMenu($_POST['idmenu']);
+        $smenu->setTitle($_POST['title']);
+        $smenu->setType($_POST['type']);
+        $smenu->setUrl($_POST['url']);
+        $smenu->setIdCategory($_POST['category']);
+        $cM->actionControl("update", $smenu);
+        header("location: submenu.form.php");
+    } else {
+        echo "sem ação";
+    }
+}//else{
+//  echo 'Você não pode fazer isso.';
+// die;
+//}
+?>
+<form action="submenu.form.php" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="action" value="insert">
     <input type="hidden" name="idSubMenu" value="<?php
     if (isset($_GET["idSubMenu"])) {
         echo $_GET["idSubMenu"];
@@ -29,28 +57,44 @@ require_once "../../models/menu.model.php";
 
     <table style="width:100%;padding:10px;">
         <tr>
-            <td>Título: <input type="text" name="title" class="form-control" value="<?php
+            <td>Título: <input type="text" name="title" class="form-control" placeholder="Max: 30 caractéres." pattern="[a-zA-Z-0-9]{3,30}" value="<?php
                 if (isset($submenu) && $submenu->getTitle() != "") {
                     echo $submenu->getTitle();
                 }
                 ?>"></td>
-            <td>Tipo de link: <select name="localization" class="form-control">
-                    <option  value="E" <?php
-                    if (isset($submenu) && $submenu->getLocalization() == "E") {
-                        echo "selected";
-                    }
-                    ?>> Em cima</option>
-
-                    <option value="L" <?php
-                    if (isset($submenu) && $submenu->getLocalization() == "L") {
-                        echo "selected";
-                    }
-                    ?>> Lateral</option>
+            <td>Tipo de item: <select id="type" name="type" class="form-control">
+                    <option value="semlink">Sem Link</option>
+                    <option  value="category">Categoria</option>
+                    <option value="link">Link</option>    
+                </select>
+            </td>
+        </tr>
+        <tr id="link_category_tr">
+            <td></td>
+            <td id="link_type">URL: 
+                <input type="text" name="title" class="form-control" value="http://"value="<?php
+                if (isset($submenu) && $submenu->getTitle() != "") {
+                    echo $submenu->getTitle();
+                }
+                ?>">
+            </td>
+            <td id="category_type">Categoria: 
+                <select name="idMenu" class="form-control">
+                    <?php
+                    //$cCat = new ContentCategory();
+                    //$category = new Category();
+                    //$categories = $cCat->actionControl("selectAll");
+                    //foreach($categories as $category){
+                        //echo "<option value =".$category->getIdCategory().">".$category->getName()."</option>";
+                    //}
+                    
+                    ?>
+                    
                 </select>
             </td>
         </tr>
         <tr>
-            <td>Descrição: <input type="text" name="description" class="form-control" value="<?php
+            <td>Descrição: <input type="text" name="description" class="form-control" placeholder="Max: 120 caractéres." pattern="[a-zA-Z-0-9]{3,120}" value="<?php
                 if (isset($menu) && $menu->getDescription() != "") {
                     echo $menu->getDescription();
                 }
@@ -69,9 +113,6 @@ require_once "../../models/menu.model.php";
                 </select>
             </td>
         </tr>
-        
-
-
     </table>
     <br>
     <input type="submit" name="button" value="Cadastrar"><br>
@@ -104,8 +145,8 @@ require_once "../../models/menu.model.php";
 <script type="text/javascript" src="../../publics/js/rhinoslider-1.05.js"></script>
 <script type="text/javascript" src="../../publics/js/mousewheel.js"></script>
 <script type="text/javascript" src="../../publics/js/easing.js"></script>
+<script type="text/javascript" src="../../publics/js/link_category_subMenu.js"></script>
 </body>
 
 </html>
-
 

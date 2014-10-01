@@ -27,7 +27,7 @@ if (isset($_POST['action'])) {
         $menu->setLocalization($_POST['localization']);
         $menu->setTitle($_POST['title']);
         $cM->actionControl("update", $menu);
-         header("location: menu.form.php");
+        header("location: menu.form.php");
     } else {
         echo "sem ação";
     }
@@ -38,44 +38,44 @@ if (isset($_POST['action'])) {
 ?>
 <form action="menu.form.php" method="post" enctype="multipart/form-data">
     <input type="hidden" name="action" value="<?php
-if (isset($_GET["action"])) {
-    echo $_GET["action"];
-}
-?>">
+    if (isset($_GET["action"])) {
+        echo $_GET["action"];
+    }
+    ?>">
     <input type="hidden" name="idMenu" value="<?php
     if (isset($_GET["idMenu"])) {
         echo $_GET["idMenu"];
     }
-?>">
+    ?>">
 
     <table style="width:100%;padding:10px;">
         <tr>
-            <td>Título: <input type="text" name="title" class="form-control" value="<?php
-    if (isset($menu) && $menu->getTitle() != "") {
-        echo $menu->getTitle();
-    }
-?>"></td>
+            <td>Título: <input type="text" name="title" class="form-control" placeholder="Max: 30 caractéres." pattern="[a-zA-Z-0-9]{3,30}" value="<?php
+                if (isset($menu) && $menu->getTitle() != "") {
+                    echo $menu->getTitle();
+                }
+                ?>"></td>
             <td>Localização Menu: <select name="localization" class="form-control">
                     <option  value="E" <?php
-                if (isset($menu) && $menu->getLocalization() == "E") {
-                    echo "selected";
-                }
-?>> Em cima</option>
+                    if (isset($menu) && $menu->getLocalization() == "E") {
+                        echo "selected";
+                    }
+                    ?>> Em cima</option>
 
                     <option value="L" <?php
                     if (isset($menu) && $menu->getLocalization() == "L") {
                         echo "selected";
                     }
-?>> Lateral</option>
+                    ?>> Lateral</option>
                 </select>
             </td>
         </tr>
         <tr>
-            <td>Descrição: <input type="text" name="description" class="form-control" value="<?php
-                    if (isset($menu) && $menu->getDescription() != "") {
-                        echo $menu->getDescription();
-                    }
-?>"><br></td>
+            <td>Descrição: <input type="text" name="description" class="form-control" placeholder="Max: 120 caractéres." pattern="[a-zA-Z-0-9]{3,120}" value="<?php
+                if (isset($menu) && $menu->getDescription() != "") {
+                    echo $menu->getDescription();
+                }
+                ?>"><br></td>
         </tr>
 
 
