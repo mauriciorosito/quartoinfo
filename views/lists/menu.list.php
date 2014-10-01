@@ -71,11 +71,13 @@ if (isset($_GET['action']) && $_GET['action'] == "delete" && isset($_GET['idMenu
             echo "<td>" . $menu->getDescription() . "</td>";
             echo "<td>"
             . "<div class='btn-group'>"
-            . "<a class='btn btn-default' href='menu.list.php?action=update&idMenu=" . $menu->getIdMenu() . "'><span class='glyphicon glyphicon-pencil'></span></a>
-                        <a class='btn btn-default' href='menu.list.php?action=delete&idMenu=" . $menu->getIdMenu() . "'><span class='glyphicon glyphicon-trash'></span></a>"
+            . "<a class='btn btn-default' title='Editar Menu' href='../forms/menu.form.php?action=update&idMenu=" . $menu->getIdMenu() . "'><span class='glyphicon glyphicon-pencil'></span></a>
+                        <a class='btn btn-default act-excluir'  title='Excluir Menu' href='menu.list.php?action=delete&idMenu=" . $menu->getIdMenu() . "'><span class='glyphicon glyphicon-trash'></span></a>"
+            . "<a title='Gerenciar Submenus' class='btn btn-default' href='submenu.list.php?idMenu=" . $menu->getIdMenu() . "'><span class='glyphicon glyphicon-folder-open'></span></a>"
             . "</div></td>";
         }
         ?>
+        <!--glyphicon glyphicon-folder-open-->
     </tbody>
 </table>
 

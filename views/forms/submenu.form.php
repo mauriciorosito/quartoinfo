@@ -15,8 +15,11 @@ require_once "../../models/content.model.php";
 <hr class="BVerde">
 <!-- contentE -->
 <?php
-   require_once "../../controllers/submenu.control.php";
-    require_once "../../models/submenu.model.php";
+require_once "../../controllers/submenu.control.php";
+require_once "../../models/submenu.model.php";
+if (isset($_GET['idMenu'])){
+    $idMenu = $_GET['idMenu'];
+}
 if (isset($_POST['action'])) {
     $cSm = new ControllerSubMenu();
     $smenu = new subMenu();
@@ -28,24 +31,29 @@ if (isset($_POST['action'])) {
         @$smenu->setUrl($_POST['url']);
         @$smenu->setIdCategory($_POST['category']);
         $cSm->actionControl("insert", $smenu);
-        header("location: submenu.form.php");
+        header("location: ../lists/submenu.list.php?idMenu=" . $_POST['idMenu']);
     }
     if ($_POST['action'] == 'update') {
         $smenu->setDescription($_POST['description']);
-        $smenu->setIdMenu($_POST['idmenu']);
+        $smenu->setIdMenu($_POST['idMenu']);
         $smenu->setTitle($_POST['title']);
         $smenu->setType($_POST['type']);
         $smenu->setUrl($_POST['url']);
         $smenu->setIdCategory($_POST['category']);
+        $smenu->setIdSubMenu($_POST['idSubMenu']);
         $cM->actionControl("update", $smenu);
-        header("location: submenu.form.php");
+        header("location: ../lists/submenu.list.php?idMenu=" . $_POST['idMenu']);
     } else {
         echo "sem ação";
     }
-}//else{
-//  echo 'Você não pode fazer isso.';
-// die;
-//}
+}
+if (isset($_GET['action']) && isset($_GET['idSubMenu'])) {
+    $submenu = new subMenu();
+    $submenu->setIdSubMenu($_GET['idSubMenu']);
+    $sControll = new ControllerSubMenu();
+    $submenu = $sControll->actionControl("selectOne", $submenu);
+    $idMenu = $submenu->getIdMenu();
+}
 ?>
 
 <div class="col-md-12"><h1><center>Cadastro de Item do Menu</center></h1><hr></div>
@@ -98,9 +106,8 @@ if (isset($_POST['action'])) {
                     //$category = new Category();
                     //$categories = $cCat->actionControl("selectAll");
                     //foreach($categories as $category){
-                        //echo "<option value =".$category->getIdCategory().">".$category->getName()."</option>";
+                    //echo "<option value =".$category->getIdCategory().">".$category->getName()."</option>";
                     //}
-                    
                     ?>
                     
                     </select>

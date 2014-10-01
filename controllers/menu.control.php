@@ -15,7 +15,7 @@ protected function selectOne($menu){
 		$menu->setIdMenu($lines[0]["idMenu"]);
 		$menu->setDescription($lines[0]["description"]);
 		$menu->setLocalization($lines[0]["localization"]);
-		$menu->setTitle($lines[0]["description"]);
+		$menu->setTitle($lines[0]["title"]);
 		
 		return $menu;
 	}
@@ -50,12 +50,12 @@ protected function selectOne($menu){
 
 	protected function update($menu){
 		$db = new Includes\Db();
-		return $db->query('update menu set isMain = :isMain , idContent = :idContent, 
-		IdMedia = :idMedia where IdContentMedia = :idContentMedia', array(
-			'isMain' => $contentMedia->getIsMain(),
-			'idContent' => $contentMedia->getIdContent(),
-			'idMedia' => $contentMedia->getIdMedia(),
-			'idContentMedia' => $contentMedia->getIdContentMedia(),
+		return $db->query('update menu set title = :title , description = :description, 
+		localization = :localization where idMenu = :idMenu', array(
+			'title' => $menu->getTitle(),
+			'description' => $menu->getDescription(),
+			'localization' => $menu->getLocalization(),
+			'idMenu' => $menu->getIdMenu(),
 		));
 	}	
 

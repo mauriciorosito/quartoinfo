@@ -12,6 +12,7 @@ include_once('../../system/limited.php');
 require_once "../../controllers/menu.control.php";
 require_once "../../models/menu.model.php";
 if (isset($_POST['action'])) {
+    
     $cM = new ControllerMenu();
     $menu = new Menu();
     if ($_POST['action'] == 'insert') {
@@ -19,7 +20,7 @@ if (isset($_POST['action'])) {
         $menu->setLocalization($_POST['localization']);
         $menu->setTitle($_POST['title']);
         $cM->actionControl("insert", $menu);
-        header("location: menu.form.php");
+        header("location: ../lists/menu.list.php");
     }
     if ($_POST['action'] == 'update') {
         $menu->setIdMenu($_POST['idMenu']);
@@ -27,14 +28,18 @@ if (isset($_POST['action'])) {
         $menu->setLocalization($_POST['localization']);
         $menu->setTitle($_POST['title']);
         $cM->actionControl("update", $menu);
-        header("location: menu.form.php");
+        header("location: ../lists/menu.list.php");
     } else {
         echo "sem ação";
     }
-}//else{
-//  echo 'Você não pode fazer isso.';
-// die;
-//}
+}if(isset($_GET['action']) && $_GET['action'] == "update"){
+    
+    $men = new Menu();
+    $men->setIdMenu($_GET['idMenu']);
+    $cM = new ControllerMenu();
+    $menu = $cM->actionControl("selectOne", $men);
+    
+}
 ?>
 <form action="menu.form.php" method="post" enctype="multipart/form-data">
     <input type="hidden" name="action" value="<?php
