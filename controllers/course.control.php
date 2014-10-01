@@ -10,12 +10,15 @@ class ControllerCourse extends Controller {
         $lines = $db->query('select * from course where idCourse = :idCourse', array(
             'idCourse' => $course->getIdCourse(),
         ));
-        if(isset($lines[0])) {
+        if (isset($lines[0])) {
             $course = new Course();
             $course->setIdCourse($lines[0]["idCourse"]);
             $course->setName($lines[0]["name"]);
+            $course->setDescription($lines[0]["description"]);
+            $course->setAlias($lines[0]["alias"]);
+            $course->setType($lines[0]["type"]);
             return $course;
-        }else{
+        } else {
             return 0;
         }
     }
@@ -23,12 +26,16 @@ class ControllerCourse extends Controller {
     protected function selectAll() {
         list($course) = func_get_args();
         $db = new Includes\Db();
-        $lines = $db->query("select * from course");
+        $lines = $db->query("select * from course order by name");
         $courses = array();
         foreach ($lines as $line) {
             $course = new Course();
             $course->setIdCourse($line["idCourse"]);
             $course->setName($line["name"]);
+            $course->setDescription($line["description"]);
+            $course->setAlias($line["alias"]);
+            $course->setType($line["type"]);
+
 
             $courses[] = $course;
         }
@@ -37,18 +44,25 @@ class ControllerCourse extends Controller {
 
     protected function insert($course) {
         $db = new Includes\Db();
-        return $db->query('insert into course (idCourse, name) values 
+        return $db->query('insert into course (idCourse, name, type, description, alias) values 
 		(NULL, :name) ', array(
                     'idCourse' => $course->getIdCourse(),
                     'name' => $course->getName(),
+                    'type' => $course->getType(),
+                    'description' => $course->getDescription(),
+                    'alias' => $course->getAlias(),
         ));
     }
 
     protected function update($course) {
         $db = new Includes\Db();
-        return $db->query('update course set idCourse = :idCourse, name = :name where idCourse = :idCourse', array(
+        return $db->query('update course set idCourse = :idCourse, name = :name, type = :type, description = :description, '
+                        . 'alias = :alias where idCourse = :idCourse', array(
                     'idCourse' => $course->getIdCourse(),
                     'name' => $course->getName(),
+                    'type' => $course->getType(),
+                    'description' => $course->getDescription(),
+                    'alias' => $course->getAlias(),
         ));
     }
 
@@ -68,6 +82,26 @@ class ControllerCourse extends Controller {
         } else {
             return false;
         }
+    }
+
+    protected function selectAllDescending() {
+        $db = new Includes\Db();
+        $lines = $db->query("select * from course order by name desc");
+        $courses = array();
+        foreach ($lines as $line) {
+            $course = new Course();
+            $course->setIdCourse($line["idCourse"]);
+            $course->setType($line["type"]);
+            $course->setName($line["name"]);
+            $course->setDescription($line["description"]);
+            $course->setAlias($line["alias"]);
+         
+            
+
+            $courses[] = $course;
+        }
+
+        return $courses;
     }
 
 }

@@ -13,6 +13,8 @@
             <ul class="nav navbar-nav">
                 <li><a href="user.list.php"><i class="glyphicon glyphicon-user"></i> &nbsp; Usuários</a></li>
                 <li><a href="content.list.php"><i class="glyphicon glyphicon-list-alt"></i> &nbsp; Conteúdos</a></li>
+                <li><a href="course.list.php"><i class="glyphicon glyphicon-book"></i> &nbsp; Cursos</a></li>
+               
             </ul>
         </div>
     </div>

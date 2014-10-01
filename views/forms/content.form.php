@@ -45,7 +45,7 @@ if (isset($_GET["action"], $_GET["idContent"])) {
     }
 }
 
-if (isset($_POST["action"])) {
+if (isset($_POST["action"])) {      
     $content = new Content();
     $content->setIdContent($_POST["idContent"]);
     $content->setTitle($_POST["title"]);
@@ -93,7 +93,7 @@ if (isset($_POST["action"])) {
         move_uploaded_file($img['tmp_name'], "../../uploads/imgs/" . $img['name']);
     }
 
-    if (!empty($_FILES['files'])) {
+    if (!empty($_FILES['files']['name'][0])) {
         $aux = 0;
         $tmp = $_FILES['files']['tmp_name'];
         foreach ($_FILES['files'] as $chave => $file) {
