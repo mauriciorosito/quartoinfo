@@ -1,16 +1,8 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+include_once("../../packages/database/database.class.php");
+include_once("controller.class.php");
 
-/**
- * Description of course
- *
- * @author kathiane.050996
- */
 class ControllerCourse extends Controller {
 
     protected function selectOne($course) {
@@ -18,21 +10,23 @@ class ControllerCourse extends Controller {
         $lines = $db->query('select * from course where idCourse = :idCourse', array(
             'idCourse' => $course->getIdCourse(),
         ));
-        $course = new Course();
-        $course->setIdCourse($lines[0]["idCourse"]);
-        $course->setName($lines[0]["name"]);
-        return $course;
+        if(isset($lines[0])) {
+            $course = new Course();
+            $course->setIdCourse($lines[0]["idCourse"]);
+            $course->setName($lines[0]["name"]);
+            return $course;
+        }else{
+            return 0;
+        }
     }
 
     protected function selectAll() {
         list($course) = func_get_args();
         $db = new Includes\Db();
-        $lines = $db->query("select * from course where idCourse = :idCourse", array(
-            'idCourse' => $course->getIdCourse(),
-        ));
+        $lines = $db->query("select * from course");
         $courses = array();
         foreach ($lines as $line) {
-            $course = new media();
+            $course = new Course();
             $course->setIdCourse($line["idCourse"]);
             $course->setName($line["name"]);
 

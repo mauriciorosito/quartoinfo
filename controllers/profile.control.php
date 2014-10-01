@@ -11,21 +11,22 @@
  *
  * @author kathiane.050996
  */
-class Profile extends Controller {
+
+include_once("../../packages/database/database.class.php");
+include_once("controller.class.php");
+include_once("../../models/profile.model.php");
+
+class ControllerProfile extends Controller {
 
     protected function selectAll() {
         $db = new Includes\Db();
         $lines = $db->query("select * from profile");
         $profiles = array();
         foreach ($lines as $line) {
-            $profile = new Profile();
+            $profile = new \models\Profile();
             $profile->setIdProfile($line["idProfile"]);
             $profile->setName($line["name"]);
-            $profile->setPhoto($line["photo"]);
-            $profile->setRegistration($line["registration"]);
-            $profile->setReminder($line["reminder"]);
-            $profile->setAbout($line["about"]);
-
+            $profile->setDescription($line["description"]);
 
             $profiles[] = $profile;
         }
@@ -37,59 +38,80 @@ class Profile extends Controller {
         $lines = $db->query('select * from profile where idProfile = :idProfile', array(
             'idProfile' => $profile->getIdProfile(),
         ));
-        $profile = new Profile();
+        $profile = new \models\Profile();
         $profile->setIdProfile($lines[0]["idProfile"]);
         $profile->setName($lines[0]["name"]);
-        $profile->setPhoto($lines[0]["photo"]);
-        $profile->setRegistration($lines[0]["registration"]);
-        $profile->setReminder($lines[0]["reminder"]);
-        $profile->setAbout($lines[0]["about"]);
+        $profile->setIs_admin($lines[0]["is_admin"]);
 
         return $profile;
     }
 
     protected function insert($profile) {
         $db = new Includes\Db();
-        return $db->query('insert into profile (idProfile,  name, photo, registration, reminder, about) values 
-		(NULL, :name, :photo, :registration, :reminder, :about) ', array(
+        return $db->query('insert into profile (idProfile,  name, is_admin, can_edit, can_view, can_create, can_delete) values 
+		(NULL, :name, :is_admin, :can_edit, :can_view, :can_create, :can_delete) ', array(
                     'idProfile' => $profile->getIdProfile(),
                     'name' => $profile->getName(),
-                    'photo' => $profile->getPhoto(),
-                    'registration' => $profile->getRegistration(),
-                    'reminder' => $profile->getReminder(),
-                    'about' => $profile->getAbout(),
+                    'is_admin' => $profile->getIs_admin(),
+                    'can_edit' => $profile->getCan_edit(),
+                    'can_view' => $profile->getCan_view(),
+                    'can_create' => $profile->getCan_create(),
+                    'can_delete' => $profile->getCan_delete(),
         ));
     }
 
     protected function update($profile) {
         $db = new Includes\Db();
-        return $db->query('update profile set idProfile = :idProfile,  name = :name, photo = :photo, registration = :registration, reminder = :reminder, about = :about where idProfile = :idProfile', array(
-                    'idProfile' => $course->getIdProfile(),
-                    'name' => $course->getName(),
-                    'photo' => $course->getPhoto(),
-                    'registration' => $course->getRegistration(),
-                    'reminder' => $course->getReminder(),
-                    'about' => $course->getAbout(),
+        return $db->query('update profile set  name = :name, is_admin = :is_admin, can_edit = :can_edit, can_view = :can_view, can_create = :can_create, can_delete = :can_delete where idProfile = :idProfile', array(
+                    'idProfile' => $profile->getIdProfile(),
+                    'name' => $profile->getName(),
+                    'is_admin' => $profile->getIs_admin(),
+                    'can_edit' => $profile->getCan_edit(),
+                    'can_view' => $profile->getCan_view(),
+                    'can_create' => $profile->getCan_create(),
+                    'can_delete' => $profile->getCan_delete(),
         ));
     }
 
     protected function delete($profile) {
-         $db = new Includes\Db();
+        $db = new Includes\Db();
 
-        $ret2 = $db->query("delete from profile where IdProfile = :idProfile", array(
+        return $db->query("delete from profile where IdProfile = :idProfile", array(
             'idProfile' => $profile->getIdProfile(),
-        )); // ???? verificar!!!!!
-
-        $ret1 = $db->query("delete from profile where idProfile = :idProfile", array(
-            'idProfile' => $profile->getIdProfile(),
-        ));
-
-        if ($ret1 && $ret2) {
-            return true;
-        } else {
-            return false;
-        }
+        )); 
+    }
+    
+    protected function selectAllCategories() {
+        $db = new Includes\Db();
+        $lines = $db->query("select * from idProfile");
+        $categories = array();
+        
+        return $lines;
+    }
+    
+    protected function selectMaxId() {
+        $db = new Includes\Db();
+        $lines = $db->query("select max(idProfile) as  id from profile");
+        
+        return $lines[0]['id'];
     }
 
-//put your code here
+    protected function deleteProfileCategory($profilecategory) {
+        $db = new Includes\Db();
+
+        return $db->query("delete from profilecategory where idProfileCategory = :idProfileCategory", array(
+            'idProfileCategory' => $profile->getIdProfileCategory(),
+        ));
+    }
+    
+    protected function updateProfileCategory($profilecategory) {
+        $db = new Includes\Db();
+        return $db->query('update profilecategory set idProfile = :idProfile, idProfile = :idCategory, permType = :permType where idProfileCategory = :idProfileCategory', array(
+                    'idProfile' => $profile->getIdProfile(),
+                    'idProfile' => $profile->getIdCategory(),
+                    'permType' => $profile->getPermType(),
+                    'idProfileCategory' => $profile->getIdProfileCategory(),
+        ));
+    }
+//put your code heree
 }

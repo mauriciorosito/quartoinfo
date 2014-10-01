@@ -1,58 +1,46 @@
 <?php
-	class Profile {
-		private $idProfile;
-		private $type;
-		private $name;
-		private $photo;
-		private $registration;
-		private $about;
 
-		public function setIdProfile($idProfile){
-			$this->idProfile = $idProfile;
-		}
+namespace models;
 
-		public function getIdProfile(){
-			return $this->idProfile;
-		}
+class Profile {
 
-		public function setType($type){
-			$this->type = $type;
-		}
+    private $idProfile;
+    private $name;
+    private $description;
+    private $is_admin;
 
-		public function getType(){
-			return $this->type;
-		}
+    public function getIdProfile() {
+        return $this->idProfile;
+    }
 
-		public function setName($name){
-			$this->name = $name;
-		}
+    public function getName() {
+        return $this->name;
+    }
 
-		public function getName(){
-			return $this->name;
-		}
+    public function getDescription() {
+        return $this->description;
+    }
 
-		public function setPhoto($photo){
-			$this->photo = $photo;
-		}
+    public function setDescription($description) {
+        $this->description = $description;
+    }
 
-		public function getPhoto(){
-			return $this->photo;
-		}
+    public function setIdProfile($idProfile) {
+        $this->idProfile = $idProfile;
+    }
 
-		public function setRegistration($registration){
-			$this->registration = $registration;
-		}
+    public function setName($name) {
+        $this->name = $name;
+    }
+    public function getIs_admin() {
+        return $this->is_admin;
+    }
 
-		public function getRegistration(){
-			return $this->registration;
-		}
+    public function setIs_admin($is_admin) {
+        $this->is_admin = $is_admin;
+    }
 
-		public function setAbout($about){
-			$this->about = $about;
-		}
 
-		public function getAbout(){
-			return $this->about;
-		}
-	}
+}
+
 ?>

@@ -8,6 +8,7 @@ $controllerContent = new ControllerContent();
 <!-- Login http://www.html5dev.com.br/category/bootstrap/-->
 
 <?php
+$caminho = "<li><a href='home.list.php'>Home</a></li><li class='active'>Pesquisa Avançada</li>";
 include_once("../parts/header.php");
 ?>
 
@@ -87,7 +88,8 @@ include_once("../parts/header.php");
                    <h3>Resultados:</h3> 
 				    <input class="botaopesquisar"type="radio" name="submit" class="btn btn-default" value="titulo">Ordenar por título
 					<input class="radiopesquisa"type="radio" name="submit" class="btn btn-default" value="data">Ordenar por data<br><br>
-				<table class="table table-striped table-condensed table-bordered table-hover corTabela" id="corTabela">
+				
+                                        <table class="table table-striped table-condensed table-bordered table-hover corTabela" id="corTabela">
 					  <thead>
 						<tr>
                           <th>Data de publicação</th>
@@ -118,14 +120,15 @@ include_once("../parts/header.php");
 								$pesquisa->pagination($pesquisa->total, $page);
 							}
 						?>
+                                        
 				</div>
 				</div>
 				<?php
 					include_once("../parts/footer.php");
 				?>
-					 
-       
 
+					 
+      
         <!-- JavaScript -->
         <script src="../../publics/js/jquery-1.10.2.js"></script>
         <script src="../../publics/js/bootstrap.js"></script>
@@ -134,6 +137,22 @@ include_once("../parts/header.php");
         <script type="text/javascript" src="../../publics/js/rhinoslider-1.05.js"></script>
         <script type="text/javascript" src="../../publics/js/mousewheel.js"></script>
         <script type="text/javascript" src="../../publics/js/easing.js"></script>
+                                
+        <script>
+            $( ".page" ).click(function() {
+                page = $( this ).html();
+                $(".page").parent().removeClass("active");
+                $(this).parent().addClass("active");
+                $.ajax({
+                    type: 'post',
+                    data: 'page='+page+'&pesquisa=<?php echo $_POST['pesquisa']; ?>&tipo=<?php echo $_POST['tipo']; ?>&submit=<?php echo $_POST['submit']; ?>&intervalo=<?php echo $_POST['intervalo']; ?>',
+                    url:'../parts/search.php',
+                    success: function(retorno){
+                      $('#corTabela').html(retorno);  
+                    }
+                })
+            });
+        </script>
 
     </body>
 

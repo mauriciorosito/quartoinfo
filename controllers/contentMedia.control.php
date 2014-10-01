@@ -72,7 +72,7 @@ class ControllerContentMedia extends Controller {
 	
 	protected function insert($contentMedia){
 		$db = new Includes\Db();
-		return $db->query('insert into contentMedia (isMain, idContent, idMedia) values 
+		return $db->query('insert into contentmedia (isMain, idContent, idMedia) values 
 		(:isMain, :idContent,:idMedia) ',array(
 			'isMain' => $contentMedia->getIsMain(),
 			'idContent' => $contentMedia->getIdContent(),
@@ -82,7 +82,7 @@ class ControllerContentMedia extends Controller {
 
 	protected function update($contentMedia){
 		$db = new Includes\Db();
-		return $db->query('update contentMedia set isMain = :isMain , idContent = :idContent, 
+		return $db->query('update contentmedia set isMain = :isMain , idContent = :idContent, 
 		IdMedia = :idMedia where IdContentMedia = :idContentMedia', array(
 			'isMain' => $contentMedia->getIsMain(),
 			'idContent' => $contentMedia->getIdContent(),
@@ -94,7 +94,7 @@ class ControllerContentMedia extends Controller {
 	protected function delete($contentMedia){
 		$db = new Includes\Db();
 		
-		$ret = $db->query('delete from contentMedia where IdContentMedia = :idContentMedia', array(
+		$ret = $db->query('delete from contentmedia where IdContentMedia = :idContentMedia', array(
 			'idContentMedia' => $content->getIdContentMedia(),
 		));
 	}	

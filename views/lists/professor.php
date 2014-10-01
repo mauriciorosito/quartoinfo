@@ -9,4 +9,7 @@
 require_once('../../system/limited.php');
 
 $limited = new Limited();
-$limited->check(array('E'));
+$limited->check(array('P'));
+?>
+
+<a href="../../system/logout.php" class="btn"><i class="glyphicon glyphicon-log-out"></i>&nbsp;Sair</a>
