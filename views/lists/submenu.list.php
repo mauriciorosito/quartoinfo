@@ -1,5 +1,4 @@
 <?php
-include_once "../parts/header.php";
 require_once "../../controllers/menu.control.php";
 require_once "../../models/menu.model.php";
 require_once "../../controllers/submenu.control.php";
@@ -7,80 +6,126 @@ require_once "../../models/submenu.model.php";
 
 if (isset($_GET['idMenu'])) {
     $idMenu = $_GET['idMenu'];
+} else {
+    header("location: menu.list.php");
 }
 
 if (isset($_GET['action']) && $_GET['action'] == "delete") {
-    $cM = new ControllerMenu();
+    $cM = new ControllerSubMenu();
 
     $menu = new subMenu();
-    $menu->setIdSubMenu($_GET['idMenu']);
+    $menu->setIdSubMenu($_GET['idSubMenu']);
+
+    $idMenu = $_GET['idMenu'];
 
     $cM->actionControl("delete", $menu);
-    header("location: submenu.list.php");
+    header("location: submenu.list.php?idMenu=$idMenu");
 }
+if (isset($_GET['action']) && $_GET['action'] == "up") {
+    $cM = new ControllerSubMenu();
+    $submenu = new subMenu();
+    $submenu->setIdSubMenu($_GET['idSubMenu']);
+    $submenu = $cM->actionControl("selectOne", $submenu);
+    $newPos = $submenu->getPosition() - 1;
+    $submenu->setPosition($newPos);
+    $cM->actionControl("upOneLevel", $submenu);
+    header("location: submenu.list.php?idMenu=$idMenu");
+}
+
+if (isset($_GET['action']) && $_GET['action'] == "down") {
+    $cM = new ControllerSubMenu();
+    $submenu = new subMenu();
+    $submenu->setIdSubMenu($_GET['idSubMenu']);
+    $submenu = $cM->actionControl("selectOne", $submenu);
+    $newPos = $submenu->getPosition() + 1;
+    $submenu->setPosition($newPos);
+    $cM->actionControl("downOneLevel", $submenu);
+    header("location: submenu.list.php?idMenu=$idMenu");
+}
+
+include_once "../parts/header.php";
 ?>
 
 <div class="col-md-12"><h1><center>Lista de Itens do Menu</center></h1><hr></div>
+<div class="row">
+    <div class="col-md-4"><a class="btn btn-default" href="../forms/submenu.form.php?action=insert&idMenu=<?php echo $idMenu; ?>">Criar Novo</a></div>
 
-<div class="col-md-4"><a class="btn btn-default" href="../forms/submenu.form.php?action=insert">Criar Novo</a></div>
+    <form class="form-horizontal" onsubmit="return false;">
 
-<form class="form-horizontal" onsubmit="return false;">
-
-    <div class="col-md-4">
-        <div class="form-group">
-            <label for="order" class="col-sm-4 control-label">Ordenar por</label>
-            <div class="col-sm-8">
-            <select id="order" class="form-control" name="order">
-                <option value="localization">Localização</option>
-                <option value="a-z">Nome A-Z</option>
-                <option value="z-a">Nome Z-A</option>
-            </select>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="order" class="col-sm-4 control-label">Ordenar por</label>
+                <div class="col-sm-8">
+                    <select id="order" class="form-control" name="order">
+                        <option value="localization">Localização</option>
+                        <option value="a-z">Nome A-Z</option>
+                        <option value="z-a">Nome Z-A</option>
+                    </select>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-4">
-        <div class="form-group">
-           <label for="filter" class="col-sm-4 control-label">Filtrar por:</label>
-           <div class="col-sm-8">
-                <input class="form-control" id="filter" type="text" name="filter">
-           </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="filter" class="col-sm-4 control-label">Filtrar por:</label>
+                <div class="col-sm-8">
+                    <input class="form-control" id="filter" type="text" name="filter">
+                </div>
+            </div>
         </div>
-    </div>
-</form>
-<table class="table table-striped table-condensed table-hover">
-    <thead>
-        <tr>
-            <td width="20%">Url</td>
-            <td>Título</td>
-            <td>Tipo</td>
-            <td colspan="2">Descrição</td>
-            <td colspan="2">Ações</td>
-        </tr>
-    </thead>
-    <tbody data-link="row" class="rowlink">
-        <?php
-        $submenu = new subMenu();
-        $submenu->setIdMenu($idMenu);
-        $cSM = new ControllerSubMenu();
-        $submenus = $cSM->actionControl("selectAllFromMenu", $submenu);
+    </form>
+</div>
+<br/>
+<br/>
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped table-condensed table-hover">
+            <thead>
+                <tr>
+                    <td> # </td>
+                    <td width="20%">Url</td>
+                    <td>Título</td>
+                    <td>Tipo</td>
+                    <td colspan="2">Descrição</td>
+                    <td width="15%" colspan="2">Ações</td>
+                </tr>
+            </thead>
+            <tbody data-link="row" class="rowlink">
+<?php
+$submenu = new subMenu();
+$submenu->setIdMenu($idMenu);
+$cSM = new ControllerSubMenu();
+$fim = $cSM->getLastPos($idMenu);
+$submenus = $cSM->actionControl("selectAllFromMenu", $submenu);
 
-        foreach ($submenus as $submenu) {
-            $url = $submenu->getUrl();
-            if ($url == "") {
-                $url = "- - - - - - - - - - - - - - - - - - - -";
-            }
-            echo "<tr>";
-            echo "<td>" . $url . "</td>";
-            echo "<td>" . $submenu->getTitle() . "</td>";
-            echo "<td>" . $submenu->getType() . "</a></td>";
-            echo "<td colspan='2'>" . $submenu->getDescription() . "</td>";
-            echo "<td colspan='2'><div title='Alterar' class='btn-group'><a class='btn btn-default' href='../forms/submenu.form.php?action=update&idSubMenu=" . $submenu->getIdSubMenu() . "'><span class='glyphicon glyphicon-pencil'></span></a>";
-            echo "<a  title='Excluir' class='btn btn-default' href='submenu.list.php?action=delete&idSubMenu=" . $submenu->getIdSubMenu() . "'><span class='glyphicon glyphicon-trash'></span></a></div></td>";
-        }
-       
-        ?>
-    </tbody>
-</table>
+foreach ($submenus as $submenu) {
+    $url = $submenu->getUrl();
+    if ($url == "") {
+        $url = "- - - - - - - - - - - - - - - - - - - -";
+    }
+    echo "<tr>";
+    echo "<td>" . $submenu->getPosition() . " </td>";
+    echo "<td>" . $url . "</td>";
+    echo "<td>" . $submenu->getTitle() . "</td>";
+    echo "<td>" . $submenu->getType() . "</a></td>";
+    echo "<td colspan='2'>" . $submenu->getDescription() . "</td>";
+    echo "<td colspan='2'><div style='font-size:10PX'  class='btn-group'>";
+    if ($submenu->getPosition() > 1)
+        echo "<a  title='Subir um Nível' class='btn btn-default' href='submenu.list.php?action=up&idSubMenu=" . $submenu->getIdSubMenu() . "&idMenu=" . $idMenu . "'><span class='glyphicon glyphicon-arrow-up'></span></a>";
+    if ($submenu->getPosition() < $fim)
+        echo "<a  title='Descer um Nível' class='btn btn-default' href='submenu.list.php?action=down&idSubMenu=" . $submenu->getIdSubMenu() . "&idMenu=" . $idMenu . "'><span class='glyphicon glyphicon-arrow-down'></span></a>";
+    echo "<a class='btn btn-default' title='Alterar' href='../forms/submenu.form.php?action=update&idSubMenu=" . $submenu->getIdSubMenu() . "'><span class='glyphicon glyphicon-pencil'></span></a>";
+    echo "<a  title='Excluir' class='act-excluir btn btn-default' href='submenu.list.php?action=delete&idSubMenu=" . $submenu->getIdSubMenu() . "&idMenu=" . $idMenu . "'><span class='glyphicon glyphicon-trash'></span></a>";
+    echo "</div></td></tr>";
+}
+?>
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- 
+glyphicon glyphicon-arrow-up
+glyphicon glyphicon-arrow-down
+-->
 <?php
 if (empty($submenus)) {
     echo "<div class='col-md-12'><div class='alert alert-info' role='alert'>

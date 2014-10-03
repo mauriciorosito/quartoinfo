@@ -8,8 +8,17 @@ class subMenu{
     public $idMenu;
     public $url;
     public $idCategory;
-    
-    public function getIdSubMenu() {
+    public $position;
+   
+    public function getPosition() {
+        return $this->position;
+    }
+
+    public function setPosition($position) {
+        $this->position = $position;
+    }
+
+        public function getIdSubMenu() {
         return $this->idSubMenu;
     }
 

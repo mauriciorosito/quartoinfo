@@ -15,72 +15,79 @@ if (isset($_GET['action']) && $_GET['action'] == "delete" && isset($_GET['idMenu
 ?>
 
 <div class="col-md-12"><h1><center>Listagem de Menus</center></h1><hr></div>
+<div class="row">
+    <div class="col-md-4"><a class="btn btn-default" href="../forms/menu.form.php?action=insert">Criar Novo</a></div>
 
-<div class="col-md-4"><a class="btn btn-default" href="../forms/menu.form.php?action=insert">Criar Novo</a></div>
+    <form class="form-horizontal" onsubmit="return false;">
 
-<form class="form-horizontal" onsubmit="return false;">
-
-    <div class="col-md-4">
-        <div class="form-group">
-            <label for="order" class="col-sm-4 control-label">Ordenar por</label>
-            <div class="col-sm-8">
-            <select id="order" class="form-control" name="order">
-                <option value="localization">Localização</option>
-                <option value="a-z">Nome A-Z</option>
-                <option value="z-a">Nome Z-A</option>
-            </select>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="order" class="col-sm-4 control-label">Ordenar por</label>
+                <div class="col-sm-8">
+                    <select id="order" class="form-control" name="order">
+                        <option value="localization">Localização</option>
+                        <option value="a-z">Nome A-Z</option>
+                        <option value="z-a">Nome Z-A</option>
+                    </select>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-4">
-        <div class="form-group">
-           <label for="filter" class="col-sm-4 control-label">Filtrar por:</label>
-           <div class="col-sm-8">
-                <input class="form-control" id="filter" type="text" name="filter">
-           </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="filter" class="col-sm-4 control-label">Filtrar por:</label>
+                <div class="col-sm-8">
+                    <input class="form-control" id="filter" type="text" name="filter">
+                </div>
+            </div>
         </div>
-    </div>
-</form>
-<table class="table table-striped table-condensed table-hover">
-    <thead>
-        <tr>
-            <td><h4>Localização</h4></td>
-            <td><h4>Título</h4></td>
-            <td><h4>Descrição</h4></td>
-            <td></td>
-        </tr>
-    </thead>
-    <tbody data-link="row" class="rowlink">
-        <?php
-        $cM = new ControllerMenu();
-        $menus = $cM->actionControl("selectAll");
+    </form>
+</div>
+<div class="row">
+    <br/>
+    <br/>
+    <div class="col-md-12">
+        <table class="table table-striped table-condensed table-hover">
 
-        foreach ($menus as $menu) {
-            echo "<tr>";
-            switch ($menu->getLocalization()) {
-                case "E":
-                    echo "<td>Acima</td>";
-                    break;
-                case "L";
-                    echo "<td>Lateral</td>";
-                    break;
-            }
-            echo "<td>"
-            . "<a href='menu.list?idMenu=" . $menu->getIdMenu() . "'>" . $menu->getTitle() . "</a>"
-            . "</td>";
-            echo "<td>" . $menu->getDescription() . "</td>";
-            echo "<td>"
-            . "<div class='btn-group'>"
-            . "<a class='btn btn-default' title='Editar Menu' href='../forms/menu.form.php?action=update&idMenu=" . $menu->getIdMenu() . "'><span class='glyphicon glyphicon-pencil'></span></a>
+            <thead>
+                <tr>
+                    <td><h5>Localização</h5></td>
+                    <td><h5>Título</h5></td>
+                    <td><h5>Descrição</h5></td>
+                    <td width="15%"><h5> Ações </h5></td>
+                </tr>
+            </thead>
+            <tbody data-link="row" class="rowlink">
+                <?php
+                $cM = new ControllerMenu();
+                $menus = $cM->actionControl("selectAll");
+
+                foreach ($menus as $menu) {
+                    echo "<tr>";
+                    switch ($menu->getLocalization()) {
+                        case "E":
+                            echo "<td>Acima</td>";
+                            break;
+                        case "L";
+                            echo "<td>Lateral</td>";
+                            break;
+                    }
+                    echo "<td>"
+                    . "<a href='menu.list?idMenu=" . $menu->getIdMenu() . "'>" . $menu->getTitle() . "</a>"
+                    . "</td>";
+                    echo "<td>" . $menu->getDescription() . "</td>";
+                    echo "<td>"
+                    . "<div class='btn-group'>"
+                    . "<a class='btn btn-default' title='Editar Menu' href='../forms/menu.form.php?action=update&idMenu=" . $menu->getIdMenu() . "'><span class='glyphicon glyphicon-pencil'></span></a>
                         <a class='btn btn-default act-excluir'  title='Excluir Menu' href='menu.list.php?action=delete&idMenu=" . $menu->getIdMenu() . "'><span class='glyphicon glyphicon-trash'></span></a>"
-            . "<a title='Gerenciar Submenus' class='btn btn-default' href='submenu.list.php?idMenu=" . $menu->getIdMenu() . "'><span class='glyphicon glyphicon-folder-open'></span></a>"
-            . "</div></td>";
-        }
-        ?>
-        <!--glyphicon glyphicon-folder-open-->
-    </tbody>
-</table>
-
+                    . "<a title='Gerenciar Submenus' class='btn btn-default' href='submenu.list.php?idMenu=" . $menu->getIdMenu() . "'><span class='glyphicon glyphicon-folder-open'></span></a>"
+                    . "</div></td>";
+                }
+                ?>
+                <!--glyphicon glyphicon-folder-open-->
+            </tbody>
+        </table>
+    </div>
+</div>
 <script type="text/javascript" charset="utf-8">
 </script>
 

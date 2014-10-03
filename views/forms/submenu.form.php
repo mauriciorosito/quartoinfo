@@ -1,5 +1,4 @@
 ﻿<?php
-include_once("../parts/header.php");
 include_once('../../system/limited.php');
 include_once("../../controllers/submenu.control.php");
 include_once("../../controllers/content.control.php");
@@ -17,7 +16,7 @@ require_once "../../models/content.model.php";
 <?php
 require_once "../../controllers/submenu.control.php";
 require_once "../../models/submenu.model.php";
-if (isset($_GET['idMenu'])){
+if (isset($_GET['idMenu'])) {
     $idMenu = $_GET['idMenu'];
 }
 if (isset($_POST['action'])) {
@@ -45,6 +44,7 @@ if (isset($_POST['action'])) {
         header("location: ../lists/submenu.list.php?idMenu=" . $_POST['idMenu']);
     } else {
         echo "sem ação";
+        die();
     }
 }
 if (isset($_GET['action']) && isset($_GET['idSubMenu'])) {
@@ -54,6 +54,7 @@ if (isset($_GET['action']) && isset($_GET['idSubMenu'])) {
     $submenu = $sControll->actionControl("selectOne", $submenu);
     $idMenu = $submenu->getIdMenu();
 }
+include_once("../parts/header.php");
 ?>
 
 <div class="col-md-12"><h1><center>Cadastro de Item do Menu</center></h1><hr></div>
@@ -61,55 +62,55 @@ if (isset($_GET['action']) && isset($_GET['idSubMenu'])) {
 <form class="form-horizontal" action="submenu.form.php" method="post" enctype="multipart/form-data">
     <input type="hidden" name="action" value="insert">
     <input type="hidden" name="idSubMenu" value="<?php
-    if (isset($_GET["idSubMenu"])) {
-        echo $_GET["idSubMenu"];
-    }
-    ?>">
+if (isset($_GET["idSubMenu"])) {
+    echo $_GET["idSubMenu"];
+}
+?>">
     <div class="col-md-8">
         <div class="form-group">
             <label for="title" class="col-sm-2 control-label">Título</label>
             <div class="col-sm-10">
-              <input type="text" name="title" class="form-control" placeholder="Max: 30 caractéres." pattern="[a-zA-Z-0-9]{3,30}" value="<?php
-                if (isset($submenu) && $submenu->getTitle() != "") {
-                    echo $submenu->getTitle();
-                }
-                ?>">
+                <input type="text" name="title" class="form-control" placeholder="Max: 30 caractéres." pattern="[a-zA-Z-0-9]{3,30}" value="<?php
+    if (isset($submenu) && $submenu->getTitle() != "") {
+        echo $submenu->getTitle();
+    }
+?>">
             </div>
         </div>
         <div class="form-group">
             <label for="type" class="col-sm-2 control-label">Tipo de Item</label>
             <div class="col-sm-10">
-              <select id="type" name="type" class="form-control">
+                <select id="type" name="type" class="form-control">
                     <option value="semlink">Sem Link</option>
                     <option  value="category">Categoria</option>
                     <option value="link">Link</option>    
-              </select>
+                </select>
             </div>
         </div>
         <div id="link_category_tr">
             <div id="link_type" class="form-group">
                 <label for="url" class="col-sm-4 control-label">URL</label>
                 <div class="col-sm-10">
-                  <input type="text" name="url" id="url" class="form-control" value="http://"value="<?php
-                    if (isset($submenu) && $submenu->getTitle() != "") {
-                        echo $submenu->getTitle();
-                    }
-                    ?>">
+                    <input type="text" name="url" id="url" class="form-control" value="http://"value="<?php
+                if (isset($submenu) && $submenu->getTitle() != "") {
+                    echo $submenu->getTitle();
+                }
+?>">
                 </div>
             </div>
             <div id="category_type" class="form-group">
                 <label for="category" class="col-sm-4 control-label">Categoria</label>
                 <div class="col-sm-10">
                     <select name="idMenu" class="form-control">
-                    <?php
-                    //$cCat = new ContentCategory();
-                    //$category = new Category();
-                    //$categories = $cCat->actionControl("selectAll");
-                    //foreach($categories as $category){
-                    //echo "<option value =".$category->getIdCategory().">".$category->getName()."</option>";
-                    //}
-                    ?>
-                    
+                        <?php
+                        //$cCat = new ContentCategory();
+                        //$category = new Category();
+                        //$categories = $cCat->actionControl("selectAll");
+                        //foreach($categories as $category){
+                        //echo "<option value =".$category->getIdCategory().">".$category->getName()."</option>";
+                        //}
+                        ?>
+
                     </select>
                 </div>
             </div>
@@ -117,32 +118,25 @@ if (isset($_GET['action']) && isset($_GET['idSubMenu'])) {
         <div class="form-group">
             <label for="description" class="col-sm-2 control-label">Descrição</label>
             <div class="col-sm-10">
-                <input type="text" name="description" class="form-control" placeholder="Max: 120 caractéres." pattern="[a-zA-Z-0-9]{3,120}" value="<?php
-                if (isset($menu) && $menu->getDescription() != "") {
-                    echo $menu->getDescription();
-                }
-                ?>">
+                <textarea name="description" class="form-control" placeholder="Max: 120 caractéres." pattern="[a-zA-Z-0-9]{3,120}"><?php
+                        if (isset($submenu) && $submenu->getDescription() != "") {
+                            echo $submenu->getDescription();
+                        }
+                        ?>
+                </textarea>
             </div>
         </div>
         <div class="form-group">
-            <label for="fathermenu" class="col-sm-2 control-label">Menu Pai</label>
-            <div class="col-sm-10">
-                <select name="idMenu" class="form-control">
-                    <?php
-                    $cM = new ControllerMenu();
-                    $menu = new Menu();
-                    $menus = $cM->actionControl("selectAll");
-                    foreach($menus as $menu){
-                        echo "<option value =".$menu->getIdMenu().">".$menu->getTitle()."</option>";
-                    }
-                    
-                    ?>
-                    
-                </select>
-            </div>
+            <input type="hidden" name="idMenu" value="<?php echo $idMenu; ?>">
+            <!--            <label for="fathermenu" class="col-sm-2 control-label">Menu Pai</label>
+                        <div class="col-sm-10">
+                            <select name="idMenu" class="form-control">
+                             
+                            </select>
+            <!--            </div>-->
         </div>
         <div class="col-md-4">
-            <input class="btn btn-default" type="submit" name="button" value="Cadastrar">
+            <input class="btn btn-success" type="submit" name="button" value="Cadastrar">
         </div>
     </div> 
 

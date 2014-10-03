@@ -12,7 +12,6 @@ include_once('../../system/limited.php');
 require_once "../../controllers/menu.control.php";
 require_once "../../models/menu.model.php";
 if (isset($_POST['action'])) {
-    
     $cM = new ControllerMenu();
     $menu = new Menu();
     if ($_POST['action'] == 'insert') {
@@ -32,13 +31,12 @@ if (isset($_POST['action'])) {
     } else {
         echo "sem ação";
     }
-}if(isset($_GET['action']) && $_GET['action'] == "update"){
-    
+}if (isset($_GET['action']) && $_GET['action'] == "update") {
+
     $men = new Menu();
     $men->setIdMenu($_GET['idMenu']);
     $cM = new ControllerMenu();
     $menu = $cM->actionControl("selectOne", $men);
-    
 }
 ?>
 <form action="menu.form.php" method="post" enctype="multipart/form-data">
@@ -53,40 +51,39 @@ if (isset($_POST['action'])) {
     }
     ?>">
 
-    <table style="width:100%;padding:10px;">
-        <tr>
-            <td>Título: <input type="text" name="title" class="form-control" placeholder="Max: 30 caractéres." pattern="[a-zA-Z-0-9]{3,30}" value="<?php
-                if (isset($menu) && $menu->getTitle() != "") {
-                    echo $menu->getTitle();
-                }
-                ?>"></td>
-            <td>Localização Menu: <select name="localization" class="form-control">
-                    <option  value="E" <?php
-                    if (isset($menu) && $menu->getLocalization() == "E") {
-                        echo "selected";
-                    }
-                    ?>> Em cima</option>
+    <div class="col-md-6">
+        <label> Título: </label> <input type="text" name="title" class="form-control" placeholder="Max: 30 caractéres." pattern="[a-zA-Z-0-9]{3,30}" value="<?php
+        if (isset($menu) && $menu->getTitle() != "") {
+            echo $menu->getTitle();
+        }
+        ?>">
+    </div>
+    <div class="col-md-6">
+        <label>Localização Menu:</label> <select name="localization" class="form-control">
+            <option  value="E" <?php
+            if (isset($menu) && $menu->getLocalization() == "E") {
+                echo "selected";
+            }
+            ?>> Superior</option>
 
-                    <option value="L" <?php
-                    if (isset($menu) && $menu->getLocalization() == "L") {
-                        echo "selected";
-                    }
-                    ?>> Lateral</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td>Descrição: <input type="text" name="description" class="form-control" placeholder="Max: 120 caractéres." pattern="[a-zA-Z-0-9]{3,120}" value="<?php
-                if (isset($menu) && $menu->getDescription() != "") {
-                    echo $menu->getDescription();
-                }
-                ?>"><br></td>
-        </tr>
+            <option value="L" <?php
+            if (isset($menu) && $menu->getLocalization() == "L") {
+                echo "selected";
+            }
+            ?>> Lateral</option>
+        </select>
+    </div>
+
+    <div class="col-md-12">
+        <label>Descrição:</label> <textarea name="description" class="form-control" placeholder="Max: 120 caractéres" pattern="[a-zA-Z-0-9]{3,120}"> <?php
+            if (isset($menu) && $menu->getDescription() != "") {
+                echo $menu->getDescription();
+            }
+            ?></textarea><br/>
+    </div>
 
 
-    </table>
-
-    <input type="submit" name="button" value="Cadastrar"><br>
+    <input type="submit" name="button" class="btn btn-success" value="Cadastrar"><br>
 </form>
 
 <script type="text/javascript" charset="utf-8">
