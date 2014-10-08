@@ -73,7 +73,7 @@ if (isset($_GET["ordenacao"])) {
                     </div>
                     <div class="col-md-6 col-sm-12 col-xs-12">
                         <div class="btn-group pull-right">
-                            <a href="../forms/course.form.php" class="btn btn-default">
+                            <a href="../forms/course.form.php?action=insert" class="btn btn-default">
                                 <i class="glyphicon glyphicon-plus-sign"></i>
                                 &nbsp; Inserir Curso
                             </a> 
@@ -103,7 +103,16 @@ if (isset($_GET["ordenacao"])) {
                                 <td><input type="checkbox" id="marcado<?php echo $course->getIdCourse(); ?>"></td>
                                 <td><?php echo $course->getName(); ?></td>
                                 <td><?php echo $course->getDescription(); ?></td>
-                                <td><?php echo $course->getType(); ?></td>
+                                <td><?php if ($course->getType() == 'T'){
+                                    echo 'Técnico';
+                                }
+                                if ($course->getType() == 'E'){
+                                    echo 'EAD';
+                                }if ($course->getType() == 'S'){
+                                    echo 'Superior';
+                                }
+                                ?>
+                                </td>
                                  <td><?php echo $course->getAlias(); ?></td>
                                 <td>
                         <center>

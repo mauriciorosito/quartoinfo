@@ -44,9 +44,8 @@ class ControllerCourse extends Controller {
 
     protected function insert($course) {
         $db = new Includes\Db();
-        return $db->query('insert into course (idCourse, name, type, description, alias) values 
-		(NULL, :name) ', array(
-                    'idCourse' => $course->getIdCourse(),
+        return $db->query('insert into course (name, type, description, alias) values 
+		(:name, :type, :description, :alias) ', array(
                     'name' => $course->getName(),
                     'type' => $course->getType(),
                     'description' => $course->getDescription(),
@@ -58,7 +57,6 @@ class ControllerCourse extends Controller {
         $db = new Includes\Db();
         return $db->query('update course set idCourse = :idCourse, name = :name, type = :type, description = :description, '
                         . 'alias = :alias where idCourse = :idCourse', array(
-                    'idCourse' => $course->getIdCourse(),
                     'name' => $course->getName(),
                     'type' => $course->getType(),
                     'description' => $course->getDescription(),
