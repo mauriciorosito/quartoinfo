@@ -1,4 +1,5 @@
 <?php
+include_once("../../utilities/Formatter.class.php");
 include_once("../parts/header.php");
 include_once('../../system/limited.php');
 
@@ -188,10 +189,10 @@ if (isset($_POST["action"])) {
         </tr>
         <tr>
             <td id="data1">Visualizar desde:<input type="text" name="postDate" class="form-control" pattern="[0-3]{1}[0-9]{1}/[0-1]{1}[0-9]{1}/[2]{1}[0-9]{3}" data-mask="99/99/9999" placeholder="Data"  value="<?php if (isset($content) && $content->getPostDate() != "") {
-    echo $content->getPostDate();
+    echo Formatter::getDateBrazilianFormat($content->getPostDate());
 } ?>"><br></td>
             <td id="data2">Visualizar até: <input type="text" name="expirationDate" class="form-control" pattern="[0-3]{1}[0-9]{1}/[0-1]{1}[0-9]{1}/[2]{1}[0-9]{3}" data-mask="99/99/9999" placeholder="Data" value="<?php if (isset($content) && $content->getExpirationDate() != "") {
-    echo $content->getExpirationDate();
+    echo Formatter::getDateBrazilianFormat($content->getExpirationDate());
 } ?>"><br></td>			
         </tr>
         <tr>
