@@ -13,7 +13,6 @@ abstract class Controller {
     abstract protected function delete($obj);
 
     public function actionControl($action, $obj = false) {
-
         if (method_exists($this, $action)) {
             return $this->{$action}($obj);
         } else {

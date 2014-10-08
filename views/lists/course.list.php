@@ -14,14 +14,20 @@ $limited->check(array('A'));
 
 $cCourse = new ControllerCourse();
 
+if (isset($_POST["pesquisa"])) {
+    $pesquisa = filter_var($_POST["pesquisa"]);
+} else {
+    $pesquisa = "";
+}
+
 if (isset($_GET["ordenacao"])) {
     if ($_GET["ordenacao"] == "desc") {
-        $courses = $cCourse->actionControl("selectAllDescending");
+        $courses = $cCourse->actionControl("selectAllDescending", $pesquisa);
     } else {
-        $courses = $cCourse->actionControl("selectAll");
+        $courses = $cCourse->actionControl("selectAllGrowing", $pesquisa);
     }
 } else {
-    $courses = $cCourse->actionControl("selectAll");
+    $courses = $cCourse->actionControl("selectAllGrowing", $pesquisa);
 }
 ?>
 <!DOCTYPE html>
@@ -64,31 +70,37 @@ if (isset($_GET["ordenacao"])) {
         <div id="content">
             <div class="container img-rounded BVerde">
                 <div class="row standard-margin-10">
-                    <div class="col-md-6 col-sm-12 col-xs-12">
+                    <div class="col-md-2 col-sm-12 col-xs-12">
+                        <a href="../forms/course.form.php?action=insert" class="btn btn-default">
+                            <i class="glyphicon glyphicon-plus-sign"></i>
+                            &nbsp; Inserir Curso
+                        </a> 
+                    </div>
+                    <div class="col-md-5 col-sm-12 col-xs-12">
                         <div class="btn-group">
                             <a href="" class="btn btn-success">Ordenar por:</a>
                             <a href="course.list.php?ordenacao=asc" class="btn btn-default">Nome - Crescente</a>
                             <a href="course.list.php?ordenacao=desc" class="btn btn-default">Nome - Decrescente</a>
                         </div>
                     </div>
-                    <div class="col-md-6 col-sm-12 col-xs-12">
-                        <div class="btn-group pull-right">
-                            <a href="../forms/course.form.php?action=insert" class="btn btn-default">
-                                <i class="glyphicon glyphicon-plus-sign"></i>
-                                &nbsp; Inserir Curso
-                            </a> 
-                            <a href="../../system/logout.php" class="btn btn-default">
-                                <i class="glyphicon glyphicon-off"></i>
-                                &nbsp; Sair
-                            </a>
-                        </div> 
+                    <div class="col-md-5 col-sm-12 col-xs-12">
+                        <form class="form-inline" role="form" method="post" action="course.list.php">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input class="form-control" type="text" name="pesquisa" placeholder="Digite sua Pesquisa">
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-default">&nbsp;<i class="glyphicon glyphicon-search"></i>&nbsp;</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
                 <hr/>
+                 <?php if (count($courses) != 0) { ?>
                 <table class="table table-striped table-condensed table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th><center>#</center></th>
                     <th><center>Nome</center></th>
                     <th><center>Descrição</center></th>
                     <th><center>Tipo</center></th>
@@ -100,7 +112,7 @@ if (isset($_GET["ordenacao"])) {
                         <?php foreach ($courses as $course) {
                             ?>
                             <tr>
-                                <td><input type="checkbox" id="marcado<?php echo $course->getIdCourse(); ?>"></td>
+                          
                                 <td><?php echo $course->getName(); ?></td>
                                 <td><?php echo $course->getDescription(); ?></td>
                                 <td><?php if ($course->getType() == 'T'){
@@ -117,13 +129,20 @@ if (isset($_GET["ordenacao"])) {
                                 <td>
                         <center>
                             <div class="btn-group">
-                               <a href="../forms/course.form.php?action=update&idCourse=<?php echo $course->getIdCourse(); ?> " class="btn btn-default">Editar</a> 
+                               <a href="../forms/course.form.php?action=update&idCourse=<?php echo $course->getIdCourse(); ?> " class="btn btn-default"><span class="glyphicon glyphicon-edit"></span></a> 
                                 <a href="../../views/forms/course.form.php?action=delete&idCourse=<?php echo $course->getIdCourse(); ?>"class="btn btn-default" title='Excluir'><span class="glyphicon glyphicon-trash"></span></a>
 
                             </div>
                         </center>
                         </td>
                         </tr>
+                    <?php } ?>
+                    <?php } else { ?>
+                        <div class="alert alert-danger">
+                            <center>
+                                <p class="lead">Sua pesquisa não encontrou nenhum resultado. Por favor, verifique sua pesquisa e tente novamente.</p>
+                            </center>
+                        </div>
                     <?php } ?>
                     </tbody>
                 </table>

@@ -49,7 +49,7 @@ if (isset($_GET["action"], $_GET["idCourse"])) {
 
 if (isset($_POST["action"])) {
     $course = new Course();
-    //$course->setIdCourse($_POST["idCourse"]);
+    $course->setIdCourse($_POST["idCourse"]);
     $course->setName($_POST["name"]);
     $course->setDescription($_POST["description"]);
     $course->setType($_POST["type"]);
@@ -89,9 +89,15 @@ if (isset($_POST["action"])) {
             <td>Tipo: 
                 <select class="form-control" name="type">
                     <option value=''></option>
-                    <option value='E'>EAD</option>
-                    <option value='S'>Superior</option>
-                    <option value='T'>Técnico</option>
+                    <option value='E' <?php if (isset($course) && $course->getType() == "E") {
+                    echo 'selected';
+                } ?>>EAD</option>
+                    <option value='S' <?php if (isset($course) && $course->getType() == "S") {
+                    echo 'selected';
+                } ?>>Superior</option>
+                    <option value='T' <?php if (isset($course) && $course->getType() == "T") {
+                    echo 'selected';
+                } ?>>Técnico</option>
                 </select><br>
             </td>
 
@@ -110,9 +116,10 @@ if (isset($_POST["action"])) {
         if (ucwords($_GET["action"]) == "Insert") {
             echo "<button class='btn btn-default' type='submit' name='button'><i class='glyphicon glyphicon-ok-circle'></i>&nbsp;Cadastrar</button>";
         } elseif (ucwords($_GET["action"]) == "update") {
-            echo "<button class='btn btn-default' type='submit' name='button'><i class='glyphicon glyphicon-ok-circle'></i>&nbsp;Salvar</button>";
+            echo "<button class='btn btn-default' type='submit' name='button'><i class='glyphicon glyphicon-trash'></i>&nbsp;Excluir</button>";
         } else {
-            echo "<button class='btn btn-default' type='submit' name='button'><i class='glyphicon glyphicon-trash'></i>&nbsp;Salvar</button>";
+            echo "<button class='btn btn-default' type='submit' name='button'><i class='glyphicon glyphicon-ok-circle'></i>&nbsp;Salvar</button>";
+            
         }
     }
     ?>
