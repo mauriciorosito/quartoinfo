@@ -117,8 +117,11 @@ $cont = $cProfile->actionControl("contarPaginas", 5);
                         </tr>
                     <?php } ?>
                     </tbody>
+                </table>
+                <center>
                     <?php
-                    echo "<p>Página " . $pagina . " de " . $cont . "</p>";
+                    echo "<hr/>";
+                    echo "<div class='btn-group'>";
                     if ($pagina > 1) {
                         $flag = $pagina - 1;
                         echo "<a type='button' class='btn btn-default' href='profile.list.php?";
@@ -130,6 +133,7 @@ $cont = $cProfile->actionControl("contarPaginas", 5);
                         $flag = $pagina - 1;
                         echo "<a type='button' disabled class='btn btn-default' href=''><span class='glyphicon glyphicon-chevron-left'></span></a>";
                     }
+                    echo "<a href='#' class='btn btn-default disabled'>Página " . $pagina . " de " . $cont . "</a>";
                     if ($pagina < $cont) {
                         echo "<a type='button' class='btn btn-default' href='profile.list.php?";
                         if (isset($_GET['ordenacao'])) {
@@ -140,8 +144,10 @@ $cont = $cProfile->actionControl("contarPaginas", 5);
                         $flag = $pagina - 1;
                         echo "<a type='button' disabled class='btn btn-default' href=''><span class='glyphicon glyphicon-chevron-right'></span></a>";
                     }
+                    echo "</div>";
+                    echo "<p>&nbsp;</p>";
                     ?>
-                </table>
+                </center>
             </div>
             <!-- /.container -->
         </div>
