@@ -40,24 +40,38 @@ if (!isset($_POST['pesquisa']))
 
     <body>
 
-<?php include_once '../parts/navigation_admin.php'; ?>
+        <?php include_once '../parts/navigation_admin.php'; ?>
 
         <div id="content">
             <div class="container img-rounded BVerde">
-                <a href="../forms/content.form.php?action=insert" class="btn btn-default">Inserir</a> 
-                <form class="navbar-form navbar-right" role="search" action="content.list.php" method="post">
-                    <div class="form-group" style="margin-left:-15%;">
-                        <label for="pesquisar">
-                            <div class="input-group">
-                                <input name="pesquisa" type="text" id="pesquisar"  class="form-control col-lg-1 col-md-1 col-sm-1 col-xs-1" placeholder="Pesquisar">
-                                <span class="input-group-btn">
-                                    <button type="submit" class="btn btn-default" name="submit">
-                                        <span class="glyphicon glyphicon-search"></span></button>
-                                </span>
-                            </div>
-                        </label>
+                <div class="row standard-margin-10">
+                    <div class="col-md-2 col-sm-12 col-xs-12">
+                        <a href="../forms/content.form.php?action=insert" class="btn btn-default">
+                            <i class="glyphicon glyphicon-plus-sign"></i>
+                            &nbsp; Inserir Conteúdo
+                        </a> 
                     </div>
-                </form>
+                    <div class="col-md-5 col-sm-12 col-xs-12">
+                        <!--div class="btn-group">
+                            <a href="" class="btn btn-success">Ordenar por:</a>
+                            <a href="user.list.php?ordenacao=asc" class="btn btn-default">Nome - Crescente</a>
+                            <a href="user.list.php?ordenacao=desc" class="btn btn-default">Nome - Decrescente</a>
+                        </div-->
+                    </div>
+                    <div class="col-md-5 col-sm-12 col-xs-12">
+                        <form class="form-inline" role="form" action="content.list.php" method="post">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input name="pesquisa" type="text" id="pesquisar"  class="form-control " placeholder="Digite sua Pesquisa">
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-default">&nbsp;<i class="glyphicon glyphicon-search"></i>&nbsp;</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <hr/>
                 <?php
                 if (isset($_POST['page']))
                     $page = $_POST['page'];
@@ -138,19 +152,19 @@ if (!isset($_POST['pesquisa']))
                                         <td>Mídias</td>
                                         <td><a href="../forms/content.form.php?action=update&idContent=<?php echo $resultado["idContent"]; ?> " class="btn btn-default">Editar</a> <a href="../forms/content.form.php?action=delete&idContent=<?php echo $resultado["idContent"]; ?>" class="btn btn-default">Excluir</a></td>
                                     </tr>
-            <?php
-        }
-    }
-}
-?>		
+                                    <?php
+                                }
+                            }
+                        }
+                        ?>		
                         </tr>
                     </tbody>
                 </table>
-<?php
-if (isset($pesquisa)) {
-    $pesquisa->pagination($pesquisa->total, $page);
-}
-?>
+                <?php
+                if (isset($pesquisa)) {
+                    $pesquisa->pagination($pesquisa->total, $page);
+                }
+                ?>
             </div>
             <!-- /.container -->
         </div>
