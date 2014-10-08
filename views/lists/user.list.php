@@ -14,14 +14,20 @@ $limited->check(array('A'));
 
 $cUser = new ControllerUser();
 
+if (isset($_POST["pesquisa"])) {
+    $pesquisa = filter_var($_POST["pesquisa"]);
+} else {
+    $pesquisa = "";
+}
+
 if (isset($_GET["ordenacao"])) {
     if ($_GET["ordenacao"] == "desc") {
-        $users = $cUser->actionControl("selectAllDescending");
+        $users = $cUser->actionControl("selectAllDescending", $pesquisa);
     } else {
-        $users = $cUser->actionControl("selectAll");
+        $users = $cUser->actionControl("selectAllGrowing", $pesquisa);
     }
 } else {
-    $users = $cUser->actionControl("selectAll");
+    $users = $cUser->actionControl("selectAllGrowing", $pesquisa);
 }
 ?>
 <!DOCTYPE html>
@@ -64,55 +70,69 @@ if (isset($_GET["ordenacao"])) {
         <div id="content">
             <div class="container img-rounded BVerde">
                 <div class="row standard-margin-10">
-                    <div class="col-md-6 col-sm-12 col-xs-12">
+                    <div class="col-md-2 col-sm-12 col-xs-12">
+                        <a href="../forms/user.form.php?action=insert" class="btn btn-default">
+                            <i class="glyphicon glyphicon-plus-sign"></i>
+                            &nbsp; Inserir Usuário
+                        </a> 
+                    </div>
+                    <div class="col-md-5 col-sm-12 col-xs-12">
                         <div class="btn-group">
                             <a href="" class="btn btn-success">Ordenar por:</a>
                             <a href="user.list.php?ordenacao=asc" class="btn btn-default">Nome - Crescente</a>
                             <a href="user.list.php?ordenacao=desc" class="btn btn-default">Nome - Decrescente</a>
                         </div>
                     </div>
-                    <div class="col-md-6 col-sm-12 col-xs-12">
-                        <div class="btn-group pull-right">
-                            <a href="../forms/user.form.php" class="btn btn-default">
-                                <i class="glyphicon glyphicon-plus-sign"></i>
-                                &nbsp; Inserir Usuário
-                            </a> 
-                            <a href="../../system/logout.php" class="btn btn-default">
-                                <i class="glyphicon glyphicon-off"></i>
-                                &nbsp; Sair
-                            </a>
-                        </div> 
+                    <div class="col-md-5 col-sm-12 col-xs-12">
+                        <form class="form-inline" role="form" method="post" action="user.list.php">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input class="form-control" type="text" name="pesquisa" placeholder="Digite sua Pesquisa">
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-default">&nbsp;<i class="glyphicon glyphicon-search"></i>&nbsp;</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
                 <hr/>
-                <table class="table table-striped table-condensed table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th><center>#</center></th>
-                    <th><center>Nome</center></th>
-                    <th><center>Email</center></th>
-                    <th><center>Sobre</center></th>
-                    <th width="20%"><center>Ações</center></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($users as $user) {
-                            ?>
+                <?php if (count($users) != 0) { ?>
+                    <table class = "table table-striped table-condensed table-bordered table-hover">
+                        <thead>
                             <tr>
-                                <td><input type="checkbox" id="marcado<?php echo $user->getIdUser(); ?>"></td>
-                                <td><?php echo $user->getName(); ?></td>
-                                <td><?php echo $user->getEmail(); ?></td>
-                                <td><?php echo $user->getAbout(); ?></td>
-                                <td>
-                        <center>
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-default" title='Editar' href="#"><span class="glyphicon glyphicon-edit"></span></button>
-                                <a href="../../views/forms/user.form.php?action=delete&idUser=<?php echo $user->getIdUser(); ?>"class="btn btn-default" title='Excluir'><span class="glyphicon glyphicon-trash"></span></a>
-
-                            </div>
-                        </center>
-                        </td>
+                                <th><center>Matrícula</center></th>
+                        <th><center>Nome</center></th>
+                        <th><center>Email</center></th>
+                        <th><center>Curso</center></th>
+                        <th width = "20%"><center>Ações</center></th>
                         </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($users as $user) {
+                                ?>
+                                <tr>
+                                    <td><?php echo $user->getRegistration(); ?></td>
+                                    <td><?php echo $user->getName(); ?></td>
+                                    <td><?php echo $user->getEmail(); ?></td>
+                                    <td><?php echo $user->getCourseName(); ?></td>
+                                    <td>
+                            <center>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default" title='Editar' href="#"><span class="glyphicon glyphicon-edit"></span></button>
+                                    <a href="../../views/forms/user.form.php?action=delete&idUser=<?php echo $user->getIdUser(); ?>"class="btn btn-default" title='Excluir'><span class="glyphicon glyphicon-trash"></span></a>
+
+                                </div>
+                            </center>
+                            </td>
+                            </tr>
+                        <?php } ?>
+                    <?php } else { ?>
+                        <div class="alert alert-danger">
+                            <center>
+                                <p class="lead">Sua pesquisa não encontrou nenhum resultado. Por favor, verifique sua pesquisa e tente novamente.</p>
+                            </center>
+                        </div>
                     <?php } ?>
                     </tbody>
                 </table>
