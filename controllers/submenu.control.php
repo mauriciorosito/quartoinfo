@@ -20,6 +20,7 @@ class ControllerSubMenu extends Controller {
         $submenu->setIdCategory($lines[0]["idCategory"]);
         $submenu->setIdMenu($lines[0]["idMenu"]);
         $submenu->setPosition($lines[0]["position"]);
+        $submenu->setIdPage($lines[0]["idPage"]);
 
         return $submenu;
     }
@@ -38,6 +39,7 @@ class ControllerSubMenu extends Controller {
             $submenu->setDescription($line["description"]);
             $submenu->setIdCategory($line["idCategory"]);
             $submenu->setPosition($line["position"]);
+            $submenu->setIdPage($line["idPage"]);
 
             $submenus[] = $submenu;
         }
@@ -92,6 +94,7 @@ class ControllerSubMenu extends Controller {
 
     protected function update($subMenu) {
         $db = new Includes\Db();
+
         return $db->query('update submenu set position = :position , url = :url, 
 		title = :title, type = :type, description = :description, idCategory = :idCategory, idPage = :idPage where idSubMenu = :idSubMenu', array(
                     'position' => $subMenu->getPosition(),
@@ -100,11 +103,30 @@ class ControllerSubMenu extends Controller {
                     'type' => $subMenu->getType(),
                     'description' => $subMenu->getDescription(),
                     'idCategory' => $subMenu->getIdCategory(),
-                    'idPage' => $subMenu->getIdPage()
+                    'idPage' => $subMenu->getIdPage(),
+                    'idSubMenu' => $subMenu->getIdSubMenu()
         ));
     }
 
     protected function delete($subMenu) {
+        $subMenu = $this->selectOne($subMenu);
+        
+        $lines = $db->query('select * from submenu where idMenu = :idMenu AND position > :position', array(
+            'idMenu' => $submenu->getIdMenu(),
+            'position' => $submenu->getPosition()
+        ));
+        
+        foreach($lines as $sMenu){
+            $suMenu = new subMenu();
+            $position = $sMenu['position'] - 1;
+            $suMenu->setPosition($position);
+            $suMenu->setIdSubMenu($sMenu['idSubMenu']);
+            $db->query('update submenu set position = :position where idSubMenu = :idSubMenu  > :position', array(
+            'idMenu' => $submenu->getIdMenu(),
+            'position' => $submenu->getPosition()
+        ));
+        }
+        
         $db = new Includes\Db();
         return $db->query('delete from submenu where idSubMenu = :idSubMenu', array(
                     'idSubMenu' => $subMenu->getIdSubMenu(),
