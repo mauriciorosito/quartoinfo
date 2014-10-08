@@ -8,8 +8,17 @@ class Profile {
     private $name;
     private $description;
     private $is_admin;
+    private $_Categories;
+    
+    public function get_Categories() {
+        return $this->_Categories;
+    }
 
-    public function getIdProfile() {
+    public function set_Categories($_Categories) {
+        $this->_Categories = $_Categories;
+    }
+
+        public function getIdProfile() {
         return $this->idProfile;
     }
 

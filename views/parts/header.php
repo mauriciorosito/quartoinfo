@@ -39,7 +39,8 @@
 
 
                                             <noscript src="../../publics/js/jasny-bootstrap.min.js"></noscript>
-
+                                            <script src="../../publics/js/script.js"></script>
+                                            
                                             </head>
 
                                             <body>
