@@ -11,10 +11,6 @@ foreach ($requires as $require) {
 
 $bc = new ControllerBanners();
 $banners = $bc->actionControl('selectAll', 1);
-
-if(isset($_GET['search'])){
-    
-}
 ?>
 <html>
     <head>
