@@ -54,12 +54,13 @@ class ControllerBanners extends Controller {
     protected function update($obj){
 	$db = new Includes\Db();
         $query = "update banners set ";
-        $query .= "title = ".$obj->getTitle().", ";
-        $query .= "description = ".$obj->getDescription().", ";
-        $query .= "href = ".$obj->getHref().", ";
-        $query .= "src = ".$obj->getSrc().", ";
-        $query .= "alt = ".$obj->getAlt().", ";
-        $query .= "type = ".$obj->getType().", ";
+        $query .= "title = '".$obj->getTitle()."', ";
+        $query .= "description = '".$obj->getDescription()."', ";
+        $query .= "href = '".$obj->getHref()."', ";
+        $query .= "alt = '".$obj->getAlt()."', ";
+        $query .= "type = '".$obj->getType()."' ";
+        $query .= "WHERE id = '".$obj->getId()."'";
+        echo $query;
         $line = $db->query($query);
         return $line;
     }
