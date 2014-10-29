@@ -36,7 +36,7 @@ if (isset($_GET['action']) && $_GET['action'] == "delete" && isset($_GET['idMenu
         <link rel="stylesheet" type="text/css" href="../../packages/wysiwyg/src/bootstrap-wysihtml5.css" />
         <link type="text/css" rel="stylesheet" href="../../packages/wysiwyg/lib/css/jasny-bootstrap.min.css" />	
 
-
+        
         <script src="../../packages/wysiwyg/lib/js/wysihtml5-0.3.0.js"></script>
         <script src="../../packages/wysiwyg/lib/js/jquery-1.7.2.min.js"></script>
         <script src="../../packages/wysiwyg/lib/js/bootstrap.min.js"></script>
@@ -47,6 +47,9 @@ if (isset($_GET['action']) && $_GET['action'] == "delete" && isset($_GET['idMenu
 
     <body>
         <?php include_once '../parts/navigation_admin.php'; ?>
+        <div style="margin-left: 5%;">
+            <span>Listagem de Menus</span>
+        </div>
         <div id="content">
             <div class="container img-rounded BVerde">
                 <div class="col-md-12"><h2><center>Listagem de Menus</center></h2><hr></div>

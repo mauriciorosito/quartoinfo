@@ -80,6 +80,10 @@ if (isset($_GET['action']) && $_GET['action'] == "down") {
 
     <body>
 <?php include_once '../parts/navigation_admin.php'; ?>
+        <div style="margin-left: 5%;">
+            <span><a href="menu.list.php">Listagem de Menus</a> -> </span>
+            <span>Listagem de Itens do Menu</span>
+        </div>
         <div id="content">
             <div class="container img-rounded BVerde">
                 <div class="col-md-12"><h2><center>Lista de Itens do Menu</center></h2><hr></div>
