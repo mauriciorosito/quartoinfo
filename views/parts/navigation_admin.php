@@ -17,7 +17,7 @@
                 <li><a href="course.list.php"><i class="glyphicon glyphicon-book"></i> &nbsp; Cursos</a></li>
                 <li><a href="profile.list.php"><i class="glyphicon glyphicon-tree-deciduous"></i> &nbsp; Perfil</a></li>
                 <li><a href="secao.list.php"><i class="glyphicon glyphicon-list-alt"></i> &nbsp; Seção</a></li>
-               
+                <li><a href="pages.list.php"><i class="glyphicon glyphicon-list-alt"></i> &nbsp; Páginas</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
