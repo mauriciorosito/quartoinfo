@@ -65,6 +65,7 @@ if (isset($_POST['action'])) {
                 $pControl->actionControl("insertProfileCategory", $profilec);
             }
         }
+        header('location:../lists/profile.list.php?alert=insert');
     } else if ($_POST['action'] == "update") {
         $pControl = new ControllerProfile();
         $profile = new models\Profile();
@@ -124,13 +125,15 @@ if (isset($_POST['action'])) {
                 $pControl->actionControl("insertProfileCategory", $profilec);
             }
         }
+        header('location:../lists/profile.list.php?alert=update');
     } else if ($_POST['action'] == "delete") {
         $pControl = new ControllerProfile();
         $profile = new models\Profile();
         $profile->setIdProfile($_POST['idProfile']);
         $pControl->actionControl("delete", $profile);
+        header('location:../lists/profile.list.php?alert=delete');
     }
-    header('location:../lists/profile.list.php');
+//    header('location:../lists/profile.list.php');
 } else if ($_GET['action'] == "delete") {
     $pControl = new ControllerProfile();
     $profile = new models\Profile();
@@ -187,6 +190,7 @@ if (isset($_POST['action'])) {
             echo "value='Cadastrar'";
         }
         ?>>
+        <a class="btn btn-warning" style="color:white;" href="javascript:history.go(-1)">Cancelar</a>
     </div>
     <div class="col-md-6">
         <?php

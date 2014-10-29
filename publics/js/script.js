@@ -61,3 +61,8 @@ function validaCheckboxes() {
         return true;
     }
 }
+
+function confirmDel(name){
+    var r = confirm("Você deseja realmente excluir o perfil "+name+"?");
+    return r;
+}

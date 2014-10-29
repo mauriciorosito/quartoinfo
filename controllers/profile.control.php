@@ -145,6 +145,9 @@ class ControllerProfile extends Controller {
         $db = new Includes\Db();
         $termoInicial = ($pag['pagina'] - 1) * $pag['limite'];
         $sql = "select * from profile ";
+        if(isset($pag['pesquisa'])){
+            $sql = "select * from profile where name like '%".$pag['pesquisa']."%' or description like '%".$pag['pesquisa']."%'";
+        }
         if (!isset($pag['ordenacao'])) {
             $sql .= "ORDER BY idProfile DESC ";
         } else if ($pag['ordenacao'] == "asc" || $pag['ordenacao'] == "desc") {
@@ -169,6 +172,36 @@ class ControllerProfile extends Controller {
         $db = new Includes\Db();
         $lines = $db->query("SELECT (count(*)/" . $limite . ") as pages FROM profile");
         return ceil($lines[0]['pages']);
+    }
+    protected function contarPaginas2($pesquisa) {
+        $db = new Includes\Db();
+        $lines = $db->query("SELECT (count(*)/ 5 ) as pages FROM profile where name like '%".$pesquisa."%' or description like '%".$pesquisa."%'");
+        return ceil($lines[0]['pages']);
+    }
+    
+    public function searchProfiles($pag, $page = 1) {
+        $db = new Includes\Db();
+        var_dump($pag);
+        $termoInicial = ($pag['pagina'] - 1) * $pag['limite'];
+        $sql = $db->query("select * from profile where name like ".$pag['pesquisa']." or description like ".$pag['pesquisa']);
+        if (!isset($pag['ordenacao'])) {
+            $sql .= "ORDER BY idProfile DESC ";
+        } else if ($pag['ordenacao'] == "asc" || $pag['ordenacao'] == "desc") {
+            $sql .= "ORDER BY name " . $pag['ordenacao'] . " ";
+        }
+        $sql .= " LIMIT " . $termoInicial . "," . $pag['limite'];
+        $lines = $db->query($sql);
+        $profiles = array();
+        foreach ($lines as $line) {
+            $profile = new \models\Profile();
+            $profile->setIdProfile($line["idProfile"]);
+            $profile->setName($line["name"]);
+            $profile->setDescription($line["description"]);
+            $profile->setIs_admin($line["is_admin"]);
+
+            $profiles[] = $profile;
+        }
+        return $profiles;
     }
     
 //put your code heree
