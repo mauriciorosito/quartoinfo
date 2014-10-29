@@ -23,7 +23,12 @@ if (isset($_GET["action"], $_GET["idContent"])) {
         $content->setIdContent($_GET["idContent"]);
         $cc = new ControllerContent();
         $cc->actionControl($_GET["action"], $content);
-        header("location: ../lists/content.list.php");
+		if ($_GET['tipo'] = 'pagina') {
+			header("location: ../lists/pages.list.php");
+		}
+		else {
+			header("location: ../lists/content.list.php");
+		}
     } else {
         $content = new Content();
         $content->setIdContent($_GET["idContent"]);
@@ -144,6 +149,9 @@ if (isset($_POST["action"])) {
 	if($_POST["type"] == 'P') {
 		header("location: ../lists/page.list.php?p=$maxIdC");
 	}
+	else if ($_GET['tipo'] = 'pagina') {
+		header("location: ../lists/pages.list.php");
+	}
 	else {
 		header("location: ../lists/content.list.php");
 	}
@@ -168,7 +176,7 @@ if (isset($_POST["action"])) {
                     <option value="O" <?php if (isset($content) && $content->getType() == "O") {
     echo "selected";
 } ?>> Oportunidades</option>
-<option value="P" <?php if (isset($content) && $content->getType() == "P") {
+<option value="P" <?php if ((isset($content) && $content->getType() == "P") or ($_GET['tipo'] = 'pagina')) {
     echo "selected";
 } ?>> Página</option>
                 </select>

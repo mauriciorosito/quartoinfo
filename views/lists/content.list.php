@@ -1,10 +1,10 @@
-﻿<?php
+<?php
 include_once("../../utilities/Formatter.class.php");
 include_once("../../controllers/content.control.php");
 require_once("../../packages/system/functions.model.php");
 $controllerContent = new ControllerContent();
 if (!isset($_POST['pesquisa']))
-    $contents = $controllerContent->actionControl('selectAllEvents');
+    $contents = $controllerContent->actionControl('selectAll');
 ?>
 <!DOCTYPE html>
 <html lang="en">

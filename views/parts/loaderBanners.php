@@ -27,8 +27,8 @@
     <td><?php echo $banner->getSrc();?></td>
     <td><?php echo $banner->getAlt();?></td>
     <td>
-        <a href="../forms/adminBanners.form.php?action=update&id=<?php echo $banner->getId(); ?>"> Alterar </a>
-        <a href="../forms/adminBanners.form.php?action=delete&id=<?php echo $banner->getId(); ?>"> Deletar </a>
+        <a href="../forms/banners.form.php?action=update&id=<?php echo $banner->getId(); ?>"> Alterar </a>
+        <a href="../forms/banners.form.php?action=delete&id=<?php echo $banner->getId(); ?>"> Deletar </a>
     </td> 
 </tr>
 <?php endforeach; ?>

@@ -6,7 +6,6 @@
 	$cb = new ControllerBanners();
         
         if(isset($_POST['create'])){
-            echo "opa3";
                 $erro = null;
                 if (isset($_FILES['src']))
                 {
