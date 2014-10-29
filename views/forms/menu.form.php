@@ -89,7 +89,7 @@ if (isset($_POST['action'])) {
                     ?>">
 
                     <div class="col-md-6">
-                        <label> Título: </label> <input type="text" name="title" class="form-control" placeholder="Max: 30 caractéres." pattern="[a-zA-Z-0-9]{3,30}" value="<?php
+                        <label> Título: </label> <input type="text" name="title" class="form-control" placeholder="Max: 30 caractéres." pattern="[a-zA-Z-0-9]+{3,30}" value="<?php
                         if (isset($menu) && $menu->getTitle() != "") {
                             echo $menu->getTitle();
                         }
@@ -112,7 +112,7 @@ if (isset($_POST['action'])) {
                     </div>
 
                     <div class="col-md-12">
-                        <label>Descrição:</label> <textarea name="description" class="form-control" placeholder="Max: 120 caractéres" pattern="[a-zA-Z-0-9]{3,120}"> <?php
+                        <label>Descrição:</label> <textarea name="description" class="form-control" placeholder="Max: 120 caractéres" pattern="[a-zA-Z-0-9]+{3,120}"> <?php
                             if (isset($menu) && $menu->getDescription() != "") {
                                 echo $menu->getDescription();
                             }

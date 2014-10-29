@@ -109,25 +109,15 @@ class ControllerSubMenu extends Controller {
     }
 
     protected function delete($subMenu) {
+        $db = new Includes\Db();
+
         $subMenu = $this->selectOne($subMenu);
         
-        $lines = $db->query('select * from submenu where idMenu = :idMenu AND position > :position', array(
-            'idMenu' => $submenu->getIdMenu(),
-            'position' => $submenu->getPosition()
-        ));
-        
-        foreach($lines as $sMenu){
-            $suMenu = new subMenu();
-            $position = $sMenu['position'] - 1;
-            $suMenu->setPosition($position);
-            $suMenu->setIdSubMenu($sMenu['idSubMenu']);
-            $db->query('update submenu set position = :position where idSubMenu = :idSubMenu  > :position', array(
-            'idMenu' => $submenu->getIdMenu(),
-            'position' => $submenu->getPosition()
-        ));
+        if ($subMenu->getPosition() == 1) {
+           $db->query("UPDATE submenu SET position = position - 1 WHERE idMenu = :idMenu", array(
+               "idMenu" => $subMenu->getIdMenu()
+            )); 
         }
-        
-        $db = new Includes\Db();
         return $db->query('delete from submenu where idSubMenu = :idSubMenu', array(
                     'idSubMenu' => $subMenu->getIdSubMenu(),
         ));
