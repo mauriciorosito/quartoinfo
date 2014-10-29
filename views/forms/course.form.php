@@ -39,7 +39,7 @@ if (isset($_GET["action"], $_GET["idCourse"])) {
         $course->setIdCourse($_GET["idCourse"]);
         $cc = new ControllerCourse();
         $course = $cc->actionControl("selectOne", $course);
-        $course->setIdCourse($course->getIdCourse());
+       // $course->setIdCourse($course->getIdCourse());
         $course->setName($course->getName());
         $course->setDescription($course->getDescription());
         $course->setType($course->getType());
@@ -49,14 +49,14 @@ if (isset($_GET["action"], $_GET["idCourse"])) {
 
 if (isset($_POST["action"])) {
     $course = new Course();
-    //$course->setIdCourse($_POST["idCourse"]);
+    $course->setIdCourse($_POST["idCourse"]);
     $course->setName($_POST["name"]);
     $course->setDescription($_POST["description"]);
     $course->setType($_POST["type"]);
     $course->setAlias($_POST["alias"]);
     $cc = new ControllerCourse();
     $cc->actionControl($_POST["action"], $course);
-
+    header('location: ../lists/course.list.php');
     echo "<script>$('#ol-caminho').html('Curso cadastrado com sucesso !');</script>";
 }
 ?>
@@ -88,11 +88,16 @@ if (isset($_POST["action"])) {
         <tr>
             <td>Tipo: 
                 <select class="form-control" name="type">
-                    <?php
-                    foreach ($arrayCursos as $curso) {
-                        echo "<option value='" . $curso->getIdCourse() . "'>" . $curso->getType() . "</option>";
-                    }
-                    ?>
+                    <option value=''></option>
+                    <option value='E' <?php if (isset($course) && $course->getType() == "E") {
+                    echo 'selected';
+                } ?>>EAD</option>
+                    <option value='S' <?php if (isset($course) && $course->getType() == "S") {
+                    echo 'selected';
+                } ?>>Superior</option>
+                    <option value='T' <?php if (isset($course) && $course->getType() == "T") {
+                    echo 'selected';
+                } ?>>Técnico</option>
                 </select><br>
             </td>
 
@@ -110,18 +115,17 @@ if (isset($_POST["action"])) {
     if (isset($_GET["action"])) {
         if (ucwords($_GET["action"]) == "Insert") {
             echo "<button class='btn btn-default' type='submit' name='button'><i class='glyphicon glyphicon-ok-circle'></i>&nbsp;Cadastrar</button>";
-        } elseif (ucwords($_GET["action"]) == "Update") {
-            echo "<button class='btn btn-default' type='submit' name='button'><i class='glyphicon glyphicon-ok-circle'></i>&nbsp;Salvar</button>";
-        } else {
+        } elseif (ucwords($_GET["action"]) == "update") {
             echo "<button class='btn btn-default' type='submit' name='button'><i class='glyphicon glyphicon-trash'></i>&nbsp;Excluir</button>";
+        } else {
+            echo "<button class='btn btn-default' type='submit' name='button'><i class='glyphicon glyphicon-ok-circle'></i>&nbsp;Salvar</button>";
+            
         }
     }
     ?>
     <button class="btn btn-default" type="reset" name="reset"><i class="glyphicon glyphicon-repeat"></i>&nbsp;Limpar Campos</button>
     <br>
-    <input type="submit" class="btn btn-primary" name="button" value="<?php if (isset($_GET["action"])) {
-    echo ucwords($_GET["action"]);
-} ?>">
+
 </form>
 
 <script type="text/javascript">
@@ -139,7 +143,7 @@ if (isset($_POST["action"])) {
 <div class="row">
     <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11" style="align:center;">
         <a href="../../system/logout.php" class="btn"><i class="glyphicon glyphicon-log-out"></i>&nbsp;Sair</a>
-        <p><b>IFRS - Curso Técnino de Informática para Internet - Câmpus Bento Gonçalves</b></p>
+        <p><b>IFRS - Curso Técnico de Informática para Internet - Câmpus Bento Gonçalves</b></p>
         <p>Avenida Osvaldo Aranha, 540 | Bairro Juventude da Enologia | CEP: 95700-000 | Bento Gonçalves/RS</p>
         <p>E-mail: mauricio.rosito@bento.ifrs.edu.br | Telefone: (54) 3455-3200: Ramal 207 | Fax: (54) 3455-3246</p>
     </div>

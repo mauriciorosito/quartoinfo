@@ -44,9 +44,8 @@ class ControllerCourse extends Controller {
 
     protected function insert($course) {
         $db = new Includes\Db();
-        return $db->query('insert into course (idCourse, name, type, description, alias) values 
-		(NULL, :name) ', array(
-                    'idCourse' => $course->getIdCourse(),
+        return $db->query('insert into course (name, type, description, alias) values 
+		(:name, :type, :description, :alias) ', array(
                     'name' => $course->getName(),
                     'type' => $course->getType(),
                     'description' => $course->getDescription(),
@@ -56,13 +55,13 @@ class ControllerCourse extends Controller {
 
     protected function update($course) {
         $db = new Includes\Db();
-        return $db->query('update course set idCourse = :idCourse, name = :name, type = :type, description = :description, '
+        return $db->query('update course set name = :name, type = :type, description = :description, '
                         . 'alias = :alias where idCourse = :idCourse', array(
-                    'idCourse' => $course->getIdCourse(),
                     'name' => $course->getName(),
                     'type' => $course->getType(),
                     'description' => $course->getDescription(),
                     'alias' => $course->getAlias(),
+                            'idCourse' => $course->getIdCourse()
         ));
     }
 
@@ -84,20 +83,53 @@ class ControllerCourse extends Controller {
         }
     }
 
-    protected function selectAllDescending() {
+    protected function selectAllGrowing($search) {
         $db = new Includes\Db();
+        
+        if($search != ""){
+            $search = "where "
+                    . "name like '%" . $search . "%' "
+                    . "or description like '%" . $search . "%' "
+                    . "or type like '%" . $search . "%' "
+                    . "or alias like '%" . $search . "%' ";
+        }
+        
+        $lines = $db->query("select * from course " . $search . " order by name");
+    
+        $courses = array();
+        foreach ($lines as $line) {
+            $course = new Course();
+            $course->setIdCourse($line["idCourse"]);
+            $course->setName($line["name"]);
+            $course->setDescription($line["description"]);
+            $course->setType($line["type"]);
+            $course->setAlias($line["alias"]);
+            $courses[] = $course;
+        }
+
+        return $courses;
+    }
+
+    protected function selectAllDescending($search) {
+        $db = new Includes\Db();
+        
+       if($search != ""){
+            $search = "where "
+                    . "name like '%" . $search . "%' "
+                    . "or description like '%" . $search . "%' "
+                    . "or type like '%" . $search . "%' "
+                    . "or alias like '%" . $search . "%' ";
+        }
+        
         $lines = $db->query("select * from course order by name desc");
         $courses = array();
         foreach ($lines as $line) {
             $course = new Course();
             $course->setIdCourse($line["idCourse"]);
-            $course->setType($line["type"]);
             $course->setName($line["name"]);
             $course->setDescription($line["description"]);
+            $course->setType($line["type"]);
             $course->setAlias($line["alias"]);
-         
-            
-
             $courses[] = $course;
         }
 

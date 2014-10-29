@@ -1,4 +1,5 @@
 <?php
+include_once("../../utilities/Formatter.class.php");
 include_once("../parts/header.php");
 include_once('../../system/limited.php');
 
@@ -188,10 +189,10 @@ if (isset($_POST["action"])) {
         </tr>
         <tr>
             <td id="data1">Visualizar desde:<input type="text" name="postDate" class="form-control" pattern="[0-3]{1}[0-9]{1}/[0-1]{1}[0-9]{1}/[2]{1}[0-9]{3}" data-mask="99/99/9999" placeholder="Data"  value="<?php if (isset($content) && $content->getPostDate() != "") {
-    echo $content->getPostDate();
+    echo Formatter::getDateBrazilianFormat($content->getPostDate());
 } ?>"><br></td>
             <td id="data2">Visualizar até: <input type="text" name="expirationDate" class="form-control" pattern="[0-3]{1}[0-9]{1}/[0-1]{1}[0-9]{1}/[2]{1}[0-9]{3}" data-mask="99/99/9999" placeholder="Data" value="<?php if (isset($content) && $content->getExpirationDate() != "") {
-    echo $content->getExpirationDate();
+    echo Formatter::getDateBrazilianFormat($content->getExpirationDate());
 } ?>"><br></td>			
         </tr>
         <tr>
@@ -272,7 +273,7 @@ if (isset($_POST["action"])) {
 <div class="row">
     <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11" style="align:center;">
         <a href="../../system/logout.php" class="btn"><i class="glyphicon glyphicon-log-out"></i>&nbsp;Sair</a>
-        <p><b>IFRS - Curso Técnino de Informática para Internet - Câmpus Bento Gonçalves</b></p>
+        <p><b>IFRS - Curso Técnico de Informática para Internet - Câmpus Bento Gonçalves</b></p>
         <p>Avenida Osvaldo Aranha, 540 | Bairro Juventude da Enologia | CEP: 95700-000 | Bento Gonçalves/RS</p>
         <p>E-mail: mauricio.rosito@bento.ifrs.edu.br | Telefone: (54) 3455-3200: Ramal 207 | Fax: (54) 3455-3246</p>
     </div>

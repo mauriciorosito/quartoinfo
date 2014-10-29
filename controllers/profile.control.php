@@ -15,6 +15,8 @@
 include_once("../../packages/database/database.class.php");
 include_once("controller.class.php");
 include_once("../../models/profile.model.php");
+include_once("../../models/category.model.php");
+include_once("../../models/profileCategory.model.php");
 
 class ControllerProfile extends Controller {
 
@@ -27,6 +29,7 @@ class ControllerProfile extends Controller {
             $profile->setIdProfile($line["idProfile"]);
             $profile->setName($line["name"]);
             $profile->setDescription($line["description"]);
+            $profile->setIs_admin($line["is_admin"]);
 
             $profiles[] = $profile;
         }
@@ -41,35 +44,36 @@ class ControllerProfile extends Controller {
         $profile = new \models\Profile();
         $profile->setIdProfile($lines[0]["idProfile"]);
         $profile->setName($lines[0]["name"]);
+        $profile->setDescription($lines[0]["description"]);
         $profile->setIs_admin($lines[0]["is_admin"]);
+        $profile->set_Categories($this->selectProfileCategories($profile));
 
         return $profile;
     }
 
     protected function insert($profile) {
         $db = new Includes\Db();
-        return $db->query('insert into profile (idProfile,  name, is_admin, can_edit, can_view, can_create, can_delete) values 
-		(NULL, :name, :is_admin, :can_edit, :can_view, :can_create, :can_delete) ', array(
-                    'idProfile' => $profile->getIdProfile(),
+//        $profiles = $this->selectAll();
+//        foreach ($profiles as $prof) {
+//            echo $prof[11]['name'];
+//        }
+        return $db->query('insert into profile (idProfile,  name, description, is_admin) values 
+		(NULL, :name, :description, :is_admin) ', array(
                     'name' => $profile->getName(),
+                    'description' => $profile->getDescription(),
                     'is_admin' => $profile->getIs_admin(),
-                    'can_edit' => $profile->getCan_edit(),
-                    'can_view' => $profile->getCan_view(),
-                    'can_create' => $profile->getCan_create(),
-                    'can_delete' => $profile->getCan_delete(),
         ));
     }
 
     protected function update($profile) {
+        print_r($profile);
         $db = new Includes\Db();
-        return $db->query('update profile set  name = :name, is_admin = :is_admin, can_edit = :can_edit, can_view = :can_view, can_create = :can_create, can_delete = :can_delete where idProfile = :idProfile', array(
+        $this->deleteProfileCategories($profile);
+        return $db->query('update profile set  name = :name, description = :description, is_admin = :is_admin  where idProfile = :idProfile', array(
                     'idProfile' => $profile->getIdProfile(),
                     'name' => $profile->getName(),
-                    'is_admin' => $profile->getIs_admin(),
-                    'can_edit' => $profile->getCan_edit(),
-                    'can_view' => $profile->getCan_view(),
-                    'can_create' => $profile->getCan_create(),
-                    'can_delete' => $profile->getCan_delete(),
+                    'description' => $profile->getDescription(),
+                    'is_admin' => $profile->getIs_admin()
         ));
     }
 
@@ -83,8 +87,7 @@ class ControllerProfile extends Controller {
     
     protected function selectAllCategories() {
         $db = new Includes\Db();
-        $lines = $db->query("select * from idProfile");
-        $categories = array();
+        $lines = $db->query("select * from category");
         
         return $lines;
     }
@@ -96,11 +99,22 @@ class ControllerProfile extends Controller {
         return $lines[0]['id'];
     }
 
-    protected function deleteProfileCategory($profilecategory) {
+    protected function deleteProfileCategories($profile) {
         $db = new Includes\Db();
 
-        return $db->query("delete from profilecategory where idProfileCategory = :idProfileCategory", array(
-            'idProfileCategory' => $profile->getIdProfileCategory(),
+        return $db->query("delete from profilecategory where idProfile = :idProfile", array(
+                    'idProfile' => $profile->getIdProfile(),
+        ));
+    }
+    
+    protected function insertProfileCategory($profile) {
+        $db = new Includes\Db();
+        return $db->query('insert into profilecategory (idProfileCategory,  idProfile, idCategory, permType) values 
+		(NULL, :idProfile, :idCategory, :permType) ', array(
+                    'idProfile' => $profile->getIdProfileCategory(),
+                    'idProfile' => $profile->getIdProfile(),
+                    'idCategory' => $profile->getIdCategory(),
+                    'permType' => $profile->getPermType(),
         ));
     }
     
@@ -113,5 +127,49 @@ class ControllerProfile extends Controller {
                     'idProfileCategory' => $profile->getIdProfileCategory(),
         ));
     }
+    
+    protected function selectProfileCategories($profile) {
+        $db = new \Includes\Db();
+        $lines = $db->query('select * from profilecategory where idProfile = :idProfile', array('idProfile' => $profile->getIdProfile()));
+        $categories = array();
+        foreach ($lines as $line) {
+            $category = new Category();
+            $category->setIdCategory($line['idCategory']);
+            $category->setType($line['permType']);
+            array_push($categories, $category);
+        }
+        return $categories;
+    }
+    
+    protected function selecionarPaginacao($pag) {
+        $db = new Includes\Db();
+        $termoInicial = ($pag['pagina'] - 1) * $pag['limite'];
+        $sql = "select * from profile ";
+        if (!isset($pag['ordenacao'])) {
+            $sql .= "ORDER BY idProfile DESC ";
+        } else if ($pag['ordenacao'] == "asc" || $pag['ordenacao'] == "desc") {
+            $sql .= "ORDER BY name " . $pag['ordenacao'] . " ";
+        }
+        $sql .= " LIMIT " . $termoInicial . "," . $pag['limite'];
+        $lines = $db->query($sql);
+        $profiles = array();
+        foreach ($lines as $line) {
+            $profile = new \models\Profile();
+            $profile->setIdProfile($line["idProfile"]);
+            $profile->setName($line["name"]);
+            $profile->setDescription($line["description"]);
+            $profile->setIs_admin($line["is_admin"]);
+
+            $profiles[] = $profile;
+        }
+        return $profiles;
+    }
+
+    protected function contarPaginas($limite) {
+        $db = new Includes\Db();
+        $lines = $db->query("SELECT (count(*)/" . $limite . ") as pages FROM profile");
+        return ceil($lines[0]['pages']);
+    }
+    
 //put your code heree
 }
