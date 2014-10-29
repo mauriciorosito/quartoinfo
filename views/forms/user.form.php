@@ -1,19 +1,8 @@
 <?php
-include_once("../parts/header.php");
-?>
-
-<hr class="BVerde">
-<!-- contentE -->
-
-<?php
 include_once("../../models/course.model.php");
 include_once("../../models/user.model.php");
 include_once("../../controllers/course.control.php");
 include_once("../../controllers/user.control.php");
-
-/* echo "<pre>";
-  print_r($_SESSION);
-  die; */
 
 require_once('../../system/limited.php');
 
@@ -26,7 +15,7 @@ if (isset($_GET["action"], $_GET["idUser"])) {
         $user->setIdUser($_GET["idUser"]);
         $cu = new ControllerUser();
         $cu->actionControl($_GET["action"], $user);
-        header("location: ../lists/login.php");
+        header("location: ../lists/user.list.php?msg=Ação realizada com sucesso!");
     } else {
         $user = new User();
         $user->setIdUser($_GET["idUser"]);
@@ -48,13 +37,14 @@ if (isset($_GET["action"], $_GET["idUser"])) {
         $user->setReminderResponse($user->getReminderResponse());
         $user->setCanReceiveContent($user->getCanReceiveContent());
         $user->setName($user->getName());
-        $user->setRegistration($user->getRagistration());
+        $user->setRegistration($user->getRegistration());
         $user->setAbout($user->getAbout());
     }
 }
 
 if (isset($_POST["action"])) {
     $user = new User();
+    $user->setIdUser($_POST["idUser"]);
     $user->setIdProfile(2);
     $user->setIdCourse($_POST["idCourse"]);
     $user->setEmail($_POST["email"]);
@@ -69,138 +59,176 @@ if (isset($_POST["action"])) {
     $cu = new ControllerUser();
     $cu->actionControl($_POST["action"], $user);
 
-    echo "<script>$('#ol-caminho').html('Cadastro Realizado com Sucesso !!!');</script>";
+    header("location: ../lists/user.list.php?msg=Ação realizada com sucesso!");
+
+    //echo "<script>$('#ol-caminho').html('Cadastro Realizado com Sucesso !!!');</script>";
 }
 ?>
-<form action="user.form.php" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="action" value="<?php
-    if (isset($_GET["action"])) {
-        echo $_GET["action"];
-    }
-    ?>">
-    <input type="hidden" name="idContent" value="<?php
-    if (isset($_GET["idContent"])) {
-        echo $_GET["idContent"];
-    }
-    ?>">
-    <input type="hidden" name="canReceiveContent" value="0">
-    <table style="width:100%;padding:10px;">
-        <tr>
-            <td>Nome: <input type="text" name="name" class="form-control" value="<?php
-                if (isset($user) && $user->getName() != "") {
-                    echo $user->getName();
-                }
-                ?>" required><br></td>
-            <td>Login: <input type="text" name="login" class="form-control" value="<?php
-                if (isset($user) && $user->getLogin() != "") {
-                    echo $user->getLogin();
-                }
-                ?>" required><br></td>
-        </tr>
-        <tr>
-            <td>Email: <input type="email" name="email" class="form-control" value="<?php
-                if (isset($user) && $user->getEmail() != "") {
-                    echo $user->getEmail();
-                }
-                ?>" required><br></td>
-            <td>Curso: 
-                <select class="form-control" name="idCourse">
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link rel="shortcut icon" href="publics/imgs/logo.png">
+
+        <title>Informática</title>
+
+        <!-- Bootstrap core CSS -->
+        <link href="../../publics/css/bootstrap.css" rel="stylesheet">
+
+        <!-- Add custom CSS here -->
+        <link href="../../publics/css/small-business.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../publics/css/craftyslide.css" />
+        <link type="text/css" rel="stylesheet" href="../../publics/css/rhinoslider-1.05.css" />
+        <link rel="stylesheet" type="text/css" href="../../packages/wysiwyg/src/bootstrap-wysihtml5.css" />
+        <link type="text/css" rel="stylesheet" href="../../packages/wysiwyg/lib/css/jasny-bootstrap.min.css" />	
+
+
+        <script src="../../packages/wysiwyg/lib/js/wysihtml5-0.3.0.js"></script>
+        <script src="../../packages/wysiwyg/lib/js/jquery-1.7.2.min.js"></script>
+        <script src="../../packages/wysiwyg/lib/js/bootstrap.min.js"></script>
+        <script src="../../packages/wysiwyg/lib/js/jasny-bootstrap.min.js"></script>
+        <script src="../../packages/wysiwyg/src/bootstrap3-wysihtml5.js"></script>
+
+    </head>
+
+    <body>
+
+        <?php include_once '../parts/navigation_admin.php'; ?>
+
+        <div id="content">
+            <div class="container img-rounded BVerde">
+                <br/>
+                <form action="user.form.php" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="action" value="<?php
+                    if (isset($_GET["action"])) {
+                        echo $_GET["action"];
+                    }
+                    ?>">
+                    <input type="hidden" name="idUser" value="<?php
+                    if (isset($_GET["idUser"])) {
+                        echo $_GET["idUser"];
+                    }
+                    ?>">
+                    <input type="hidden" name="canReceiveContent" value="0">
+
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 col-xs-12">
+                            <p>Nome: </p>
+                            <input type="text" name="name" class="form-control" value="<?php
+                            if (isset($user) && $user->getName() != "") {
+                                echo $user->getName();
+                            }
+                            ?>" required><br/>
+                        </div>
+                        <div class="col-md-6 col-sm-12 col-xs-12">
+                            <p>Login: </p>
+                            <input type="text" name="login" class="form-control" value="<?php
+                            if (isset($user) && $user->getLogin() != "") {
+                                echo $user->getLogin();
+                            }
+                            ?>" required  <?php if($_GET["action"] == "update"){ echo "readonly"; } ?>><br/>
+                        </div>
+                        <div class="col-md-6 col-sm-12 col-xs-12">
+                            <p>Email: </p>
+                            <input type="email" name="email" class="form-control" value="<?php
+                            if (isset($user) && $user->getEmail() != "") {
+                                echo $user->getEmail();
+                            }
+                            ?>" required><br/>
+                        </div>
+                        <div class="col-md-6 col-sm-12 col-xs-12">
+                            <p>Curso: </p>
+                            <select class="form-control" name="idCourse">
+                                <?php
+                                foreach ($arrayCursos as $curso) {
+                                    echo "<option value='" . $curso->getIdCourse() . "'>" . $curso->getName() . "</option>";
+                                }
+                                ?>
+                            </select><br/>
+                        </div>
+                        
+                        <?php if($_GET["action"] != "update"){ ?>
+                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                <p>Senha: </p>
+                                <input type="password" name="hash" class="form-control"  value="" required /><br/>
+                            </div>
+                        <?php } ?>
+                        
+                        <div class="col-md-6 col-sm-12 col-xs-12">
+                            <p>Número da matrícula: </p>
+                            <input type="text" name="registration" class="form-control" value="<?php
+                            if (isset($user) && $user->getRegistration() != "") {
+                                echo $user->getRegistration();
+                            }
+                            ?>" required><br/>
+                        </div>
+                        <div class="col-md-6 col-sm-12 col-xs-12">
+                            <p>Pergunta para a Recuperação de Senha: </p>
+                            <input type="text" name="reminder" class="form-control"  value="<?php
+                            if (isset($user) && $user->getReminder() != "") {
+                                echo $user->getReminder();
+                            }
+                            ?>" required><br/>
+                        </div>
+                        <div class="col-md-6 col-sm-12 col-xs-12">
+                            <p>Resposta para a Recuperação de Senha: </p>
+                            <input type="text" name="reminderResponse" class="form-control"  value="<?php
+                            if (isset($user) && $user->getReminderResponse() != "") {
+                                echo $user->getReminderResponse();
+                            }
+                            ?>" required><br/>
+                        </div>
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <p>Sobre: </p>
+                            <textarea name="about" value="" class="textarea form-control" placeholder="Enter text ..." rows="5"> <?php
+                                if (isset($user) && $user->getAbout() != "") {
+                                    echo $user->getAbout();
+                                }
+                                ?> </textarea>
+                        </div>
+                    </div>
+                    <br/>
                     <?php
-                    foreach ($arrayCursos as $curso) {
-                        echo "<option value='" . $curso->getIdCourse() . "'>" . $curso->getName() . "</option>";
+                    if (isset($_GET["action"])) {
+                        if (ucwords($_GET["action"]) == "Insert") {
+                            echo "<button class='btn btn-default' type='submit' name='button'><i class='glyphicon glyphicon-ok-circle'></i>&nbsp;Cadastrar</button>";
+                        } elseif (ucwords($_GET["action"]) == "Update") {
+                            echo "<button class='btn btn-default' type='submit' name='button'><i class='glyphicon glyphicon-ok-circle'></i>&nbsp;Salvar</button>";
+                        } else {
+                            echo "<button class='btn btn-default' type='submit' name='button'><i class='glyphicon glyphicon-trash'></i>&nbsp;Excluir</button>";
+                        }
                     }
                     ?>
-                </select><br>
-            </td>
+                    <button class="btn btn-default" type="reset" name="reset"><i class="glyphicon glyphicon-repeat"></i>&nbsp;Limpar Campos</button>
+                    <br>
+                    <br>
+                </form>
 
-        </tr>
-        <tr>
-            <td>Senha:<input type="password" name="hash" class="form-control"  value="" required><br></td>
-            <td>Número da matrícula: <input type="text" name="registration" class="form-control" value="<?php
-                if (isset($user) && $user->getRegistration() != "") {
-                    echo $user->getRegistration();
-                }
-                ?>" required><br></td>			
-        </tr>
-        <tr>
-            <td>Pergunta para a Recuperação de Senha:<input type="etxt" name="reminder" class="form-control"  value="<?php
-                if (isset($user) && $user->getReminder() != "") {
-                    echo $user->getReminder();
-                }
-                ?>" required><br></td>
-            <td>Resposta para a Recuperação de Senha:<input type="etxt" name="reminderResponse" class="form-control"  value="<?php
-                if (isset($user) && $user->getReminderResponse() != "") {
-                    echo $user->getReminderResponse();
-                }
-                ?>" required><br></td>			
-        </tr>
-        <tr>
-            <td colspan=2>Sobre: <textarea name="about" value="" class="textarea form-control" placeholder="Enter text ..." style="width: 810px; height: 200px"> <?php
-                    if (isset($user) && $user->getAbout() != "") {
-                        echo $user->getAbout();
-                    }
-                    ?> </textarea><br></td>
-        </tr>
+                <script type="text/javascript">
+                    $('.textarea').wysihtml5();
+                </script>
 
-    </table>
-    <?php
-    if (isset($_GET["action"])) {
-        if (ucwords($_GET["action"]) == "Insert") {
-            echo "<button class='btn btn-default' type='submit' name='button'><i class='glyphicon glyphicon-ok-circle'></i>&nbsp;Cadastrar</button>";
-        } elseif (ucwords($_GET["action"]) == "Update") {
-            echo "<button class='btn btn-default' type='submit' name='button'><i class='glyphicon glyphicon-ok-circle'></i>&nbsp;Salvar</button>";
-        } else {
-            echo "<button class='btn btn-default' type='submit' name='button'><i class='glyphicon glyphicon-trash'></i>&nbsp;Excluir</button>";
-        }
-    }
-    ?>
-    <button class="btn btn-default" type="reset" name="reset"><i class="glyphicon glyphicon-repeat"></i>&nbsp;Limpar Campos</button>
-    <br>
-</form>
-
-<script type="text/javascript">
-    $('.textarea').wysihtml5();
-</script>
-
-<script type="text/javascript" charset="utf-8">
-    $(prettyPrint);
-</script>
+                <script type="text/javascript" charset="utf-8">
+                    $(prettyPrint);
+                </script>
+            </div>
+        </div>
 
 
+        <!-- JavaScript -->
+        <script src="publics/js/jquery-1.10.2.js"></script>
+        <script src="publics/js/bootstrap.js"></script>
+        <script src="publics/js/craftyslide.js"></script>
+        <script src="publics/js/script.js"></script>
+        <script type="text/javascript" src="publics/js/rhinoslider-1.05.js"></script>
+        <script type="text/javascript" src="publics/js/mousewheel.js"></script>
+        <script type="text/javascript" src="publics/js/easing.js"></script>
 
-<!-- FIM DO contentE-->
-<hr  class="BVerde">
-<div class="row">
-    <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11" style="align:center;">
-        <a href="../../system/logout.php" class="btn"><i class="glyphicon glyphicon-log-out"></i>&nbsp;Sair</a>
-        <p><b>IFRS - Curso Técnino de Informática para Internet - Câmpus Bento Gonçalves</b></p>
-        <p>Avenida Osvaldo Aranha, 540 | Bairro Juventude da Enologia | CEP: 95700-000 | Bento Gonçalves/RS</p>
-        <p>E-mail: mauricio.rosito@bento.ifrs.edu.br | Telefone: (54) 3455-3200: Ramal 207 | Fax: (54) 3455-3246</p>
-    </div>
-    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 pull-right">
-        <a href="#content"><span class="glyphicon glyphicon-arrow-up"></span>Topo</a>
-    </div>
-</div>
-</footer>
-
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- /.container -->
-</div>
-<!-- /#content -->
-<!-- JavaScript -->
-
-
-<script src="../../publics/js/jquery-1.10.2.js"></script>
-<!--script src="../../publics/js/bootstrap.js"></script-->
-<script src="../../publics/js/craftyslide.js"></script>
-<script src="../../publics/js/script.js"></script>
-<script type="text/javascript" src="../../publics/js/rhinoslider-1.05.js"></script>
-<script type="text/javascript" src="../../publics/js/mousewheel.js"></script>
-<script type="text/javascript" src="../../publics/js/easing.js"></script>
-</body>
+    </body>
 
 </html>

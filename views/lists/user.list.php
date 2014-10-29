@@ -119,7 +119,7 @@ if (isset($_GET["ordenacao"])) {
                                     <td>
                             <center>
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-default" title='Editar' href="#"><span class="glyphicon glyphicon-edit"></span></button>
+                                    <a class="btn btn-default" title='Editar' href="../../views/forms/user.form.php?action=update&idUser=<?php echo $user->getIdUser(); ?>"><span class="glyphicon glyphicon-edit"></span></a>
                                     <a href="../../views/forms/user.form.php?action=delete&idUser=<?php echo $user->getIdUser(); ?>"class="btn btn-default" title='Excluir'><span class="glyphicon glyphicon-trash"></span></a>
 
                                 </div>
