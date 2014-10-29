@@ -2,7 +2,9 @@
 require_once "../../controllers/menu.control.php";
 require_once "../../models/menu.model.php";
 require_once "../../controllers/submenu.control.php";
+include_once("../../controllers/content.control.php");
 require_once "../../models/submenu.model.php";
+require_once "../../models/content.model.php";
 
 if (isset($_GET['idMenu'])) {
     $idMenu = $_GET['idMenu'];
@@ -15,7 +17,7 @@ if (isset($_GET['action']) && $_GET['action'] == "delete") {
 
     $menu = new subMenu();
     $menu->setIdSubMenu($_GET['idSubMenu']);
-
+    $menu->setIdMenu($_GET['idMenu']);
     $idMenu = $_GET['idMenu'];
 
     $cM->actionControl("delete", $menu);
@@ -82,7 +84,7 @@ include_once "../parts/header.php";
             <thead>
                 <tr>
                     <td> # </td>
-                    <td width="20%">Url</td>
+                    <td width="20%">Redirecionamento</td>
                     <td>Título</td>
                     <td>Tipo</td>
                     <td colspan="2">Descrição</td>
@@ -90,34 +92,51 @@ include_once "../parts/header.php";
                 </tr>
             </thead>
             <tbody data-link="row" class="rowlink">
-<?php
-$submenu = new subMenu();
-$submenu->setIdMenu($idMenu);
-$cSM = new ControllerSubMenu();
-$fim = $cSM->getLastPos($idMenu);
-$submenus = $cSM->actionControl("selectAllFromMenu", $submenu);
+                <?php
+                $submenu = new subMenu();
+                $submenu->setIdMenu($idMenu);
+                $cSM = new ControllerSubMenu();
+                $fim = $cSM->getLastPos($idMenu);
+                $submenus = $cSM->actionControl("selectAllFromMenu", $submenu);
+                foreach ($submenus as $submenu) {
+                    echo "<tr>";
+                    echo "<td>" . $submenu->getPosition() . " </td>";
 
-foreach ($submenus as $submenu) {
-    $url = $submenu->getUrl();
-    if ($url == "") {
-        $url = "- - - - - - - - - - - - - - - - - - - -";
-    }
-    echo "<tr>";
-    echo "<td>" . $submenu->getPosition() . " </td>";
-    echo "<td>" . $url . "</td>";
-    echo "<td>" . $submenu->getTitle() . "</td>";
-    echo "<td>" . $submenu->getType() . "</a></td>";
-    echo "<td colspan='2'>" . $submenu->getDescription() . "</td>";
-    echo "<td colspan='2'><div style='font-size:10PX'  class='btn-group'>";
-    if ($submenu->getPosition() > 1)
-        echo "<a  title='Subir um Nível' class='btn btn-default' href='submenu.list.php?action=up&idSubMenu=" . $submenu->getIdSubMenu() . "&idMenu=" . $idMenu . "'><span class='glyphicon glyphicon-arrow-up'></span></a>";
-    if ($submenu->getPosition() < $fim)
-        echo "<a  title='Descer um Nível' class='btn btn-default' href='submenu.list.php?action=down&idSubMenu=" . $submenu->getIdSubMenu() . "&idMenu=" . $idMenu . "'><span class='glyphicon glyphicon-arrow-down'></span></a>";
-    echo "<a class='btn btn-default' title='Alterar' href='../forms/submenu.form.php?action=update&idSubMenu=" . $submenu->getIdSubMenu() . "'><span class='glyphicon glyphicon-pencil'></span></a>";
-    echo "<a  title='Excluir' class='act-excluir btn btn-default' href='submenu.list.php?action=delete&idSubMenu=" . $submenu->getIdSubMenu() . "&idMenu=" . $idMenu . "'><span class='glyphicon glyphicon-trash'></span></a>";
-    echo "</div></td></tr>";
-}
-?>
+                    echo "<td>";
+                    $url = $submenu->getUrl();
+                    $page = $submenu->getIdPage();
+                    $category = $submenu->getIdCategory();
+                    $type = $submenu->getType();
+
+                    if ($url != "") {
+                        echo $url;
+                    } elseif ($page > 0) {
+                        $con = new Content();
+                        $con->setIdContent($page);
+                        $cCon = new ControllerContent();
+                        $pagina = $cCon->actionControl("selectOne", $con);
+                        echo $pagina->getTitle();
+                    } elseif ($category > 0) {
+                        //A FAZER
+                        echo $category;
+                    } elseif ($type == "semlink") {
+                        echo " - - - - - - - - - - -";
+                    }
+
+                    echo "</td>";
+                    echo "<td>" . $submenu->getTitle() . "</td>";
+                    echo "<td>" . $submenu->getType() . "</a></td>";
+                    echo "<td colspan='2'>" . $submenu->getDescription() . "</td>";
+                    echo "<td colspan='2'><div style='font-size:10PX'  class='btn-group'>";
+                    if ($submenu->getPosition() > 1)
+                        echo "<a  title='Subir um Nível' class='btn btn-default' href='submenu.list.php?action=up&idSubMenu=" . $submenu->getIdSubMenu() . "&idMenu=" . $idMenu . "'><span class='glyphicon glyphicon-arrow-up'></span></a>";
+                    if ($submenu->getPosition() < $fim)
+                        echo "<a  title='Descer um Nível' class='btn btn-default' href='submenu.list.php?action=down&idSubMenu=" . $submenu->getIdSubMenu() . "&idMenu=" . $idMenu . "'><span class='glyphicon glyphicon-arrow-down'></span></a>";
+                    echo "<a class='btn btn-default' title='Alterar' href='../forms/submenu.form.php?action=update&idSubMenu=" . $submenu->getIdSubMenu() . "'><span class='glyphicon glyphicon-pencil'></span></a>";
+                    echo "<a  title='Excluir' class='act-excluir btn btn-default' href='submenu.list.php?action=delete&idSubMenu=" . $submenu->getIdSubMenu() . "&idMenu=" . $idMenu . "'><span class='glyphicon glyphicon-trash'></span></a>";
+                    echo "</div></td></tr>";
+                }
+                ?>
             </tbody>
         </table>
     </div>
