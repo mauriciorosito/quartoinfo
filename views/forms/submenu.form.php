@@ -115,7 +115,7 @@ if (isset($_GET['action']) && isset($_GET['idSubMenu'])) {
                         <div class="form-group">
                             <label for="title" class="col-sm-2 control-label">Título</label>
                             <div class="col-sm-10">
-                                <input type="text" name="title" class="form-control" placeholder="Max: 30 caractéres." pattern="[a-zA-Z-0-9]{3,30}" value="<?php
+                                <input type="text" name="title" class="form-control" placeholder="Max: 30 caractéres." pattern="[a-zA-Z-0-9]+{3,30}" value="<?php
                     if (isset($submenu) && $submenu->getTitle() != "") {
                         echo $submenu->getTitle();
                     }
