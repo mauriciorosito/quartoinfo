@@ -29,6 +29,19 @@ if (isset($_GET["ordenacao"])) {
 } else {
     $courses = $cCourse->actionControl("selectAllGrowing", $pesquisa);
 }
+
+//$cCourse = new ControllerCourse();
+//$courses = $cCourse->actionControl("selectAll");
+//$pagina = (!isset($_GET['pagina'])) ? 1 : filter_var($_GET['pagina'], FILTER_SANITIZE_NUMBER_INT);
+//$cCourse = new ControllerCourse();
+//$pag = array();
+//$pag['pagina'] = $pagina;
+//$pag['limite'] = 5;
+//if (isset($_GET['ordenacao'])) {
+//    $pag['ordenacao'] = $_GET['ordenacao'];
+//}
+//$courses = $cCourse->actionControl("selecionarPaginacao", $pag);
+//$cont = $cCourse->actionControl("contarPaginas", 5);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -146,6 +159,37 @@ if (isset($_GET["ordenacao"])) {
                     <?php } ?>
                     </tbody>
                 </table>
+                                
+<!--                <center>
+                    <?php
+                    echo "<hr/>";
+                    echo "<div class='btn-group'>";
+                    if ($pagina > 1) {
+                        $flag = $pagina - 1;
+                        echo "<a type='button' class='btn btn-default' href='profile.list.php?";
+                        if (isset($_GET['ordenacao'])) {
+                            echo "ordenacao=" . $_GET['ordenacao'] . "&";
+                        }
+                        echo "pagina=" . $flag . "'><span class='glyphicon glyphicon-chevron-left'></span></a>";
+                    } else{
+                        $flag = $pagina - 1;
+                        echo "<a type='button' disabled class='btn btn-default' href=''><span class='glyphicon glyphicon-chevron-left'></span></a>";
+                    }
+                    echo "<a href='#' class='btn btn-default disabled'>Página " . $pagina . " de " . $cont . "</a>";
+                    if ($pagina < $cont) {
+                        echo "<a type='button' class='btn btn-default' href='profile.list.php?";
+                        if (isset($_GET['ordenacao'])) {
+                            echo "ordenacao=" . $_GET['ordenacao'] . "&";
+                        }
+                        echo "pagina=" . ($pagina + 1) . "'><span class='glyphicon glyphicon-chevron-right'></span></a>";
+                    } else{
+                        $flag = $pagina - 1;
+                        echo "<a type='button' disabled class='btn btn-default' href=''><span class='glyphicon glyphicon-chevron-right'></span></a>";
+                    }
+                    echo "</div>";
+                    echo "<p>&nbsp;</p>";
+                    ?>
+                </center>-->
             </div>
             <!-- /.container -->
         </div>

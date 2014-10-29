@@ -135,5 +135,34 @@ class ControllerCourse extends Controller {
 
         return $courses;
     }
-
+//     protected function selecionarPaginacao($pag) {
+//        $db = new Includes\Db();
+//        $termoInicial = ($pag['pagina'] - 1) * $pag['limite'];
+//        $sql = "select * from course ";
+//        if (!isset($pag['ordenacao'])) {
+//            $sql .= "ORDER BY idCourse DESC ";
+//        } else if ($pag['ordenacao'] == "asc" || $pag['ordenacao'] == "desc") {
+//            $sql .= "ORDER BY name " . $pag['ordenacao'] . " ";
+//        }
+//        $sql .= " LIMIT " . $termoInicial . "," . $pag['limite'];
+//        $lines = $db->query($sql);
+//        $courses = array();
+//        foreach ($lines as $line) {
+//            $course = new \models\course();
+//            $course->setIdCourse($line["idCourse"]);
+//            $course->setName($line["name"]);
+//            $course->setAlias($line["alias"]);
+//            $course->setDescription($line["description"]);
+//            $course->setType($line["type"]);
+//
+//            $courses[] = $course;
+//        }
+//        return $courses;
+//    }
+//
+//    protected function contarPaginas($limite) {
+//        $db = new Includes\Db();
+//        $lines = $db->query("SELECT (count(*)/" . $limite . ") as pages FROM course");
+//        return ceil($lines[0]['pages']);
+//    }
 }

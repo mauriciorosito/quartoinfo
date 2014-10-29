@@ -126,7 +126,16 @@ if (isset($_GET['action']) && $_GET['action'] == "delete" && isset($_GET['idMenu
                         </table>
                     </div>
                 </div>
-            </div></div>
+                
+                <center>
+                    <div class="btn-group" style="margin-bottom: 20px;">
+                        <a type="button" disabled="" class="btn btn-default" href=""><span class="glyphicon glyphicon-chevron-left"></span></a><a href="#" class="btn btn-default disabled">Página 1 de 1</a><a type="button" class="btn btn-default disabled" href="profile.list.php?pagina=2"><span class="glyphicon glyphicon-chevron-right"></span></a>
+                    </div>
+                </center>
+            </div>
+        </div>
+        
+        
         <script type="text/javascript" charset="utf-8">
         </script>
 

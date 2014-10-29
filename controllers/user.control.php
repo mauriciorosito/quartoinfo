@@ -90,22 +90,22 @@ class ControllerUser extends Controller {
 
     protected function selectAllGrowing($search) {
         $db = new Includes\Db();
-        
-        if($search != ""){
+
+        if ($search != "") {
             $search = "where "
                     . "name like '%" . $search . "%' "
                     . "or registration like '%" . $search . "%' "
                     . "or courseName like '%" . $search . "%' ";
         }
-        
+
         $lines = $db->query("select * from userSearch " . $search . " order by name");
         /*
          * create view userSearch as 
-select u.idUser, u.name, u.idCourse, u.email, u.about, u.registration, c.name as courseName
-from user u
-join course c on c.idCourse = u.idCourse
-join profile p on p.idProfile = u.idProfile 
-where p.is_admin = 0
+          select u.idUser, u.name, u.idCourse, u.email, u.about, u.registration, c.name as courseName
+          from user u
+          join course c on c.idCourse = u.idCourse
+          join profile p on p.idProfile = u.idProfile
+          where p.is_admin = 0
          */
         $users = array();
         foreach ($lines as $line) {
@@ -125,14 +125,14 @@ where p.is_admin = 0
 
     protected function selectAllDescending($search) {
         $db = new Includes\Db();
-        
-        if($search != ""){
+
+        if ($search != "") {
             $search = "where "
                     . "name like '%" . $search . "%' "
                     . "or registration like '%" . $search . "%' "
                     . "or courseName like '%" . $search . "%' ";
         }
-        
+
         $lines = $db->query("select * from userSearch order by name desc");
         $users = array();
         foreach ($lines as $line) {
@@ -168,13 +168,12 @@ where p.is_admin = 0
         $user->setReminder($lines[0]["reminder"]);
         $user->setReminderResponse($lines[0]["reminderResponse"]);
         $user->setCanReceiveContent($lines[0]["canReceiveContent"]);
-        $user->setType($lines[0]["type"]);
 
 
-        $profile = new Profile();
-        $profile->setIdProfile($user->getIdUser());
-        $controllerProfile = new ControllerProfile();
-        $profile = $controllerProfile->actionControl('selectOne', $profile);
+        /* $profile = new Profile();
+          $profile->setIdProfile($user->getIdUser());
+          $controllerProfile = new ControllerProfile();
+          $profile = $controllerProfile->actionControl('selectOne', $profile); */
         //$content->set_Medias($contentMedia);
 
 
@@ -236,22 +235,38 @@ where p.is_admin = 0
     }
 
     protected function update($user) {
-        $db = new Includes\Db();
-        return $db->query('update user set idProfile = :idProfile, idCourse = :idCourse, email = :email, name = :name, registration = :registration, about = :about, login = :login
+        //if ($this->verifyExistenceLogin($user) == 0) {
+            $db = new Includes\Db();
+            return $db->query('update user set idProfile = :idProfile, idCourse = :idCourse, email = :email, name = :name, registration = :registration, about = :about, login = :login
 		, hash =  :hash, reminder =  :reminder, reminderResponse = :reminderResponse
-		, canReceiveContent = :canReceiveContent, where idUser = :idUser', array(
-                    'idProfile' => $user->getIdProfile(),
-                    'idCourse' => $user->getIdCourse(),
-                    'email' => $user->getEmail(),
-                    'name' => $user->getName(),
-                    'registration' => $user->getRegistration(),
-                    'about' => $user->getAbout(),
-                    'login' => $user->getLogin(),
-                    'hash' => $user->getHash(),
-                    'reminder' => $user->getReminder(),
-                    'reminderResponse' => $user->getReminderResponse(),
-                    'canReceiveContent' => $user->getCanReceiveContent(),
+		, canReceiveContent = :canReceiveContent where idUser = :idUser', array(
+                        'idProfile' => $user->getIdProfile(),
+                        'idCourse' => $user->getIdCourse(),
+                        'email' => $user->getEmail(),
+                        'name' => $user->getName(),
+                        'registration' => $user->getRegistration(),
+                        'about' => $user->getAbout(),
+                        'login' => $user->getLogin(),
+                        'hash' => $user->getHash(),
+                        'reminder' => $user->getReminder(),
+                        'reminderResponse' => $user->getReminderResponse(),
+                        'canReceiveContent' => $user->getCanReceiveContent(),
+                        'idUser' => $user->getIdUser()
+            ));
+            
+            /*return true;
+        } else {
+            return false;
+        }*/
+    }
+
+    protected function verifyExistenceLogin($user) {
+        $db = new Includes\Db();
+        $lines = $db->query("select count(*) as qtde from user where login = :login", array(
+            'login' => $user->getLogin(),
         ));
+
+        return $lines[0]["qtde"];
     }
 
     protected function updatePassword($user) {
@@ -298,63 +313,62 @@ where p.is_admin = 0
             return false;
         }
     }
-    
+
     /*
 
-    public function searchAll($data, $page = 1) {
-        $db = new Includes\Db();
-        $select = $db->query("select * from content where title like :title or description like :description limit :page, 10", array(
-            "title" => '%' . $data . '%',
-            "description" => '%' . $data . '%',
-            'page' => (($page - 1) * 10),
-        ));
-        $this->total = $db->single("select count(*) from content where title like :title or description like :description", array(
-            "title" => '%' . $data . '%',
-            "description" => '%' . $data . '%',
-        ));
-        return $select;
-    }
+      public function searchAll($data, $page = 1) {
+      $db = new Includes\Db();
+      $select = $db->query("select * from content where title like :title or description like :description limit :page, 10", array(
+      "title" => '%' . $data . '%',
+      "description" => '%' . $data . '%',
+      'page' => (($page - 1) * 10),
+      ));
+      $this->total = $db->single("select count(*) from content where title like :title or description like :description", array(
+      "title" => '%' . $data . '%',
+      "description" => '%' . $data . '%',
+      ));
+      return $select;
+      }
 
-    public function search($type, $search, $page = 1, $order = "postDate", $data, $data2) {
-        $db = new Includes\Db();
+      public function search($type, $search, $page = 1, $order = "postDate", $data, $data2) {
+      $db = new Includes\Db();
 
-        if ($type <> 'A') {
-            $select = $db->query("select * from content where type = :type and (title like :title or description like :description) and (postDate between :data and :data2) order by :order limit :page, 10", array(
-                "type" => $type,
-                "title" => '%' . $search . '%',
-                "description" => '%' . $search . '%',
-                "page" => (($page - 1) * 10),
-                "order" => $order,
-                "data" => $data,
-                "data2" => $data2,
-            ));
+      if ($type <> 'A') {
+      $select = $db->query("select * from content where type = :type and (title like :title or description like :description) and (postDate between :data and :data2) order by :order limit :page, 10", array(
+      "type" => $type,
+      "title" => '%' . $search . '%',
+      "description" => '%' . $search . '%',
+      "page" => (($page - 1) * 10),
+      "order" => $order,
+      "data" => $data,
+      "data2" => $data2,
+      ));
 
-            $this->total = $db->single("select count(*) from content where type = :type and (title like :title or description like :description) and (postDate between :data and :data2)", array(
-                "type" => $type,
-                "title" => '%' . $search . '%',
-                "description" => '%' . $search . '%',
-                "data" => $data,
-                "data2" => $data2,
-            ));
-        } else {
-            $select = $db->query("select * from content where (title like :title or description like :description) and (postDate between :data and :data2) order by :order limit :page, 10", array(
-                "title" => '%' . $search . '%',
-                "description" => '%' . $search . '%',
-                "page" => (($page - 1) * 10),
-                "order" => $order,
-                "data" => $data,
-                "data2" => $data2,
-            ));
+      $this->total = $db->single("select count(*) from content where type = :type and (title like :title or description like :description) and (postDate between :data and :data2)", array(
+      "type" => $type,
+      "title" => '%' . $search . '%',
+      "description" => '%' . $search . '%',
+      "data" => $data,
+      "data2" => $data2,
+      ));
+      } else {
+      $select = $db->query("select * from content where (title like :title or description like :description) and (postDate between :data and :data2) order by :order limit :page, 10", array(
+      "title" => '%' . $search . '%',
+      "description" => '%' . $search . '%',
+      "page" => (($page - 1) * 10),
+      "order" => $order,
+      "data" => $data,
+      "data2" => $data2,
+      ));
 
-            $this->total = $db->single("select count(*) from content where (title like :title or description like :description) and (postDate between :data and :data2)", array(
-                "title" => '%' . $search . '%',
-                "description" => '%' . $search . '%',
-                "data" => $data,
-                "data2" => $data2,
-            ));
-        }
-        return $select;
-    }
+      $this->total = $db->single("select count(*) from content where (title like :title or description like :description) and (postDate between :data and :data2)", array(
+      "title" => '%' . $search . '%',
+      "description" => '%' . $search . '%',
+      "data" => $data,
+      "data2" => $data2,
+      ));
+      }
+      return $select;
+      }
      */
-
 }

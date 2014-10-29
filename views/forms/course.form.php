@@ -74,20 +74,20 @@ if (isset($_POST["action"])) {
     <input type="hidden" name="canReceiveContent" value="0">
     <table style="width:100%;padding:10px;">
         <tr>
-            <td>Nome: <input type="text" name="name" class="form-control" value="<?php
+            <td>Nome*: <input type="text" name="name" class="form-control" value="<?php
                 if (isset($course) && $course->getName() != "") {
                     echo $course->getName();
                 }
                 ?>" required><br></td>
-            <td>Alias: <input type="text" name="alias" class="form-control" value="<?php
+            <td>Alias*: <input type="text" name="alias" class="form-control" value="<?php
                 if (isset($course) && $course->getAlias() != "") {
                     echo $course->getAlias();
                 }
                 ?>" required><br></td>
         </tr>
         <tr>
-            <td>Tipo: 
-                <select class="form-control" name="type">
+            <td>Tipo*: 
+                <select class="form-control" name="type" required>
                     <option value=''></option>
                     <option value='E' <?php if (isset($course) && $course->getType() == "E") {
                     echo 'selected';
@@ -100,16 +100,18 @@ if (isset($_POST["action"])) {
                 } ?>>Técnico</option>
                 </select><br>
             </td>
+            
 
         </tr>
         
-            <td colspan=2>Descrição: <textarea name="description" value="" class="textarea form-control" placeholder="Enter text ..." style="width: 810px; height: 200px"> <?php
+            <td colspan=2>Descrição: <textarea name="description"  class="textarea form-control"  style="width: 810px; height: 200px" > <?php
                     if (isset($course) && $course->getDescription() != "") {
                         echo $course->getDescription();
                     }
                     ?> </textarea><br></td>
+          
         </tr>
-
+        <tr> <td> <h6>* Campos Obrigatórios<h6> <br></td></tr>
     </table>
     <?php
     if (isset($_GET["action"])) {
