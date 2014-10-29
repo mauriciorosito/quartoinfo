@@ -128,8 +128,8 @@ class ControllerContent extends Controller {
 		return $content;
 	}
 	protected function selectAll(){
-		$db = new database();
-	    $lines = $db->select("select * from content where type<>'P' order by postDate desc");
+		$db = new Includes\Db();
+	    $lines = $db->query("select * from content where type <> 'P' order by postDate desc");
 	    $contents = array();
 	    foreach($lines as $line){
 		   $content = new Content();
@@ -330,7 +330,7 @@ class ControllerContent extends Controller {
 	protected function delete($content){
 		$db = new Includes\Db();
 		
-		$ret2 = $db->query("delete from contentMedia where IdContent = :idContent", array(
+		$ret2 = $db->query("delete from contentmedia where IdContent = :idContent", array(
 			'idContent' => $content->getIdContent(),
 		));
 
@@ -352,5 +352,53 @@ class ControllerContent extends Controller {
 		$content->setIdContent($lines[0]["max(idContent)"]);
 		return($content);
 	}
+	
+	protected function selecionarPaginacaoPaginas($pag) {
+        $db = new Includes\Db();
+        $termoInicial = ($pag['pagina'] - 1) * $pag['limite'];
+        $sql = "select * from content where type = 'P' ";
+        if (!isset($pag['ordenacao'])) {
+            $sql .= "ORDER BY idContent DESC ";
+        } else if ($pag['ordenacao'] == "asc" || $pag['ordenacao'] == "desc") {
+            $sql .= "ORDER BY title " . $pag['ordenacao'] . " ";
+        }
+        $sql .= " LIMIT " . $termoInicial . "," . $pag['limite'];
+        $lines = $db->query($sql);
+        $contents = array();
+        foreach ($lines as $line) {
+			$content = new Content();
+			$content->setIdContent($line["idContent"]);
+			$content->setPublisher($line["publisher"]);
+			$content->setSource($line["source"]);
+			$content->setTitle($line["title"]);
+			$content->setText($line["text"]);
+			$content->setDescription($line["description"]);
+			$content->setPostDate($line["postDate"]);
+			$content->setExpirationDate($line["expirationDate"]);
+			$content->setType($line["type"]);
+
+			$contentMedia = new contentMedia;
+			$contentMedia->setIdContent($content->getIdContent());
+			$controllerContentMedia = new ControllerContentMedia();
+			$contentMedia = $controllerContentMedia->actionControl('selectAll', $contentMedia);
+			$content->set_Medias($contentMedia);
+
+
+			$contentCategory = new contentCategory;
+			$contentCategory->setIdContent($content->getIdContent());
+			$controllerContentMedia = new ControllerContentCategory();
+			$contentCategory = $controllerContentMedia->actionControl('selectAll', $contentCategory);
+			$content->set_Category($contentCategory);
+
+			$contents[] = $content;
+        }
+        return $contents;
+    }
+
+    protected function contarPaginasPaginas($limite) {
+        $db = new Includes\Db();
+        $lines = $db->query("SELECT (count(*)/" . $limite . ") as pages FROM content where type = 'P'");
+        return ceil($lines[0]['pages']);
+    }
 
 }
