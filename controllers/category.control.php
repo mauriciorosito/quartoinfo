@@ -3,15 +3,15 @@ include_once("../../packages/database/database.class.php");
 include_once("controller.class.php");
 include_once("../../models/category.model.php");
 
-
 class ControllerCategory extends Controller {
 	
+
 	protected function selectOne($category){
 	$db = new Includes\Db();
         $lines = $db->query("select * from category where idCategory = :idCategory", array(
             'idCategory' => $category->getIdCategory(),
         ));
-        $category = new Category();
+        $category = new \models\Category();
         $category->setIdCategory($lines[0]["idCategory"]);
         $category->setName($lines[0]["name"]);
         $category->setType($lines[0]["type"]);
@@ -21,10 +21,11 @@ class ControllerCategory extends Controller {
 
 	protected function selectAll(){
 	 $db = new Includes\Db();
+	
         $lines = $db->query("select * from category");
         $categories = array();
         foreach ($lines as $line) {
-            $category = new Category();
+            $category = new \models\Category();
             $category->setIdCategory($line["idCategory"]);
             $category->setName($line["name"]);
 			$category->setType($line["type"]);
@@ -58,15 +59,10 @@ class ControllerCategory extends Controller {
 		$ret1 = $db->query("delete from category where idCategory = :idCategory", array('idCategory' => $category->getIdCategory(),		));
 	}
 	
-	protected function selectAllDescending($search) {
+	protected function selectAllDescending() {
         $db = new Includes\Db();
-		 if($search != ""){
-            $search = "where "
-                    . "name like '%" . $search . "%' "
-                    . "or type like '%" . $search . "%' ";
-        }
         $lines = $db->query("select * from category order by name desc");
-        $categories = array();
+        $categorys = array();
         foreach ($lines as $line) {
             $category = new Category();
             $category->setIdCategory($line["idCategory"]);
@@ -80,27 +76,36 @@ class ControllerCategory extends Controller {
         return $categories;
     }
 	
-	protected function selectAllGrowing($search) {
+	
+
+	protected function selecionarPaginacao($pag) {
         $db = new Includes\Db();
-        
-        if($search != ""){
-            $search = "where "
-                    . "name like '%" . $search . "%' "
-                    . "or type like '%" . $search . "%' ";
+	
+        $termoInicial = ($pag['pagina'] - 1) * $pag['limite'];
+        $sql = "select * from category ";
+        if (!isset($pag['ordenacao'])) {
+            $sql .= "ORDER BY idCategory DESC ";
+        } else if ($pag['ordenacao'] == "asc" || $pag['ordenacao'] == "desc") {
+            $sql .= "ORDER BY name " . $pag['ordenacao'] . " ";
         }
-        
-        $lines = $db->query("select * from category " . $search . " order by name");
-      
+        $sql .= " LIMIT " . $termoInicial . "," . $pag['limite'];
+        $lines = $db->query($sql);
         $categories = array();
         foreach ($lines as $line) {
-            $category = new Category();
+		
+            $category = new \models\Category();
             $category->setIdCategory($line["idCategory"]);
             $category->setType($line["type"]);
-			$category->setName($line["name"]);
+            $category->setName($line["name"]);
+
             $categories[] = $category;
         }
-
         return $categories;
     }
 
+    protected function contarPaginas($limite) {
+        $db = new Includes\Db();
+        $lines = $db->query("SELECT (count(*)/" . $limite . ") as pages FROM category");
+        return ceil($lines[0]['pages']);
+    }
 }
