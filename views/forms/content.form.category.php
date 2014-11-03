@@ -1,88 +1,85 @@
-﻿<?php
+<?php
 include_once("../parts/header.php");
 include_once('../../system/limited.php');
 
-$limited = new Limited();
-$limited->check(array('A'));
+//$limited = new Limited();
+//$limited->check(array('A'));
 ?>
 
 <hr class="BVerde">
-<!-- contentE -->
+<!-- categoryE -->
 <?php
-include_once("../../controllers/controleCategoria.php");
+include_once("../../controllers/category.control.php");
 
 
-if (isset($_GET["action"], $_GET["idContent"])) {
+if (isset($_GET["action"], $_GET["idCategory"])) {
     if ($_GET["action"] == "delete") {
-        $content = new Content();
-        $content->setIdContent($_GET["idContent"]);
-        $cc = new ControllerContent();
-        $cc->actionControl($_GET["action"], $content);
-        header("location: ../lists/content.list.php");
+        $category = new \models\Category();
+        $category->setIdCategory($_GET["idCategory"]);
+        $cc = new ControllerCategory();
+        $cc->actionControl($_GET["action"], $category);
+       header("location: ../lists/list.category.php");
     } else {
-        $content = new Content();
-        $content->setIdContent($_GET["idContent"]);
-        $cc = new ControllerContent();
-        $content = $cc->actionControl("selectOne", $content);
+        $category = new \models\Category();
+        $category->setIdCategory($_GET["idCategory"]);
+        $cc = new ControllerCategory();
+        $category = $cc->actionControl("selectOne", $category);
     }
 
     if ($_GET["action"] == "update") {
-        $content = new Content();
-        $content->setIdContent($_GET["idContent"]);
-        $cc = new ControllerContent();
-        $content = $cc->actionControl("selectOne", $content);
-        $content->setTitle($content->getTitle());
-        $content->setText($content->getText());
-        $content->setCategory($content->getCategory());
+        $category = new \models\Category();
+        $category->setIdCategory($_GET["idCategory"]);
+        $cc = new ControllerCategory();
+        $category = $cc->actionControl("selectOne", $category);
+        $category->setName($category->getName());
+        $category->setType($category->getType());
     }
 }
 
 if (isset($_POST["action"])) {
-    $content = new Content();
-    $content->setIdContent($_POST["idContent"]);
-    $content->setTitle($_POST["title"]);
-    $content->setText($_POST["text"]);
-    $content->setCategory($_POST["category"]);
-    $cc = new ControllerContent();
-    $cc->actionControl($_POST["action"], $content);
+    $category = new \models\Category();
+    $category->setIdCategory($_POST["idCategory"]);
+    $category->setName($_POST["name"]);
+    $category->setType($_POST["type"]);
+    $cc = new ControllerCategory();
+    $cc->actionControl($_POST["action"], $category);
 
-    $maxIdC = $cc->actionControl("selectMaxId");
-    $maxIdC = $maxIdC->getIdContent();
-    
-    header("location: ../lists/content.list.php");
+   
+   
+    header("location: ../lists/list.category.php");
 }
 ?>
-<form action="content.form.php" method="post" enctype="multipart/form-data">
+<form action="content.form.category.php" method="post" enctype="multipart/form-data">
     <input type="hidden" name="action" value="<?php if (isset($_GET["action"])) {
     echo $_GET["action"];
 } ?>">
-    <input type="hidden" name="idContent" value="<?php if (isset($_GET["idContent"])) {
-    echo $_GET["idContent"];
+    <input type="hidden" name="idCategory" value="<?php if (isset($_GET["idCategory"])) {
+    echo $_GET["idCategory"];
 } ?>">
 
-	<table style="width:60%;padding:10px;">
+	<table style="width:30%;padding:10px;">
 		<tr>
-			<td>Título: <input type="text" name="title" class="form-control" value="<?php if (isset($content) && $content->getTitle() != "") {
-				echo $content->getTitle();
+			<td>Título: <input type="text" required name="name" class="form-control" value="<?php if (isset($category) && $category->getName() != "") {
+				echo $category->getName();
 				} ?>"><br>
 			</td>
 		</tr>
 		<tr>
-			<td colspan=2>Descrição: 
-				<textarea name="text" value="" class="textarea form-control" placeholder="Enter text ..." style="width: 810px; height: 200px"> 
-				<?php if (isset($content) && $content->getText() != "") {
-					echo $content->getText();
-				} ?> 
-				</textarea><br>
-			</td>
-		</tr>
-		<tr>
-			<td> Categoria pai: <br>
-				<select>
-					<option>Extensão</option>
-					<option>Pesquisa</option>
-				</select>
-			</td>
+			<td>Tipo do conteúdo: <select name="type" class="form-control" id="type">
+                    <option  value="Notícia" <?php if (isset($category) && $category->getType() == "Notícia") {
+    echo "selected";
+} ?>> Notícia</option>
+                    <option value="Eventos" <?php if (isset($category) && $category->getType() == "Eventos") {
+    echo "selected";
+} ?>> Eventos</option>
+                    <option value="Extensão" <?php if (isset($category) && $category->getType() == "Extensão") {
+    echo "selected";
+} ?>> Extensão</option>
+<option value="Pesquisa" <?php if (isset($category) && $category->getType() == "Pesquisa") {
+    echo "selected";
+} ?>> Pesquisa</option>
+                </select>
+            </td>
 		</tr>
 	</table>
 	<br>
@@ -91,30 +88,7 @@ if (isset($_POST["action"])) {
 } ?>"><br>
 </form>
 
-<script type="text/javascript" charset="utf-8">
-    $('.textarea').wysihtml5();
-
-    $(prettyPrint);
-
-    function duplicarCampos() {
-        var clone = document.getElementById('origem').cloneNode(true);
-        var destino = document.getElementById('destino');
-        destino.appendChild(clone);
-
-        var camposClonados = clone.getElementsByTagName('input');
-
-        for (i = 0; i < camposClonados.length; i++) {
-            camposClonados[i].value = '';
-        }
-    }
-
-    function removerCampos(id) {
-        var node1 = document.getElementById('destino');
-        node1.removeChild(node1.childNodes[0]);
-    }
-</script>
-
-<!-- FIM DO contentE-->
+<!-- FIM DO categoryE-->
 <hr  class="BVerde">
 <div class="row">
     <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11" style="align:center;">
@@ -123,7 +97,7 @@ if (isset($_POST["action"])) {
         <p>E-mail: mauricio.rosito@bento.ifrs.edu.br | Telefone: (54) 3455-3200: Ramal 207 | Fax: (54) 3455-3246</p>
     </div>
     <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 pull-right">
-        <a href="#content"><span class="glyphicon glyphicon-arrow-up"></span>Topo</a>
+        <a href="#category"><span class="glyphicon glyphicon-arrow-up"></span>Topo</a>
     </div>
 </div>
 </footer>
@@ -135,7 +109,7 @@ if (isset($_POST["action"])) {
 </div>
 <!-- /.container -->
 </div>
-<!-- /#content -->
+<!-- /#category -->
 <!-- JavaScript -->
 
 <script src="../../publics/js/jquery-1.10.2.js"></script>
