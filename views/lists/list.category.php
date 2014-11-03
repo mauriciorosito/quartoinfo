@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 include_once("../../controllers/controller.class.php");
 include_once("../../controllers/category.control.php");
 
@@ -6,6 +6,18 @@ include_once("../../controllers/category.control.php");
 //$contents = $controllerContent->actionControl('selectAllEvents');
 
 $cCategory = new ControllerCategory();
+$categories = $cCategory->actionControl("selectAll");
+$pagina = (!isset($_GET['pagina'])) ? 1 : filter_var($_GET['pagina'], FILTER_SANITIZE_NUMBER_INT);
+$cCategory = new ControllerCategory();
+$pag = array();
+$pag['pagina'] = $pagina;
+$pag['limite'] = 5;
+if (isset($_GET['ordenacao'])) {
+    $pag['ordenacao'] = $_GET['ordenacao'];
+}
+$categories = $cCategory->actionControl("selecionarPaginacao", $pag);
+$cont = $cCategory->actionControl("contarPaginas", 5);
+
 
 if (isset($_POST["pesquisa"])) {
     $pesquisa = filter_var($_POST["pesquisa"]);
@@ -58,28 +70,25 @@ if (isset($_GET["ordenacao"])) {
 
     <body>
         <div id="content">
-            <div class="container img-rounded BVerde">
-			<a href="../forms/content.form.category.php?action=insert" class="btn btn-default standard-margin-10">Inserir Categoria</a>
-			<div class="btn-group">
+            <div class="container img-rounded BVerde"><br><br>
+			<a href="../forms/content.form.category.php?action=insert" class="btn btn-default standard-margin-10" style="margin-left: -52px; margin-top:0px;">Inserir Categoria</a>
+			<div class="col-md-5 col-sm-12 col-xs-12">
+                        <div class="btn-group">
                             <a href="" class="btn btn-success">Ordenar por:</a>
-                            <a href="list.category.php?ordenacao=asc" class="btn btn-default">Nome - Crescente</a>
-                            <a href="list.category.php?ordenacao=desc" class="btn btn-default">Nome - Decrescente</a> 
-							<form class="form-inline" role="form" method="post" action="list.category.php">
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <input class="form-controlCATEG" type="text" name="pesquisa" placeholder="Digite sua Pesquisa"> 
-                                    <span class="input-group-btn"><br>
-                                        <button type="submit" class="btn btn-default-CATEG">&nbsp;<i class="glyphicon glyphicon-search"></i>&nbsp;</button> <br>
-                                    </span>
-                                </div>
-                            </div>
-							</form>
-                        </form>
+                            <a href="list.category.php?<?php
+                            if (isset($_GET['pagina'])) {
+                                echo "pagina=" . $_GET['pagina'] . "&";
+                            }
+                            ?>ordenacao=asc" class="btn btn-default">Nome - Crescente</a>
+                            <a href="list.category.php?<?php
+                            if (isset($_GET['pagina'])) {
+                                echo "pagina=" . $_GET['pagina'] . "&";
+                            }
+                            ?>ordenacao=desc" class="btn btn-default">Nome - Decrescente</a>
+                        </div>
                     </div>
-                </div>		
-                </div>
-				<?php if (count($categories) != 0) { ?>
-                <table class = "table table-striped table-condensed table-bordered table-hover">
+                 <hr></hr>
+                <table class="table table-striped table-condensed table-bordered table-hover">
                     <thead>
                         <tr>
                            
@@ -106,15 +115,39 @@ if (isset($_GET["ordenacao"])) {
                         </td>
                         </tr>
                     <?php } ?>
-					<?php } else { ?>
-                        <div class="alert alert-danger">
-                            <center>
-                                <p class="lead">Sua pesquisa não encontrou nenhum resultado. Por favor, verifique sua pesquisa e tente novamente.</p>
-                            </center>
-                        </div>
-                    <?php } ?>
                     </tbody>
-                </table>
+					 </table>
+					 <center>
+                    <?php
+                    echo "<hr/>";
+                    echo "<div class='btn-group'>";
+                    if ($pagina > 1) {
+                        $flag = $pagina - 1;
+                        echo "<a type='button' class='btn btn-default' href='list.category.php?";
+                        if (isset($_GET['ordenacao'])) {
+                            echo "ordenacao=" . $_GET['ordenacao'] . "&";
+                        }
+                        echo "pagina=" . $flag . "'><span class='glyphicon glyphicon-chevron-left'></span></a>";
+                    } else{
+                        $flag = $pagina - 1;
+                        echo "<a type='button' disabled class='btn btn-default' href=''><span class='glyphicon glyphicon-chevron-left'></span></a>";
+                    }
+                    echo "<a href='#' class='btn btn-default disabled'>Página " . $pagina . " de " . $cont . "</a>";
+                    if ($pagina < $cont) {
+                        echo "<a type='button' class='btn btn-default' href='list.category.php?";
+                        if (isset($_GET['ordenacao'])) {
+                            echo "ordenacao=" . $_GET['ordenacao'] . "&";
+                        }
+                        echo "pagina=" . ($pagina + 1) . "'><span class='glyphicon glyphicon-chevron-right'></span></a>";
+                    } else{
+                        $flag = $pagina - 1;
+                        echo "<a type='button' disabled class='btn btn-default' href=''><span class='glyphicon glyphicon-chevron-right'></span></a>";
+                    }
+                    echo "</div>";
+                    echo "<p>&nbsp;</p>";
+                    ?>
+                </center>
+               
             </div>
             <!-- /.container -->
         </div>
