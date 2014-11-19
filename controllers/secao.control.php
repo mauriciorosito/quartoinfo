@@ -38,10 +38,18 @@ class ControllerSecao extends Controller {
         return $secaos;
     }
     
+    public function verifyExistenceSecao($secao) {
+        $db = new Includes\Db();
+        $lines = $db->query("select titulo from secao where titulo = :titulo", array(
+            'titulo' => $secao->getTitulo(),
+        ));
+
+        return $lines;
+    }    
+    
     protected function selectAllDescending() {
         $db = new Includes\Db();
         
-
         $lines = $db->query("select * from secao order by titulo desc");
         $secaos = array();
         foreach ($lines as $line) {
