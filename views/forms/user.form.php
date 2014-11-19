@@ -123,88 +123,117 @@ if (isset($_POST["action"])) {
 
                     <div class="row">
                         <div class="col-md-6 col-sm-12 col-xs-12">
-                            <p>Nome: </p>
-                            <input type="text" name="name" class="form-control" value="<?php
-                            if (isset($user) && $user->getName() != "") {
-                                echo $user->getName();
-                            }
-                            ?>" required><br/>
-                        </div>
-                        <div class="col-md-6 col-sm-12 col-xs-12">
-                            <p>Login: </p>
-                            <input type="text" name="login" class="form-control" value="<?php
-                            if (isset($user) && $user->getLogin() != "") {
-                                echo $user->getLogin();
-                            }
-                            ?>" required  <?php
-                                   if ($_GET["action"] == "update") {
-                                       echo "readonly";
-                                   }
-                                   ?>><br/>
-                        </div>
-                        <div class="col-md-6 col-sm-12 col-xs-12">
-                            <p>Email: </p>
-                            <input type="email" name="email" class="form-control" value="<?php
-                            if (isset($user) && $user->getEmail() != "") {
-                                echo $user->getEmail();
-                            }
-                            ?>" required  <?php
-                                   if ($_GET["action"] == "update") {
-                                       echo "readonly";
-                                   }
-                            ?>><br/>
-                        </div>
-                        <div class="col-md-6 col-sm-12 col-xs-12">
-                            <p>Curso: </p>
-                            <select class="form-control" name="idCourse">
-                                <?php
-                                foreach ($arrayCursos as $curso) {
-                                    echo "<option value='" . $curso->getIdCourse() . "'>" . $curso->getName() . "</option>";
+                            <div class="form-group has-success has-feedback">
+                                <p>Nome: </p>
+                                <input type="text" name="name" class="form-control" value="<?php
+                                if (isset($user) && $user->getName() != "") {
+                                    echo $user->getName();
                                 }
-                                ?>
-                            </select><br/>
+                                ?>" required><br/>
+                                <span class="glyphicon glyphicon-asterisk form-control-feedback" aria-hidden="true"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12 col-xs-12">
+                            <div class="form-group has-success has-feedback">
+                                <p>Login: </p>
+                                <input type="text" name="login" class="form-control" value="<?php
+                                if (isset($user) && $user->getLogin() != "") {
+                                    echo $user->getLogin();
+                                }
+                                ?>" required  <?php
+                                       if ($_GET["action"] == "update") {
+                                           echo "readonly";
+                                       }
+                                       ?>><br/>
+                                <span class="glyphicon glyphicon-asterisk form-control-feedback" aria-hidden="true"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12 col-xs-12">
+                            <div class="form-group has-success has-feedback">
+                                <p>Email: </p>
+                                <input type="email" name="email" class="form-control" value="<?php
+                                if (isset($user) && $user->getEmail() != "") {
+                                    echo $user->getEmail();
+                                }
+                                ?>" required  <?php
+                                       if ($_GET["action"] == "update") {
+                                           echo "readonly";
+                                       }
+                                       ?>><br/>
+                                <span class="glyphicon glyphicon-asterisk form-control-feedback" aria-hidden="true"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <p>Curso: </p>
+                                <select class="form-control" name="idCourse">
+                                    <?php
+                                    foreach ($arrayCursos as $curso) {
+                                        echo "<option value='" . $curso->getIdCourse() . "'>" . $curso->getName() . "</option>";
+                                    }
+                                    ?>
+                                </select><br/>
+                            </div>
                         </div>
 
                         <?php if ($_GET["action"] != "update") { ?>
-                            <div class="col-md-6 col-sm-12 col-xs-12">
-                                <p>Senha: </p>
-                                <input type="password" name="hash" class="form-control"  value="" required /><br/>
+                            <div class="form-group has-success has-feedback">
+                                <div class="col-md-6 col-sm-12 col-xs-12">
+                                    <p>Senha: </p>
+                                    <input type="password" name="hash" class="form-control"  value="" required /><br/>
+                                    <span class="glyphicon glyphicon-asterisk form-control-feedback" aria-hidden="true" style="margin-right: 15px;"></span>
+                                </div>
                             </div>
-                            <?php } ?>
+                        <?php } ?>
 
                         <div class="col-md-6 col-sm-12 col-xs-12">
-                            <p>Número da matrícula: </p>
-                            <input type="text" name="registration" class="form-control" value="<?php
-                            if (isset($user) && $user->getRegistration() != "") {
-                                echo $user->getRegistration();
-                            }
-                            ?>" required><br/>
+                            <div class="form-group has-success has-feedback">
+                                <p>Número da matrícula: </p>
+                                <input type="text" name="registration" class="form-control" value="<?php
+                                if (isset($user) && $user->getRegistration() != "") {
+                                    echo $user->getRegistration();
+                                }
+                                ?>" required><br/>
+                                <span class="glyphicon glyphicon-asterisk form-control-feedback" aria-hidden="true"></span>
+                            </div>
                         </div>
                         <div class="col-md-6 col-sm-12 col-xs-12">
-                            <p>Pergunta para a Recuperação de Senha: </p>
-                            <input type="text" name="reminder" class="form-control"  value="<?php
-                            if (isset($user) && $user->getReminder() != "") {
-                                echo $user->getReminder();
-                            }
-                            ?>" required><br/>
+                            <div class="form-group has-success has-feedback">
+                                <p>Pergunta para a Recuperação de Senha: </p>
+                                <input type="text" name="reminder" class="form-control"  value="<?php
+                                if (isset($user) && $user->getReminder() != "") {
+                                    echo $user->getReminder();
+                                }
+                                ?>" required><br/>
+                                <span class="glyphicon glyphicon-asterisk form-control-feedback" aria-hidden="true"></span>
+                            </div>
                         </div>
                         <div class="col-md-6 col-sm-12 col-xs-12">
-                            <p>Resposta para a Recuperação de Senha: </p>
-                            <input type="text" name="reminderResponse" class="form-control"  value="<?php
-                            if (isset($user) && $user->getReminderResponse() != "") {
-                                echo $user->getReminderResponse();
-                            }
-                            ?>" required><br/>
+                            <div class="form-group has-success has-feedback">
+                                <p>Resposta para a Recuperação de Senha: </p>
+                                <input type="text" name="reminderResponse" class="form-control"  value="<?php
+                                if (isset($user) && $user->getReminderResponse() != "") {
+                                    echo $user->getReminderResponse();
+                                }
+                                ?>" required><br/>
+                                <span class="glyphicon glyphicon-asterisk form-control-feedback" aria-hidden="true"></span>
+                            </div>
                         </div>
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <p>Sobre: </p>
                             <textarea name="about" value="" class="textarea form-control" placeholder="Enter text ..." rows="5"> <?php
-                            if (isset($user) && $user->getAbout() != "") {
-                                echo $user->getAbout();
-                            }
-                            ?> </textarea>
+                                if (isset($user) && $user->getAbout() != "") {
+                                    echo $user->getAbout();
+                                }
+                                ?> </textarea>
                         </div>
                     </div>
+                    
+                    <div class="pull-right">
+                        <br/>
+                        <p style="color: #3c763d;"><i class="glyphicon glyphicon-asterisk"></i> &nbsp; Campos Obrigatórios</p>
+                    </div>
+                    
                     <br/>
                     <?php
                     if (isset($_GET["action"])) {
