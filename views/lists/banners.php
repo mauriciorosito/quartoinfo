@@ -41,11 +41,19 @@ $banners = $bc->actionControl('selectAll', 1);
         <noscript src="../../packages/wysiwyg/src/bootstrap3-wysihtml5.js"></noscript>
     </head>
     <body>
-        <?php include_once '../parts/navigation_admin.php'; ?>
+        <?php
+            include_once '../parts/navigation_admin.php';
+        ?>
         <div id="content">
             <div class="container img-rounded BVerde">
                 <br>
-                <a href="../forms/banners.form.php?action=create" class="btn btn-default">Inserir</a> 
+                <?php
+                    if(isset($_GET['msg'])){
+                        echo '<div class="alert alert-success col-md-5" role="alert">'.$_GET['msg'].'</div>';
+                    }
+                ?>
+                <br><br><br><br>
+                <a href="../forms/banners.form.php?action=create" class="btn btn-default">Inserir</a>
                 <form class="navbar-form navbar-right" role="search" action="adminBanners.list.php" method="GET">
                     <div class="form-group" style="margin-left:-15%;">
                         <label for="pesquisar">
@@ -63,6 +71,7 @@ $banners = $bc->actionControl('selectAll', 1);
                 <table cellspacing="5px" id="tabelaDados" class="table table-striped table-condensed table-bordered table-hover">
                 
                 </table>
+                
                 <?php
                 $f = new functions();
                 $f->pagination($bc->total[0]['count(*)']);

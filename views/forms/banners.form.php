@@ -29,20 +29,40 @@ if(isset($_POST['create'])){
                 $banner->setType($_POST['type']);
                 $cb->actionControl('insert', $banner);
 
-                header('location:../lists/banners.php?msg=criado');
+                header('location:../lists/banners.php?msg=Novo banner ('.$banner->getTitle().') cadastrado!');
         }
 }
 if(isset($_POST['update'])){
-    $banner->setId($_POST['id']);
-    $banner->setTitle($_POST['title']);
-    $banner->setDescription($_POST['description']);
-    $banner->setHref($_POST['href']);
-    $banner->setAlt($_POST['alt']);
-    $banner->setType($_POST['type']);
-    
-    $cb->actionControl('update', $banner);
-    
-    header('location:../lists/banners.php?msg=atualizado');
+    $erro = null;
+        if (isset($_FILES['src']))
+        {
+                $extensoes = array(".jpg");
+                $caminho = "../../publics/imgs/slider/";
+                $nome = $_FILES['src']['name'];
+                $temp = $_FILES['src']['tmp_name'];
+                if (!in_array(strtolower(strrchr($nome, ".")), $extensoes)) {
+                        $erro = "Extensão inválida";
+                }
+                if (!isset($erro)) {
+                        $nomeAleatorio = md5(uniqid(time())) . strrchr($nome, ".");
+                        if (!move_uploaded_file($temp, $caminho . $nomeAleatorio))
+                                $erro = "Não foi possível anexar o arquivo";
+                }
+        }
+        if(!isset($nomeAleatorio)){
+            $nomeAleatorio = $_POST['src'];
+        }
+        $banner->setId($_POST['id']);
+        $banner->setTitle($_POST['title']);
+        $banner->setDescription($_POST['description']);
+        $banner->setHref($_POST['href']);
+        $banner->setSrc($nomeAleatorio);
+        $banner->setAlt($_POST['alt']);
+        $banner->setType($_POST['type']);
+        
+        $cb->actionControl('update', $banner);
+
+        header('location:../lists/banners.php?msg=Item '.$banner->getId().' atualizado!');
 }
 if(isset($_GET['action'])){
     if($_GET['action'] == 'delete'){
@@ -101,7 +121,9 @@ $banners = $bc->actionControl('selectAll', 1);
         <noscript src="../../packages/wysiwyg/src/bootstrap3-wysihtml5.js"></noscript>
     </head>
     <body>
-        <?php include_once '../parts/navigation_admin.php'; ?>
+        <?php
+            include_once '../parts/navigation_admin.php';
+        ?>
         <div id="content">
             <div class="container img-rounded BVerde">
                 <br>
@@ -120,7 +142,7 @@ $banners = $bc->actionControl('selectAll', 1);
                         </label>
                     </div>
                 </form>
-                <br><br><br><br>
+                <br><br><br><center><div class="alert alert-danger" style="width: 450px"> Atenção! Todos os campos são obrigatórios! </div></center><br>
                 <form enctype="multipart/form-data" action="banners.form.php" method="POST">
 		<table style="margin:0px auto;width:450px;padding:10px;">
                     <tr>
@@ -145,8 +167,13 @@ $banners = $bc->actionControl('selectAll', 1);
                     </tr>
                     <tr>
                         <td>Tipo</td>
-                        <td><input type="text" name="type" class="form-control" value="<?php if(isset($dados)){ echo $dados['type']; } ?>"></td>
-                    </tr>
+                        <td>
+                            <select name="type" class="form-control">
+                                <option value="centro"> Banner de destaque </option>
+                                <option value="esquerda"> Banner da esquerda </option>
+                                <option value="direita"> Banner da direita </option>
+                            </select>
+                        </tr>
                     <tr>
                         <td colspan="2">
                                 <input type="submit" value="<?php if(isset($dados)){ echo 'Atualizar'; } else{ echo 'Inserir'; } ?>" name="<?php if(isset($dados)){ echo 'update'; } else{ echo 'create'; } ?>" class="form-control">

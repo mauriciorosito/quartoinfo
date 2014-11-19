@@ -58,6 +58,7 @@ class ControllerBanners extends Controller {
         $query .= "description = '".$obj->getDescription()."', ";
         $query .= "href = '".$obj->getHref()."', ";
         $query .= "alt = '".$obj->getAlt()."', ";
+        $query .= "src = '".$obj->getSrc()."', ";
         $query .= "type = '".$obj->getType()."' ";
         $query .= "WHERE id = '".$obj->getId()."'";
         echo $query;
