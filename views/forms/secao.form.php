@@ -32,10 +32,8 @@ if (isset($_GET["action"], $_GET["idSecao"])) {
 		//$secao->setTitulo($_GET["titulo"]);
 		//$secao->setAlias($_GET["Alias"]);
 		//$secao->setDescrica($_GET["descricao"]);
-		
         $cu = new ControllerSecao();
-		$secao = $cu->actionControl("selectOne", $secao);
-
+        $secao = $cu->actionControl("selectOne", $secao);
     }
 }
 
@@ -45,12 +43,22 @@ if (isset($_POST["action"])) {
     $secao->setTitulo($_POST["titulo"]);
     $secao->setAlias($_POST["alias"]);
     $secao->setDescricao($_POST["descricao"]);
-    
+   
     $cu = new ControllerSecao();
-    $cu->actionControl($_POST["action"], $secao);
+    $compTitle = $cu->verifyExistenceSecao($secao);
+    //var_dump($compTitle[0]['titulo']);
+    //break;
+    if($compTitle[0]['titulo'] != $_POST["titulo"]){
+        
+        $cu->actionControl($_POST["action"], $secao);
+        echo "<script>$('#ol-caminho').html('Cadastro Realizado com Sucesso !!!');</script>";
+        header('location: ../lists/secao.list.php');
 
-    echo "<script>$('#ol-caminho').html('Cadastro Realizado com Sucesso !!!');</script>";
-	header('location: ../lists/secao.list.php');
+     }else{
+        header('location: ../lists/secao.list.php?erro=Nomeduplicado');
+     }
+    
+    
 }
 ?>
 <form action="secao.form.php" method="post" enctype="multipart/form-data">
