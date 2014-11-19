@@ -13,6 +13,7 @@ require_once('../../system/limited.php');
 
 if (isset($_GET["action"], $_GET["idSecao"])) {
     if ($_GET["action"] == "delete") {
+        echo "<script>Alert('Tem certeza que deseja excluir');</script>";
         $secao = new Secao();
         $secao->setIdSecao($_GET["idSecao"]);
         $cu = new ControllerSecao();
