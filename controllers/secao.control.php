@@ -40,11 +40,13 @@ class ControllerSecao extends Controller {
     
     protected function selectAllDescending() {
         $db = new Includes\Db();
+        
+
         $lines = $db->query("select * from secao order by titulo desc");
         $secaos = array();
         foreach ($lines as $line) {
             $secao = new secao();
-			$secao->setIdsecao($line["idsecao"]);
+            $secao->setIdsecao($line["idsecao"]);
             $secao->setTitulo($line["titulo"]);
             $secao->setAlias($line["alias"]);
             $secao->setDescricao($line["descricao"]);
@@ -54,8 +56,23 @@ class ControllerSecao extends Controller {
         return $secaos;
     }
     
+    protected function selectAllGrowing() {
+        $db = new Includes\Db();
+        
+        $lines = $db->query("select * from secao order by titulo asc");
+        $secaos = array();
+        foreach ($lines as $line) {
+            $secao = new secao();
+            $secao->setIdsecao($line["idsecao"]);
+            $secao->setTitulo($line["titulo"]);
+            $secao->setAlias($line["alias"]);
+            $secao->setDescricao($line["descricao"]);
+			
+            $secaos[] = $secao;
+        }
+        return $secaos;
+    }    
     
-
     protected function selectOne($secao) {
         $db = new Includes\Db();
         $lines = $db->query("select * from secao where idsecao = :idsecao", array(
