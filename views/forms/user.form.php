@@ -169,7 +169,11 @@ if (isset($_POST["action"])) {
                                 <select class="form-control" name="idCourse">
                                     <?php
                                     foreach ($arrayCursos as $curso) {
-                                        echo "<option value='" . $curso->getIdCourse() . "'>" . $curso->getName() . "</option>";
+                                        if (isset($user) && $user->getIdCourse() == $curso->getIdCourse()) {
+                                            echo "<option value='" . $curso->getIdCourse() . "' selected>" . $curso->getName() . "</option>";
+                                        } else {
+                                            echo "<option value='" . $curso->getIdCourse() . "'>" . $curso->getName() . "</option>";
+                                        }
                                     }
                                     ?>
                                 </select><br/>
@@ -228,12 +232,12 @@ if (isset($_POST["action"])) {
                                 ?> </textarea>
                         </div>
                     </div>
-                    
+
                     <div class="pull-right">
                         <br/>
                         <p style="color: #3c763d;"><i class="glyphicon glyphicon-asterisk"></i> &nbsp; Campos Obrigatórios</p>
                     </div>
-                    
+
                     <br/>
                     <?php
                     if (isset($_GET["action"])) {
