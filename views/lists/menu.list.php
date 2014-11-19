@@ -11,6 +11,34 @@ if (isset($_GET['action']) && $_GET['action'] == "delete" && isset($_GET['idMenu
     $cM->actionControl("delete", $menu);
     header("location: menu.list.php");
 }
+
+$pagina = (!isset($_GET['pagina'])) ? 1 : filter_var($_GET['pagina'], FILTER_SANITIZE_NUMBER_INT);
+$pag = array();
+$pag['pagina'] = $pagina;
+$pag['limite'] = 5;
+
+if (isset($_GET['ordenacao'])) {
+    $pag['ordenacao'] = $_GET['ordenacao'];
+}
+if (isset($_GET['pesquisa'])) {
+    $pag['pesquisa'] = $_GET['pesquisa'];
+}
+$cM = new ControllerMenu();
+
+
+$menus = $cM->actionControl("selecionarPaginacao", $pag);
+
+if (count($menus) <= 0 && $pagina > 1 ) {
+    header("location: menu.list.php");
+}
+                                
+$cont = $cM->actionControl("contarPaginas", 5);
+
+if (isset($_GET['pesquisa'])) {
+    $cont = $cM->actionControl("contarPaginas2", $_GET['pesquisa']);
+}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,7 +64,7 @@ if (isset($_GET['action']) && $_GET['action'] == "delete" && isset($_GET['idMenu
         <link rel="stylesheet" type="text/css" href="../../packages/wysiwyg/src/bootstrap-wysihtml5.css" />
         <link type="text/css" rel="stylesheet" href="../../packages/wysiwyg/lib/css/jasny-bootstrap.min.css" />	
 
-        
+
         <script src="../../packages/wysiwyg/lib/js/wysihtml5-0.3.0.js"></script>
         <script src="../../packages/wysiwyg/lib/js/jquery-1.7.2.min.js"></script>
         <script src="../../packages/wysiwyg/lib/js/bootstrap.min.js"></script>
@@ -54,31 +82,69 @@ if (isset($_GET['action']) && $_GET['action'] == "delete" && isset($_GET['idMenu
             <div class="container img-rounded BVerde">
                 <div class="col-md-12"><h2><center>Listagem de Menus</center></h2><hr></div>
                 <div class="row">
-                    <div class="col-md-4"><a class="btn btn-default" href="../forms/menu.form.php?action=insert">Criar Novo</a></div>
+                    <div class="col-md-2"><a class="btn btn-default" href="../forms/menu.form.php?action=insert">Criar Novo</a></div>
 
-                    <form class="form-horizontal" onsubmit="return false;">
+                    <form class="form-horizontal" >
 
-                        <div class="col-md-4">
+                        <div class="col-md-8">
                             <div class="form-group">
-                                <label for="order" class="col-sm-4 control-label">Ordenar por</label>
-                                <div class="col-sm-8">
-                                    <select id="order" class="form-control" name="order">
-                                        <option value="localization">Localização</option>
-                                        <option value="a-z">Nome A-Z</option>
-                                        <option value="z-a">Nome Z-A</option>
-                                    </select>
+                                <label for="order" class="col-sm-2 control-label">Ordenar por</label>
+                                <div class="col-sm-10">
+                                 <div class="btn-group">
+                                    <a href="" class="btn btn-success">Ordenar por:</a>
+                                    <a href="menu.list.php?<?php
+                                    if (isset($_GET['pagina'])) {
+                                        echo "pagina=" . $_GET['pagina'] . "&";
+                                    }
+                                    if (isset($_GET['pesquisa'])) {
+                                        echo "pesquisa=" . $_GET['pesquisa'] . "&";
+                                    }
+                                    ?>ordenacao=asc" class="btn btn-default"><i class="glyphicon glyphicon-arrow-up"></i> Nome - Crescente</a>
+                                    
+                                    <a href="menu.list.php?<?php
+                                    if (isset($_GET['pagina'])) {
+                                        echo "pagina=" . $_GET['pagina'] . "&";
+                                    }
+                                    if (isset($_GET['pesquisa'])) {
+                                        echo "pesquisa=" . $_GET['pesquisa'] . "&";
+                                    }
+                                    ?>ordenacao=desc" class="btn btn-default"><i class="glyphicon glyphicon-arrow-down"></i> Nome - Decrescente</a>
+                                    
+                                    <a href="menu.list.php?<?php
+                                    if (isset($_GET['pagina'])) {
+                                        echo "pagina=" . $_GET['pagina'] . "&";
+                                    }
+                                    if (isset($_GET['pesquisa'])) {
+                                        echo "pesquisa=" . $_GET['pesquisa'] . "&";
+                                    }
+                                    ?>ordenacao=localizacao" class="btn btn-default"><i class="glyphicon glyphicon-sort"></i> Localização</a>
+
+                                </div>
+                                   
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="filter" class="col-sm-4 control-label">Filtrar por:</label>
-                                <div class="col-sm-8">
-                                    <input class="form-control" id="filter" type="text" name="filter">
+                        <div class="col-md-2">
+                          <form class="form-inline" role="form" method="get" action="profile.list.php">
+                            <div  style="padding-right: 10px;" class="form-group">
+                                <div class="input-group">
+                                    <input class="form-control" type="text" name="pesquisa" placeholder="Digite sua Pesquisa">
+                                    <?php
+                                    if (isset($_GET['ordenacao'])) {
+                                        echo "<input type='hidden' name='ordenacao' value='" . $_GET['ordenacao'] . "'>";
+                                    }
+                                    if (isset($_GET['pagina'])) {
+                                        echo "<input type='hidden' name='pagina' value='" . $_GET['pagina'] . "'>";
+                                    }
+                                    ?>
+                                    <span class="input-group-btn">
+                                        <button type="submit" name="botao_pesquisa" class="btn btn-success">&nbsp;<i class="glyphicon glyphicon-search"></i>&nbsp;</button>
+                                    </span>
                                 </div>
                             </div>
+                        </form>
                         </div>
-                    </form>
+                    
                 </div>
                 <div class="row">
                     <br/>
@@ -96,9 +162,7 @@ if (isset($_GET['action']) && $_GET['action'] == "delete" && isset($_GET['idMenu
                             </thead>
                             <tbody data-link="row" class="rowlink">
                                 <?php
-                                $cM = new ControllerMenu();
-                                $menus = $cM->actionControl("selectAll");
-
+                              
                                 foreach ($menus as $menu) {
                                     echo "<tr>";
                                     switch ($menu->getLocalization()) {
@@ -126,16 +190,47 @@ if (isset($_GET['action']) && $_GET['action'] == "delete" && isset($_GET['idMenu
                         </table>
                     </div>
                 </div>
-                
+
                 <center>
-                    <div class="btn-group" style="margin-bottom: 20px;">
-                        <a type="button" disabled="" class="btn btn-default" href=""><span class="glyphicon glyphicon-chevron-left"></span></a><a href="#" class="btn btn-default disabled">Página 1 de 1</a><a type="button" class="btn btn-default disabled" href="profile.list.php?pagina=2"><span class="glyphicon glyphicon-chevron-right"></span></a>
-                    </div>
+                   <?php
+                    echo "<hr/>";
+                    echo "<div class='btn-group'>";
+                    if ($pagina > 1) {
+                        $flag = $pagina - 1;
+                        echo "<a type='button' class='btn btn-default' href='menu.list.php?";
+                        if (isset($_GET['ordenacao'])) {
+                            echo "ordenacao=" . $_GET['ordenacao'] . "&";
+                        }
+                        if (isset($_GET['pesquisa'])) {
+                            echo "pesquisa=" . $_GET['pesquisa'] . "&";
+                        }
+                        echo "pagina=" . $flag . "'><span class='glyphicon glyphicon-chevron-left'></span></a>";
+                    } else {
+                        $flag = $pagina - 1;
+                        echo "<a type='button' disabled class='btn btn-default' href=''><span class='glyphicon glyphicon-chevron-left'></span></a>";
+                    }
+                    echo "<a href='#' class='btn btn-default disabled'>Página " . $pagina . " de " . $cont . "</a>";
+                    if ($pagina < $cont) {
+                        echo "<a type='button' class='btn btn-default' href='menu.list.php?";
+                        if (isset($_GET['ordenacao'])) {
+                            echo "ordenacao=" . $_GET['ordenacao'] . "&";
+                        }
+                        if (isset($_GET['pesquisa'])) {
+                            echo "pesquisa=" . $_GET['pesquisa'] . "&";
+                        }
+                        echo "pagina=" . ($pagina + 1) . "'><span class='glyphicon glyphicon-chevron-right'></span></a>";
+                    } else {
+                        $flag = $pagina - 1;
+                        echo "<a type='button' disabled class='btn btn-default' href=''><span class='glyphicon glyphicon-chevron-right'></span></a>";
+                    }
+                    echo "</div>";
+                    echo "<p>&nbsp;</p>";
+                    ?>
                 </center>
             </div>
         </div>
-        
-        
+
+
         <script type="text/javascript" charset="utf-8">
         </script>
 

@@ -60,7 +60,7 @@ class ControllerMenu extends Controller {
 
     protected function delete($menu) {
         $db = new Includes\Db();
-        
+
         $ret = $db->query('delete from menu where idMenu = :idMenu', array(
             'idMenu' => $menu->getIdMenu(),
         ));
@@ -68,7 +68,7 @@ class ControllerMenu extends Controller {
 
     protected function selecionarPaginacao($pag) {
         $db = new Includes\Db();
-        
+
         $termoInicial = ($pag['pagina'] - 1) * $pag['limite'];
         $sql = "select * from menu ";
         if (!isset($pag['ordenacao'])) {
@@ -76,12 +76,12 @@ class ControllerMenu extends Controller {
         } else if ($pag['ordenacao'] == "asc" || $pag['ordenacao'] == "desc") {
             $sql .= "ORDER BY title " . $pag['ordenacao'] . " ";
         }
-        
+
         $sql .= " LIMIT " . $termoInicial . "," . $pag['limite'];
         $lines = $db->query($sql);
         $menus = array();
         foreach ($lines as $line) {
-               $menu = new Menu();
+            $menu = new Menu();
             $menu->setIdMenu($line["idMenu"]);
             $menu->setDescription($line["description"]);
             $menu->setTitle($line["title"]);
@@ -89,14 +89,45 @@ class ControllerMenu extends Controller {
 
             $menus[] = $menu;
         }
-       
+
         return $menus;
     }
 
     protected function contarPaginas($limite) {
         $db = new Includes\Db();
-        $lines = $db->query("SELECT (count(*)/" . $limite . ") as pages FROM profile");
+        $lines = $db->query("SELECT (count(*)/ "  . $limite . ") as pages FROM menu");
         return ceil($lines[0]['pages']);
+    }
+
+    protected function contarPaginas2($pesquisa) {
+        $db = new Includes\Db();
+        $lines = $db->query("SELECT (count(*)/ 5 ) as pages FROM menu where title like '%" . $pesquisa . "%' or description like '%" . $pesquisa . "%'");
+        return ceil($lines[0]['pages']);
+    }
+
+    public function searchMenus($pag, $page = 1) {
+        $db = new Includes\Db();
+        var_dump($pag);
+        $termoInicial = ($pag['pagina'] - 1) * $pag['limite'];
+        $sql = $db->query("select * from menu where name like '%" . $pag['pesquisa'] . "%' or description like '%" . $pag['pesquisa'] . "%'");
+        if (!isset($pag['ordenacao'])) {
+            $sql .= "ORDER BY idMenu DESC ";
+        } else if ($pag['ordenacao'] == "asc" || $pag['ordenacao'] == "desc") {
+            $sql .= "ORDER BY title " . $pag['ordenacao'] . " ";
+        }
+        $sql .= " LIMIT " . $termoInicial . "," . $pag['limite'];
+        $lines = $db->query($sql);
+        $menus = array();
+        foreach ($lines as $line) {
+             $menu = new Menu();
+            $menu->setIdMenu($line["idMenu"]);
+            $menu->setDescription($line["description"]);
+            $menu->setTitle($line["title"]);
+            $menu->setLocalization($line["localization"]);
+
+            $menus[] = $menu;
+        }
+        return $menus;
     }
 
 }
