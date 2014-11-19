@@ -70,6 +70,11 @@ if (isset($_GET["ordenacao"])) {
         <div id="content">
             <div class="container img-rounded BVerde">
                 <div class="row standard-margin-10">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="alert alert-info" id="div-msg" style="display: none;">
+                            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        </div>
+                    </div>
                     <div class="col-md-2 col-sm-12 col-xs-12">
                         <a href="../forms/user.form.php?action=insert" class="btn btn-default">
                             <i class="glyphicon glyphicon-plus-sign"></i>
@@ -150,6 +155,15 @@ if (isset($_GET["ordenacao"])) {
         <script type="text/javascript" src="publics/js/rhinoslider-1.05.js"></script>
         <script type="text/javascript" src="publics/js/mousewheel.js"></script>
         <script type="text/javascript" src="publics/js/easing.js"></script>
+
+        <?php
+        if (isset($_GET["msg"])) {
+            echo "<script>"
+            . "$('#div-msg').show();"
+            . "$('#div-msg').append('" . $_GET["msg"] . "');"
+            . "</script>";
+        }
+        ?>
 
     </body>
 

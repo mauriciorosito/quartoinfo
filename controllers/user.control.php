@@ -216,30 +216,11 @@ class ControllerUser extends Controller {
     }
 
     protected function insert($user) {
-        $db = new Includes\Db();
-        return $db->query('insert into user (idUser, idProfile, idCourse, email, name, registration, about, login, hash, reminder, reminderResponse, canReceiveContent) values 
+        if ($this->verifyExistenceLogin($user) == 0) {
+            $db = new Includes\Db();
+            return $db->query('insert into user (idUser, idProfile, idCourse, email, name, registration, about, login, hash, reminder, reminderResponse, canReceiveContent) values 
 		(NULL, :idProfile, :idCourse, :email, :name, :registration, :about, :login, :hash, :reminder
 		, :reminderResponse, :canReceiveContent) ', array(
-                    'idProfile' => $user->getIdProfile(),
-                    'idCourse' => $user->getIdCourse(),
-                    'email' => $user->getEmail(),
-                    'name' => $user->getName(),
-                    'registration' => $user->getRegistration(),
-                    'about' => $user->getAbout(),
-                    'login' => $user->getLogin(),
-                    'hash' => $user->getHash(),
-                    'reminder' => $user->getReminder(),
-                    'reminderResponse' => $user->getReminderResponse(),
-                    'canReceiveContent' => $user->getCanReceiveContent(),
-        ));
-    }
-
-    protected function update($user) {
-        //if ($this->verifyExistenceLogin($user) == 0) {
-            $db = new Includes\Db();
-            return $db->query('update user set idProfile = :idProfile, idCourse = :idCourse, email = :email, name = :name, registration = :registration, about = :about, login = :login
-		, hash =  :hash, reminder =  :reminder, reminderResponse = :reminderResponse
-		, canReceiveContent = :canReceiveContent where idUser = :idUser', array(
                         'idProfile' => $user->getIdProfile(),
                         'idCourse' => $user->getIdCourse(),
                         'email' => $user->getEmail(),
@@ -251,19 +232,37 @@ class ControllerUser extends Controller {
                         'reminder' => $user->getReminder(),
                         'reminderResponse' => $user->getReminderResponse(),
                         'canReceiveContent' => $user->getCanReceiveContent(),
-                        'idUser' => $user->getIdUser()
             ));
-            
-            /*return true;
         } else {
             return false;
-        }*/
+        }
+    }
+
+    protected function update($user) {
+        $db = new Includes\Db();
+        return $db->query('update user set idProfile = :idProfile, idCourse = :idCourse, email = :email, name = :name, registration = :registration, about = :about, login = :login
+		, hash =  :hash, reminder =  :reminder, reminderResponse = :reminderResponse
+		, canReceiveContent = :canReceiveContent where idUser = :idUser', array(
+                    'idProfile' => $user->getIdProfile(),
+                    'idCourse' => $user->getIdCourse(),
+                    'email' => $user->getEmail(),
+                    'name' => $user->getName(),
+                    'registration' => $user->getRegistration(),
+                    'about' => $user->getAbout(),
+                    'login' => $user->getLogin(),
+                    'hash' => $user->getHash(),
+                    'reminder' => $user->getReminder(),
+                    'reminderResponse' => $user->getReminderResponse(),
+                    'canReceiveContent' => $user->getCanReceiveContent(),
+                    'idUser' => $user->getIdUser()
+        ));
     }
 
     protected function verifyExistenceLogin($user) {
         $db = new Includes\Db();
-        $lines = $db->query("select count(*) as qtde from user where login = :login", array(
+        $lines = $db->query("select count(*) as qtde from user where login = :login or email = :email ", array(
             'login' => $user->getLogin(),
+            'email' => $user->getEmail(),
         ));
 
         return $lines[0]["qtde"];

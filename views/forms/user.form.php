@@ -57,9 +57,14 @@ if (isset($_POST["action"])) {
     $user->setRegistration($_POST["registration"]);
     $user->setAbout($_POST["about"]);
     $cu = new ControllerUser();
-    $cu->actionControl($_POST["action"], $user);
+    $result = $cu->actionControl($_POST["action"], $user);
 
-    header("location: ../lists/user.list.php?msg=Ação realizada com sucesso!");
+    if ($_POST["action"] == "insert" && ($result == false)) {
+        header("location: ../lists/user.list.php?msg=O login ou o e-mail já existem cadastrados.");
+    } else {
+        header("location: ../lists/user.list.php?msg=Ação realizada com sucesso!");
+    }
+
 
     //echo "<script>$('#ol-caminho').html('Cadastro Realizado com Sucesso !!!');</script>";
 }
@@ -131,7 +136,11 @@ if (isset($_POST["action"])) {
                             if (isset($user) && $user->getLogin() != "") {
                                 echo $user->getLogin();
                             }
-                            ?>" required  <?php if($_GET["action"] == "update"){ echo "readonly"; } ?>><br/>
+                            ?>" required  <?php
+                                   if ($_GET["action"] == "update") {
+                                       echo "readonly";
+                                   }
+                                   ?>><br/>
                         </div>
                         <div class="col-md-6 col-sm-12 col-xs-12">
                             <p>Email: </p>
@@ -139,7 +148,11 @@ if (isset($_POST["action"])) {
                             if (isset($user) && $user->getEmail() != "") {
                                 echo $user->getEmail();
                             }
-                            ?>" required><br/>
+                            ?>" required  <?php
+                                   if ($_GET["action"] == "update") {
+                                       echo "readonly";
+                                   }
+                            ?>><br/>
                         </div>
                         <div class="col-md-6 col-sm-12 col-xs-12">
                             <p>Curso: </p>
@@ -151,14 +164,14 @@ if (isset($_POST["action"])) {
                                 ?>
                             </select><br/>
                         </div>
-                        
-                        <?php if($_GET["action"] != "update"){ ?>
+
+                        <?php if ($_GET["action"] != "update") { ?>
                             <div class="col-md-6 col-sm-12 col-xs-12">
                                 <p>Senha: </p>
                                 <input type="password" name="hash" class="form-control"  value="" required /><br/>
                             </div>
-                        <?php } ?>
-                        
+                            <?php } ?>
+
                         <div class="col-md-6 col-sm-12 col-xs-12">
                             <p>Número da matrícula: </p>
                             <input type="text" name="registration" class="form-control" value="<?php
@@ -186,10 +199,10 @@ if (isset($_POST["action"])) {
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <p>Sobre: </p>
                             <textarea name="about" value="" class="textarea form-control" placeholder="Enter text ..." rows="5"> <?php
-                                if (isset($user) && $user->getAbout() != "") {
-                                    echo $user->getAbout();
-                                }
-                                ?> </textarea>
+                            if (isset($user) && $user->getAbout() != "") {
+                                echo $user->getAbout();
+                            }
+                            ?> </textarea>
                         </div>
                     </div>
                     <br/>
