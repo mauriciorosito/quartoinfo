@@ -20,6 +20,11 @@ if (isset($_GET["ordenacao"])) {
 } else {
     $users = $controllerSecao->actionControl("selectAllGrowing", $pesquisa);
 }
+
+if(@$_GET['erro'] == 'Nomeduplicado'){
+    echo"<script>alert('Esta seção ja existe !');</script>";
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
