@@ -176,7 +176,7 @@ if (isset($_POST["action"])) {
                     <option value="O" <?php if (isset($content) && $content->getType() == "O") {
     echo "selected";
 } ?>> Oportunidades</option>
-<option value="P" <?php if ((isset($content) && $content->getType() == "P") or ($_GET['tipo'] = 'pagina')) {
+<option value="P" <?php if ((isset($content) && $content->getType() == "P") or ($_GET['tipo'] == 'pagina' and $_GET['action'] == 'insert')) {
     echo "selected";
 } ?>> Página</option>
                 </select>
