@@ -68,7 +68,7 @@ Else {
             <div class="container img-rounded BVerde">
                 <div class="row standard-margin-10">
                     <div class="col-md-2 col-sm-12 col-xs-12">
-                        <a href="../forms/content.form.php?action=insert&tipo=pagina" class="btn btn-default">
+                        <a href="../forms/content.form.php?action=insert&tipo=<?php if($_REQUEST["tipo"] == "C") echo "conteudo"; else echo "pagina"; ?>" class="btn btn-default">
                             <i class="glyphicon glyphicon-plus-sign"></i>
                             &nbsp; Inserir <?php if($_REQUEST["tipo"] == "C") echo "Conteúdo"; else echo "Página"; ?>
                         </a><br><br>
@@ -104,6 +104,7 @@ Else {
                             <div class="form-group">
                                 <div class="input-group">
                                     <input name="pesquisa" type="text" id="pesquisar"  class="form-control " placeholder="Digite sua Pesquisa">
+									<input type="hidden" name="tipo" value=<?php echo '"'.$_REQUEST["tipo"].'"'; ?>>
                                     <span class="input-group-btn">
                                         <button type="submit" name="submit" class="btn btn-default">&nbsp;<i class="glyphicon glyphicon-search"></i>&nbsp;</button>
                                     </span>
@@ -121,8 +122,13 @@ Else {
 				if ($_REQUEST["pesquisa"] <> "") {
 					echo '<h1> Pesquisando por:' . $_REQUEST['pesquisa'] . '</h1>';
 					$pesquisa = new functions();
-
-					$resultados = ($pesquisa->searchAllPages($_REQUEST["pesquisa"], $pagina));
+					
+					if ($_REQUEST["tipo"] == "P") {
+						$resultados = ($pesquisa->searchAllPages($_REQUEST["pesquisa"], $pagina));
+					}
+					else {
+						$resultados = ($pesquisa->searchAll($_REQUEST["pesquisa"], $pagina));
+					}
 				}
 				if (!empty($resultados) or !empty($contents)) {
                 ?>
