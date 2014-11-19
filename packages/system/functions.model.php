@@ -8,12 +8,26 @@ class functions {
 
     public function searchAll($data, $page = 1) {
         $db = new Includes\Db();
-        $select = $db->query("select * from content where title like :title or description like :description limit :page, 10", array(
+        $select = $db->query("select * from content where type <> 'P' and title like :title or description like :description limit :page, 5", array(
             "title" => '%' . $data . '%',
             "description" => '%' . $data . '%',
-            'page' => (($page - 1) * 10),
+            'page' => (($page - 1) * 5),
         ));
-        $this->total = $db->single("select count(*) from content where title like :title or description like :description", array(
+        $this->total = $db->single("select count(*) from content where type <> 'P' and title like :title or description like :description", array(
+            "title" => '%' . $data . '%',
+            "description" => '%' . $data . '%',
+        ));
+        return $select;
+    }
+	
+	public function searchAllPages($data, $page = 1) {
+        $db = new Includes\Db();
+        $select = $db->query("select * from content where type = 'P' and title like :title or description like :description limit :page, 5", array(
+            "title" => '%' . $data . '%',
+            "description" => '%' . $data . '%',
+            'page' => (($page - 1) * 5),
+        ));
+        $this->total = $db->single("select count(*) from content where type = 'P' and title like :title or description like :description", array(
             "title" => '%' . $data . '%',
             "description" => '%' . $data . '%',
         ));
@@ -24,11 +38,11 @@ class functions {
         $db = new Includes\Db();
 
         if ($type <> 'A') {
-            $select = $db->query("select * from content where type = :type and (title like :title or description like :description) and (postDate between :data and :data2) order by :order limit :page, 10", array(
+            $select = $db->query("select * from content where type = :type and (title like :title or description like :description) and (postDate between :data and :data2) order by :order limit :page, 5", array(
                 "type" => $type,
                 "title" => '%' . $search . '%',
                 "description" => '%' . $search . '%',
-                "page" => (($page - 1) * 10),
+                "page" => (($page - 1) * 5),
                 "order" => $order,
                 "data" => $data,
                 "data2" => $data2,
@@ -42,10 +56,10 @@ class functions {
                 "data2" => $data2,
             ));
         } else {
-            $select = $db->query("select * from content where (title like :title or description like :description) and (postDate between :data and :data2) order by :order limit :page, 10", array(
+            $select = $db->query("select * from content where (title like :title or description like :description) and (postDate between :data and :data2) order by :order limit :page, 5", array(
                 "title" => '%' . $search . '%',
                 "description" => '%' . $search . '%',
-                "page" => (($page - 1) * 10),
+                "page" => (($page - 1) * 5),
                 "order" => $order,
                 "data" => $data,
                 "data2" => $data2,
@@ -61,7 +75,7 @@ class functions {
         return $select;
     }
 
-    public function pagination($total, $page = 1, $limit = 10) {
+    public function pagination($total, $page = 1, $limit = 5) {
         $num_page = ceil($total / $limit);
         echo '<ul class="pagination">';
         error_reporting(error_reporting() & ~E_NOTICE);
