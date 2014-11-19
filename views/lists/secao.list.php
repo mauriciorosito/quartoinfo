@@ -2,8 +2,24 @@
 include_once("../../controllers/secao.control.php");
 require_once("../../packages/system/functions.model.php");
 $controllerSecao = new ControllerSecao();
-if (!isset($_POST['pesquisa']))
+if (!isset($_POST['pesquisa'])){
     $contents = $controllerSecao->actionControl('selectAllDescending');
+}
+if (isset($_POST["pesquisa"])) {
+    $pesquisa = filter_var($_POST["pesquisa"]);
+} else {
+    $pesquisa = "";
+}
+
+if (isset($_GET["ordenacao"])) {
+    if ($_GET["ordenacao"] == "desc") {
+        $users = $controllerSecao->actionControl("selectAllDescending", $pesquisa);
+    } else {
+        $users = $controllerSecao->actionControl("selectAllGrowing", $pesquisa);
+    }
+} else {
+    $users = $controllerSecao->actionControl("selectAllGrowing", $pesquisa);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -43,21 +59,33 @@ if (!isset($_POST['pesquisa']))
 <?php include_once '../parts/navigation_admin.php'; ?>
 
         <div id="content">
-            <div class="container img-rounded BVerde">
-                <a href="../forms/secao.form.php?action=insert" class="btn btn-default">Inserir</a> 
-                <form class="navbar-form navbar-right" role="search" action="content.list.php" method="post">
-                    <div class="form-group" style="margin-left:-15%;">
-                        <label for="pesquisar">
+            <div class="container img-rounded BVerde" style="padding-top: 22px;"> 
+                
+                <div class="col-md-2 col-sm-12 col-xs-12">
+                    <a href="../forms/secao.form.php?action=insert" class="btn btn-default">Inserir</a>                     
+                </div>    
+                <div class="col-md-5 col-sm-12 col-xs-12">
+                    <div class="btn-group">
+                        <a href="" class="btn btn-success">Ordenar por:</a>
+                        <a href="secao.list.php?ordenacao=asc" class="btn btn-default">Nome - Crescente</a>
+                        <a href="secao.list.php?ordenacao=desc" class="btn btn-default">Nome - Decrescente</a>
+                    </div>
+                </div>
+                <div class="col-md-5 col-sm-12 col-xs-12">
+                    <form class="form-inline" role="form" method="post" action="secao.list.php">
+                        <div class="form-group">
                             <div class="input-group">
-                                <input name="pesquisa" type="text" id="pesquisar"  class="form-control col-lg-1 col-md-1 col-sm-1 col-xs-1" placeholder="Pesquisar">
+                                <input class="form-control" type="text" name="pesquisa" placeholder="Digite sua Pesquisa">
                                 <span class="input-group-btn">
-                                    <button type="submit" class="btn btn-default" name="submit">
-                                        <span class="glyphicon glyphicon-search"></span></button>
+                                    <button type="submit" class="btn btn-default">&nbsp;<i class="glyphicon glyphicon-search"></i>&nbsp;</button>
                                 </span>
                             </div>
-                        </label>
-                    </div>
-                </form>
+                        </div>
+                    </form>
+                </div>                
+
+                
+
                 <?php
                 if (isset($_POST['page']))
                     $page = $_POST['page'];
@@ -72,7 +100,7 @@ if (!isset($_POST['pesquisa']))
                     }
                 }
                 ?>	
-                <table class="table table-striped table-condensed table-bordered table-hover" id="tabela">
+                <table class="table table-striped table-condensed table-bordered table-hover" id="tabela" style="margin-top: 60px;">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -84,14 +112,14 @@ if (!isset($_POST['pesquisa']))
                     <tbody data-link="row" class="rowlink">
                         <?php
                         if (!isset($_POST['pesquisa'])) {
-                            foreach ($contents as $content) {
+                            foreach ($users as $user) {
                                 ?>
                                 <tr>
-                                    <td><a href="#"><?php echo $content->getIdSecao(); ?></a></td>
-                                    <td><?php echo $content->getTitulo(); ?></td>
-                                    <td><?php echo $content->getAlias(); ?></td>
+                                    <td><a href="#"><?php echo $user->getIdSecao(); ?></a></td>
+                                    <td><?php echo $user->getTitulo(); ?></td>
+                                    <td><?php echo $user->getAlias(); ?></td>
                        
-                                    <td><a href="../forms/secao.form.php?action=update&idSecao=<?php echo $content->getIdSecao(); ?> " class="btn btn-default">Editar</a> <a href="../forms/secao.form.php?action=delete&idSecao=<?php echo $content->getIdSecao(); ?>" class="btn btn-default">Excluir</a></td>	
+                                    <td><a href="../forms/secao.form.php?action=update&idSecao=<?php echo $user->getIdSecao(); ?> " class="btn btn-default">Editar</a> <a href="../forms/secao.form.php?action=delete&idSecao=<?php echo $user->getIdSecao(); ?>" class="btn btn-default">Excluir</a></td>	
                                     <?php
                                 }
                             } else {
@@ -113,9 +141,9 @@ if (!isset($_POST['pesquisa']))
                     </tbody>
                 </table>
 <?php
-if (isset($pesquisa)) {
-    $pesquisa->pagination($pesquisa->total, $page);
-}
+//if (isset($pesquisa)) {
+//    $pesquisa->pagination($pesquisa->total, $page);
+//}
 ?>
             </div>
             <!-- /.container -->
