@@ -13,21 +13,42 @@ $limited = new Limited();
 $limited->check(array('A'));
 
 $cUser = new ControllerUser();
+/*
+  if (isset($_POST["pesquisa"])) {
+  $pesquisa = filter_var($_POST["pesquisa"]);
+  } else {
+  $pesquisa = "";
+  }
 
-if (isset($_POST["pesquisa"])) {
-    $pesquisa = filter_var($_POST["pesquisa"]);
-} else {
-    $pesquisa = "";
+  if (isset($_GET["ordenacao"])) {
+  if ($_GET["ordenacao"] == "desc") {
+  $users = $cUser->actionControl("selectAllDescending", $pesquisa);
+  } else {
+  $users = $cUser->actionControl("selectAllGrowing", $pesquisa);
+  }
+  } else {
+  $users = $cUser->actionControl("selectAllGrowing", $pesquisa);
+  } */
+
+$pagina = (!isset($_GET['pagina'])) ? 1 : filter_var($_GET['pagina'], FILTER_SANITIZE_NUMBER_INT);
+
+$pag = array();
+$pag['pagina'] = $pagina;
+$pag['limite'] = 5;
+
+if (isset($_GET['ordenacao'])) {
+    $pag['ordenacao'] = $_GET['ordenacao'];
 }
 
-if (isset($_GET["ordenacao"])) {
-    if ($_GET["ordenacao"] == "desc") {
-        $users = $cUser->actionControl("selectAllDescending", $pesquisa);
-    } else {
-        $users = $cUser->actionControl("selectAllGrowing", $pesquisa);
-    }
-} else {
-    $users = $cUser->actionControl("selectAllGrowing", $pesquisa);
+if (isset($_POST['pesquisa'])) {
+    $pag['pesquisa'] = filter_var($_POST['pesquisa']);
+}
+
+$users = $cUser->actionControl("selectPagination", $pag);
+$cont = $cUser->actionControl("countPages", 5);
+
+if (isset($_POST['pesquisa'])) {
+    $cont = $cUser->actionControl("countPagesWithSearch", filter_var($_POST['pesquisa']));
 }
 ?>
 <!DOCTYPE html>
@@ -141,6 +162,42 @@ if (isset($_GET["ordenacao"])) {
                     <?php } ?>
                     </tbody>
                 </table>
+                <center>
+                    <?php
+                    echo "<hr/>";
+                    echo "<div class='btn-group'>";
+                    if ($pagina > 1) {
+                        $flag = $pagina - 1;
+                        echo "<a type='button' class='btn btn-default' href='user.list.php?";
+                        if (isset($_GET['ordenacao'])) {
+                            echo "ordenacao=" . $_GET['ordenacao'] . "&";
+                        }
+                        if (isset($_GET['pesquisa'])) {
+                            echo "pesquisa=" . $_GET['pesquisa'] . "&";
+                        }
+                        echo "pagina=" . $flag . "'><span class='glyphicon glyphicon-chevron-left'></span></a>";
+                    } else {
+                        $flag = $pagina - 1;
+                        echo "<a type='button' disabled class='btn btn-default' href=''><span class='glyphicon glyphicon-chevron-left'></span></a>";
+                    }
+                    echo "<a href='#' class='btn btn-default disabled'>Página " . $pagina . " de " . $cont . "</a>";
+                    if ($pagina < $cont) {
+                        echo "<a type='button' class='btn btn-default' href='user.list.php?";
+                        if (isset($_GET['ordenacao'])) {
+                            echo "ordenacao=" . $_GET['ordenacao'] . "&";
+                        }
+                        if (isset($_GET['pesquisa'])) {
+                            echo "pesquisa=" . $_GET['pesquisa'] . "&";
+                        }
+                        echo "pagina=" . ($pagina + 1) . "'><span class='glyphicon glyphicon-chevron-right'></span></a>";
+                    } else {
+                        $flag = $pagina - 1;
+                        echo "<a type='button' disabled class='btn btn-default' href=''><span class='glyphicon glyphicon-chevron-right'></span></a>";
+                    }
+                    echo "</div>";
+                    echo "<p>&nbsp;</p>";
+                    ?>
+                </center>
             </div>
             <!-- /.container -->
         </div>

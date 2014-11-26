@@ -60,91 +60,19 @@ class ControllerUser extends Controller {
             $user->setIdCourse($line["idCourse"]);
             $user->setEmail($line["email"]);
             $user->setName($line["name"]);
-            //$user->setPhoto($line["photo"]);
             $user->setRegistration($line["registration"]);
             $user->setAbout($line["about"]);
             $user->setLogin($line["login"]);
             $user->setHash($line["hash"]);
             $user->setReminder($line["reminder"]);
             $user->setReminderResponse($line["reminderResponse"]);
-            //$user->setCanReceiveContent($line["canReceiveContent"]);
-            //$user->setType($line["type"]);
-//            $profile = new Profile();
-//            $profile->setIdProfile($user->getIdUser());
-//            $controllerProfile = new ControllerProfile();
-//            $profile = $controllerProfile->actionControl('selectOne', $profile);
-            //$content->set_Medias($contentMedia);
-
 
             $course = new Course();
             $course->setIdCourse($user->getIdCourse());
             $controllerCourse = new ControllerCourse();
             $course = $controllerCourse->actionControl('selectOne', $course);
-            //$contentCategory->set_Category($contentCategory);
 
             $users[] = $user;
-        }
-
-        return $users;
-    }
-
-    protected function selectAllGrowing($search) {
-        $db = new Includes\Db();
-
-        if ($search != "") {
-            $search = "where "
-                    . "name like '%" . $search . "%' "
-                    . "or registration like '%" . $search . "%' "
-                    . "or courseName like '%" . $search . "%' ";
-        }
-
-        $lines = $db->query("select * from userSearch " . $search . " order by name");
-        /*
-         * create view userSearch as 
-          select u.idUser, u.name, u.idCourse, u.email, u.about, u.registration, c.name as courseName
-          from user u
-          join course c on c.idCourse = u.idCourse
-          join profile p on p.idProfile = u.idProfile
-          where p.is_admin = 0
-         */
-        $users = array();
-        foreach ($lines as $line) {
-            $userSearch = new UserSearch();
-            $userSearch->setIdUser($line["idUser"]);
-            $userSearch->setIdCourse($line["idCourse"]);
-            $userSearch->setCourseName($line["courseName"]);
-            $userSearch->setEmail($line["email"]);
-            $userSearch->setName($line["name"]);
-            $userSearch->setRegistration($line["registration"]);
-            $userSearch->setAbout($line["about"]);
-            $users[] = $userSearch;
-        }
-
-        return $users;
-    }
-
-    protected function selectAllDescending($search) {
-        $db = new Includes\Db();
-
-        if ($search != "") {
-            $search = "where "
-                    . "name like '%" . $search . "%' "
-                    . "or registration like '%" . $search . "%' "
-                    . "or courseName like '%" . $search . "%' ";
-        }
-
-        $lines = $db->query("select * from userSearch order by name desc");
-        $users = array();
-        foreach ($lines as $line) {
-            $userSearch = new UserSearch();
-            $userSearch->setIdUser($line["idUser"]);
-            $userSearch->setIdCourse($line["idCourse"]);
-            $userSearch->setCourseName($line["courseName"]);
-            $userSearch->setEmail($line["email"]);
-            $userSearch->setName($line["name"]);
-            $userSearch->setRegistration($line["registration"]);
-            $userSearch->setAbout($line["about"]);
-            $users[] = $userSearch;
         }
 
         return $users;
@@ -169,19 +97,10 @@ class ControllerUser extends Controller {
         $user->setReminderResponse($lines[0]["reminderResponse"]);
         $user->setCanReceiveContent($lines[0]["canReceiveContent"]);
 
-
-        /* $profile = new Profile();
-          $profile->setIdProfile($user->getIdUser());
-          $controllerProfile = new ControllerProfile();
-          $profile = $controllerProfile->actionControl('selectOne', $profile); */
-        //$content->set_Medias($contentMedia);
-
-
         $course = new Course();
         $course->setIdCourse($user->getIdCourse());
         $controllerCourse = new ControllerCourse();
         $course = $controllerCourse->actionControl('selectOne', $course);
-        //$contentCategory->set_Category($contentCategory);
 
         return $user;
     }
@@ -298,10 +217,6 @@ class ControllerUser extends Controller {
     protected function delete($user) {
         $db = new Includes\Db();
 
-        /* $ret2 = $db->query("delete from profile where IdProfile = :idUser", array(
-          'idUser' => $user->getIdUser(),
-          )); // ???? verificar!!! */
-
         $ret1 = $db->query("delete from user where idUser = :idUser", array(
             'idUser' => $user->getIdUser(),
         ));
@@ -313,61 +228,108 @@ class ControllerUser extends Controller {
         }
     }
 
-    /*
+    protected function selectAllGrowing($search) {
+        $db = new Includes\Db();
 
-      public function searchAll($data, $page = 1) {
-      $db = new Includes\Db();
-      $select = $db->query("select * from content where title like :title or description like :description limit :page, 10", array(
-      "title" => '%' . $data . '%',
-      "description" => '%' . $data . '%',
-      'page' => (($page - 1) * 10),
-      ));
-      $this->total = $db->single("select count(*) from content where title like :title or description like :description", array(
-      "title" => '%' . $data . '%',
-      "description" => '%' . $data . '%',
-      ));
-      return $select;
-      }
+        if ($search != "") {
+            $search = "where "
+                    . "name like '%" . $search . "%' "
+                    . "or registration like '%" . $search . "%' "
+                    . "or courseName like '%" . $search . "%' ";
+        }
 
-      public function search($type, $search, $page = 1, $order = "postDate", $data, $data2) {
-      $db = new Includes\Db();
+        $lines = $db->query("select * from userSearch " . $search . " order by name");
+        /*
+         * create view userSearch as 
+          select u.idUser, u.name, u.idCourse, u.email, u.about, u.registration, c.name as courseName
+          from user u
+          join course c on c.idCourse = u.idCourse
+          join profile p on p.idProfile = u.idProfile
+          where p.is_admin = 0
+         */
+        $users = array();
+        foreach ($lines as $line) {
+            $userSearch = new UserSearch();
+            $userSearch->setIdUser($line["idUser"]);
+            $userSearch->setIdCourse($line["idCourse"]);
+            $userSearch->setCourseName($line["courseName"]);
+            $userSearch->setEmail($line["email"]);
+            $userSearch->setName($line["name"]);
+            $userSearch->setRegistration($line["registration"]);
+            $userSearch->setAbout($line["about"]);
+            $users[] = $userSearch;
+        }
 
-      if ($type <> 'A') {
-      $select = $db->query("select * from content where type = :type and (title like :title or description like :description) and (postDate between :data and :data2) order by :order limit :page, 10", array(
-      "type" => $type,
-      "title" => '%' . $search . '%',
-      "description" => '%' . $search . '%',
-      "page" => (($page - 1) * 10),
-      "order" => $order,
-      "data" => $data,
-      "data2" => $data2,
-      ));
+        return $users;
+    }
 
-      $this->total = $db->single("select count(*) from content where type = :type and (title like :title or description like :description) and (postDate between :data and :data2)", array(
-      "type" => $type,
-      "title" => '%' . $search . '%',
-      "description" => '%' . $search . '%',
-      "data" => $data,
-      "data2" => $data2,
-      ));
-      } else {
-      $select = $db->query("select * from content where (title like :title or description like :description) and (postDate between :data and :data2) order by :order limit :page, 10", array(
-      "title" => '%' . $search . '%',
-      "description" => '%' . $search . '%',
-      "page" => (($page - 1) * 10),
-      "order" => $order,
-      "data" => $data,
-      "data2" => $data2,
-      ));
+    protected function selectAllDescending($search) {
+        $db = new Includes\Db();
 
-      $this->total = $db->single("select count(*) from content where (title like :title or description like :description) and (postDate between :data and :data2)", array(
-      "title" => '%' . $search . '%',
-      "description" => '%' . $search . '%',
-      "data" => $data,
-      "data2" => $data2,
-      ));
-      }
-      return $select;
-      }
-     */
+        if ($search != "") {
+            $search = "where "
+                    . "name like '%" . $search . "%' "
+                    . "or registration like '%" . $search . "%' "
+                    . "or courseName like '%" . $search . "%' ";
+        }
+
+        $lines = $db->query("select * from userSearch order by name desc");
+        $users = array();
+        foreach ($lines as $line) {
+            $userSearch = new UserSearch();
+            $userSearch->setIdUser($line["idUser"]);
+            $userSearch->setIdCourse($line["idCourse"]);
+            $userSearch->setCourseName($line["courseName"]);
+            $userSearch->setEmail($line["email"]);
+            $userSearch->setName($line["name"]);
+            $userSearch->setRegistration($line["registration"]);
+            $userSearch->setAbout($line["about"]);
+            $users[] = $userSearch;
+        }
+
+        return $users;
+    }
+
+    protected function selectPagination($pag) {
+        $db = new Includes\Db();
+        $termoInicial = ($pag['pagina'] - 1) * $pag['limite'];
+        $sql = "select * from userSearch ";
+        if (isset($pag['pesquisa'])) {
+            $sql = "select * from userSearch where name like '%" . $pag['pesquisa'] . "%' or registration like '%" . $pag['pesquisa'] . "%' or courseName like '%" . $pag['pesquisa'] . "%'";
+        }
+        if (!isset($pag['ordenacao'])) {
+            $sql .= "ORDER BY name asc ";
+        } else if ($pag['ordenacao'] == "asc" || $pag['ordenacao'] == "desc") {
+            $sql .= "ORDER BY name " . $pag['ordenacao'] . " ";
+        }
+        $sql .= " LIMIT " . $termoInicial . "," . $pag['limite'];
+        
+        $lines = $db->query($sql);
+        $users = array();
+        foreach ($lines as $line) {
+            $userSearch = new UserSearch();
+            $userSearch->setIdUser($line["idUser"]);
+            $userSearch->setIdCourse($line["idCourse"]);
+            $userSearch->setCourseName($line["courseName"]);
+            $userSearch->setEmail($line["email"]);
+            $userSearch->setName($line["name"]);
+            $userSearch->setRegistration($line["registration"]);
+            $userSearch->setAbout($line["about"]);
+            $users[] = $userSearch;
+        }
+        return $users;
+    }
+
+    protected function countPages($limit) {
+        $db = new Includes\Db();
+        $lines = $db->query("SELECT (count(*)/" . $limit . ") as pages FROM userSearch");
+        return ceil($lines[0]['pages']);
+    }
+
+    protected function countPagesWithSearch($pesquisa) {
+        $db = new Includes\Db();
+        $lines = $db->query("SELECT (count(*)/ 5 ) as pages FROM userSearch where name like '%" . $pesquisa . "%' or registration like '%" . $pesquisa . "%' or courseName like '%" . $pesquisa . "%'");
+        return ceil($lines[0]['pages']);
+    }
+
 }
