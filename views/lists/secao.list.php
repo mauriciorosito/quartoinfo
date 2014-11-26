@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 include_once("../../controllers/secao.control.php");
 require_once("../../packages/system/functions.model.php");
 $controllerSecao = new ControllerSecao();
