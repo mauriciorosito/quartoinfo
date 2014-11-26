@@ -2,6 +2,10 @@
 require_once('../../models/banners.model.php');
 require_once('../../controllers/banners.control.php');
 
+require_once('../../system/limited.php');
+$limited = new Limited();
+$limited->check(array('A'));
+
 $banner = new banners();
 $cb = new ControllerBanners();
 if(isset($_POST['create'])){
@@ -33,7 +37,7 @@ if(isset($_POST['create'])){
         }
 }
 if(isset($_POST['update'])){
-    $erro = null;
+        $erro = null;
         if (isset($_FILES['src']))
         {
                 $extensoes = array(".jpg");
@@ -69,7 +73,7 @@ if(isset($_GET['action'])){
         $id = $_GET['id'];
         $banner->setId($id);
         $cb->actionControl('delete', $banner);
-        header('location:../lists/banners.php?msg=deletado');
+        header('location:../lists/banners.php?msg=Banner nº '.$id.' excluído!');
     }
     if($_GET['action'] == 'update'){
 	$id = $_GET['id'];
@@ -128,7 +132,7 @@ $banners = $bc->actionControl('selectAll', 1);
             <div class="container img-rounded BVerde">
                 <br>
                 <a href="../lists/banners.php" class="btn btn-default">Voltar</a> 
-                <form class="navbar-form navbar-right" role="search" action="adminBanners.list.php" method="GET">
+                <form class="navbar-form navbar-right" role="search" action="banners.search.php" method="GET">
                     <div class="form-group" style="margin-left:-15%;">
                         <label for="pesquisar">
                             <div class="input-group">
@@ -147,23 +151,25 @@ $banners = $bc->actionControl('selectAll', 1);
 		<table style="margin:0px auto;width:450px;padding:10px;">
                     <tr>
                         <td>Título</td>
-                        <td><input type="text" name="title" class="form-control" value="<?php if(isset($dados)){ echo $dados['title']; } ?>"></td>
+                        <td><input type="text" name="title" class="form-control" value="<?php if(isset($dados)){ echo $dados['title']; } ?>" required></td>
                     </tr>
                     <tr>
                         <td>Descrição</td>
-                        <td><input type="text" name="description" class="form-control" value="<?php if(isset($dados)){ echo $dados['description']; } ?>"></td>
+                        <td>
+                            <textarea  name="description" class="form-control" rows="8" required><?php if(isset($dados)){ echo $dados['description']; } ?></textarea>
+                        </td>
                     </tr>
                     <tr>
                         <td>Direção</td>
-                        <td><input type="text" name="href" class="form-control" value="<?php if(isset($dados)){ echo $dados['href']; } ?>"></td>
+                        <td><input type="text" name="href" class="form-control" value="<?php if(isset($dados)){ echo $dados['href']; } ?>" required></td>
                     </tr>
                     <tr>
                         <td>Arquivo</td>
-                        <td><input type="file" name="src" class="form-control" value="<?php if(isset($dados)){ echo $dados['src']; } ?>"></td>
+                        <td><input type="file" name="src" class="form-control" value="<?php if(isset($dados)){ echo $dados['src']; } ?>" <?php if(isset($_GET['action']) && $_GET['action'] != 'update'){ echo 'required'; }?>></td>
                     </tr>
                     <tr>
                         <td>Texto Alternativo</td>
-                        <td><input type="text" name="alt" class="form-control" value="<?php if(isset($dados)){ echo $dados['alt']; } ?>"></td>
+                        <td><input type="text" name="alt" class="form-control" value="<?php if(isset($dados)){ echo $dados['alt']; } ?>" required></td>
                     </tr>
                     <tr>
                         <td>Tipo</td>
@@ -180,8 +186,8 @@ $banners = $bc->actionControl('selectAll', 1);
                         </td>
                     </tr>
 		</table>
-                    <input type="hidden" name="id" value="<?php if(isset($dados)){ echo $dados['id'];} ?>">
-	</form>
+                <input type="hidden" name="id" value="<?php if(isset($dados)){ echo $dados['id'];} ?>">
+            </form>
             </div>
         </div>
     </body>

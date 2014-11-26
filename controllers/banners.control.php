@@ -58,7 +58,9 @@ class ControllerBanners extends Controller {
         $query .= "description = '".$obj->getDescription()."', ";
         $query .= "href = '".$obj->getHref()."', ";
         $query .= "alt = '".$obj->getAlt()."', ";
-        $query .= "src = '".$obj->getSrc()."', ";
+        if($obj->getSrc() != null){
+            $query .= "src = '".$obj->getSrc()."', ";
+        }        
         $query .= "type = '".$obj->getType()."' ";
         $query .= "WHERE id = '".$obj->getId()."'";
         echo $query;
@@ -71,11 +73,11 @@ class ControllerBanners extends Controller {
         $line = $db->query($query);
         return $line;
     }
-    protected function search($name){
+    public function search($title){
 	$db = new Includes\Db();
         $lines = $db->query(
-           "select * from banners where name :name",
-            array('name'=>$name)
+           "SELECT * FROM banners WHERE title LIKE :title",
+            array('title' => '%'.$title.'%')
         );
         $banners = array();
         foreach($lines as $line){
