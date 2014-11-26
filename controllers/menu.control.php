@@ -71,11 +71,21 @@ class ControllerMenu extends Controller {
 
         $termoInicial = ($pag['pagina'] - 1) * $pag['limite'];
         $sql = "select * from menu ";
+        
+        if (isset($pag['pesquisa'])){
+            $sql .= " where title like '%" . $pag['pesquisa'] . "%' or description like '%".$pag['pesquisa']."%'";
+        }
+        
+        
         if (!isset($pag['ordenacao'])) {
             $sql .= "ORDER BY idMenu DESC ";
         } else if ($pag['ordenacao'] == "asc" || $pag['ordenacao'] == "desc") {
             $sql .= "ORDER BY title " . $pag['ordenacao'] . " ";
+        } else if ($pag['ordenacao'] == "localizacao") {
+            $sql .= "ORDER BY localization asc ";
         }
+        
+       
 
         $sql .= " LIMIT " . $termoInicial . "," . $pag['limite'];
         $lines = $db->query($sql);

@@ -30,7 +30,8 @@ if (isset($_POST['action'])) {
         @$smenu->setIdCategory($_POST['category']);
         @$smenu->setIdPage($_POST['page']);
         $cSm->actionControl("insert", $smenu);
-        header("location: ../lists/submenu.list.php?idMenu=" . $_POST['idMenu']);
+        
+        header("location: ../lists/submenu.list.php?return=insert&&idMenu=" . $_POST['idMenu']);
     }
     if ($_POST['action'] == 'update') {
         @$smenu->setDescription($_POST['description']);
@@ -43,7 +44,7 @@ if (isset($_POST['action'])) {
         @$smenu->setIdSubMenu($_POST['idSubMenu']);
         @$smenu->setPosition($_POST['position']);
         $cSm->actionControl("update", $smenu);
-        header("location: ../lists/submenu.list.php?idMenu=" . $_POST['idMenu']);
+        header("location: ../lists/submenu.list.php?return=update&&idMenu=" . $_POST['idMenu']);
     } else {
         echo "sem ação";
         die();
@@ -93,6 +94,10 @@ if (isset($_GET['action']) && isset($_GET['idSubMenu'])) {
     <body>
         <?php include_once '../parts/navigation_admin.php'; ?>
         <div id="content">
+            <div style="margin-left: 5%;">
+                <span><a href="../lists/menu.list.php">Listagem de Menus</a> -> </span>
+                <span>Criar / Editar Item de Menu</span>
+            </div>
             <div class="container img-rounded BVerde">
 
      

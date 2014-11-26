@@ -156,7 +156,53 @@ class ControllerSubMenu extends Controller {
                     'idSubMenu' => $subMenu->getIdSubMenu()
         ));
     }
+    
+    protected function selecionarPaginacao($pag) {
+        $db = new Includes\Db();
 
+        $termoInicial = ($pag['pagina'] - 1) * $pag['limite'];
+        
+        $sql = "select * from submenu where idMenu = '" . $pag['idMenu'] . "'";
+        
+       
+          
+        if (isset($pag['pesquisa'])){
+            $sql .= " and (title like '%" . $pag['pesquisa'] . "%' or description like '%".$pag['pesquisa']."%')";
+        }
+        
+        
+   
+        
+
+        $sql .= " LIMIT " . $termoInicial . "," . $pag['limite'];
+        $lines = $db->query($sql);
+        $subMenus = array();
+        foreach ($lines as $line) {
+            $submenu = new subMenu();
+            $submenu->setIdSubMenu($line["idSubMenu"]);
+            $submenu->setUrl($line["url"]);
+            $submenu->setTitle($line["title"]);
+            $submenu->setType($line["type"]);
+            $submenu->setDescription($line["description"]);
+            $submenu->setIdCategory($line["idCategory"]);
+            
+            $subMenus[] = $submenu;
+        }
+
+        return $subMenus;
+    }
+
+    protected function contarPaginas($pag) {
+        $db = new Includes\Db();
+        $lines = $db->query("SELECT (count(*)/ "  . $pag['limite'] . ") as pages FROM submenu where idMenu = '" . $pag['idMenu'] . "'");
+        return ceil($lines[0]['pages']);
+    }
+
+    protected function contarPaginas2($pag) {
+        $db = new Includes\Db();
+        $lines = $db->query("SELECT (count(*)/ 5 ) as pages FROM submenu where idMenu = '" . $pag['idMenu'] . "' and (title like '%" . $pag['pesquisa'] . "%' or description like '%" . $pag['pesquisa'] . "%')");
+        return ceil($lines[0]['pages']);
+    }
     public function getLastPos($idMenu) {
         $db = new Includes\Db();
 

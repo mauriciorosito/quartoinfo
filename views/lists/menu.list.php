@@ -38,6 +38,16 @@ if (isset($_GET['pesquisa'])) {
     $cont = $cM->actionControl("contarPaginas2", $_GET['pesquisa']);
 }
 
+if (isset($_GET['return']) && $_GET['return'] == "insert"){
+    echo "<script type='text/javascript'>";
+    echo "alert('Novo Menu Cadastrado');";
+    echo "</script>";
+}
+elseif (isset($_GET['return']) && $_GET['return'] == "update"){
+    echo "<script type='text/javascript'>";
+    echo "alert('Menu Alterado.');";
+    echo "</script>";
+}
 
 ?>
 <!DOCTYPE html>
@@ -125,7 +135,7 @@ if (isset($_GET['pesquisa'])) {
                             </div>
                         </div>
                         <div class="col-md-2">
-                          <form class="form-inline" role="form" method="get" action="profile.list.php">
+                          <form class="form-inline" role="form" method="get" action="menu.list.php">
                             <div  style="padding-right: 10px;" class="form-group">
                                 <div class="input-group">
                                     <input class="form-control" type="text" name="pesquisa" placeholder="Digite sua Pesquisa">
