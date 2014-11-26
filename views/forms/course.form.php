@@ -20,6 +20,8 @@ require_once('../../system/limited.php');
 $cc = new ControllerCourse();
 $arrayCursos = $cc->actionControl("selectAll");
 
+
+
 if (isset($_GET["action"], $_GET["idCourse"])) {
     if ($_GET["action"] == "delete") {
         $course = new Course();
@@ -33,18 +35,6 @@ if (isset($_GET["action"], $_GET["idCourse"])) {
         $cc = new ControllerCourse();
         $course = $cc->actionControl("selectOne", $course);
     }
-
-    if ($_GET["action"] == "update") {
-        $course = new Course();
-        $course->setIdCourse($_GET["idCourse"]);
-        $cc = new ControllerCourse();
-        $course = $cc->actionControl("selectOne", $course);
-       // $course->setIdCourse($course->getIdCourse());
-        $course->setName($course->getName());
-        $course->setDescription($course->getDescription());
-        $course->setType($course->getType());
-        $course->setAlias($course->getAlias());
-    }
 }
 
 if (isset($_POST["action"])) {
@@ -54,10 +44,16 @@ if (isset($_POST["action"])) {
     $course->setDescription($_POST["description"]);
     $course->setType($_POST["type"]);
     $course->setAlias($_POST["alias"]);
+    
     $cc = new ControllerCourse();
-    $cc->actionControl($_POST["action"], $course);
-    header('location: ../lists/course.list.php');
-    echo "<script>$('#ol-caminho').html('Curso cadastrado com sucesso !');</script>";
+   
+        
+    try {
+        $cc->actionControl($_POST["action"], $course);
+        header("location: ../lists/course.list.php?msg=Cadastro realizado com sucesso!");
+    } catch (PDOException $course) {
+        header("location: ../lists/course.list.php?msg=Curso já existe!");
+    } 
 }
 ?>
 <form action="course.form.php" method="post" enctype="multipart/form-data">

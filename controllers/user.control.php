@@ -290,45 +290,41 @@ class ControllerUser extends Controller {
         return $users;
     }
 
-    protected function selectPagination($pag) {
+    protected function selecionarPaginacao($pag) {
         $db = new Includes\Db();
         $termoInicial = ($pag['pagina'] - 1) * $pag['limite'];
-        $sql = "select * from userSearch ";
-        if (isset($pag['pesquisa'])) {
-            $sql = "select * from userSearch where name like '%" . $pag['pesquisa'] . "%' or registration like '%" . $pag['pesquisa'] . "%' or courseName like '%" . $pag['pesquisa'] . "%'";
+        $sql = "select * from course ";
+        if(isset($pag['pesquisa'])){
+            $sql = "select * from course where name like '%".$pag['pesquisa']."%' or description like '%".$pag['pesquisa']."%'";
         }
         if (!isset($pag['ordenacao'])) {
-            $sql .= "ORDER BY name asc ";
+            $sql .= "ORDER BY idCourse DESC ";
         } else if ($pag['ordenacao'] == "asc" || $pag['ordenacao'] == "desc") {
             $sql .= "ORDER BY name " . $pag['ordenacao'] . " ";
         }
         $sql .= " LIMIT " . $termoInicial . "," . $pag['limite'];
-        
         $lines = $db->query($sql);
-        $users = array();
+        $courses = array();
         foreach ($lines as $line) {
-            $userSearch = new UserSearch();
-            $userSearch->setIdUser($line["idUser"]);
-            $userSearch->setIdCourse($line["idCourse"]);
-            $userSearch->setCourseName($line["courseName"]);
-            $userSearch->setEmail($line["email"]);
-            $userSearch->setName($line["name"]);
-            $userSearch->setRegistration($line["registration"]);
-            $userSearch->setAbout($line["about"]);
-            $users[] = $userSearch;
+            $course = new \models\Profile();
+            $course->setIdCourse($line["idCourse"]);
+            $course->setName($line["name"]);
+            $course->setDescription($line["description"]);
+            $course->setAlias($line["alias"]);
+
+            $courses[] = $course;
         }
-        return $users;
+        return $courses;
     }
 
-    protected function countPages($limit) {
+    protected function contarPaginas($limite) {
         $db = new Includes\Db();
-        $lines = $db->query("SELECT (count(*)/" . $limit . ") as pages FROM userSearch");
+        $lines = $db->query("SELECT (count(*)/" . $limite . ") as pages FROM course");
         return ceil($lines[0]['pages']);
     }
-
-    protected function countPagesWithSearch($pesquisa) {
+    protected function contarPaginas2($pesquisa) {
         $db = new Includes\Db();
-        $lines = $db->query("SELECT (count(*)/ 5 ) as pages FROM userSearch where name like '%" . $pesquisa . "%' or registration like '%" . $pesquisa . "%' or courseName like '%" . $pesquisa . "%'");
+        $lines = $db->query("SELECT (count(*)/ 5 ) as pages FROM course where name like '%".$pesquisa."%' or description like '%".$pesquisa."%'");
         return ceil($lines[0]['pages']);
     }
 

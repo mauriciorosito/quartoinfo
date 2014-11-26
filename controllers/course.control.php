@@ -43,6 +43,7 @@ class ControllerCourse extends Controller {
     }
 
     protected function insert($course) {
+   
         $db = new Includes\Db();
         return $db->query('insert into course (name, type, description, alias) values 
 		(:name, :type, :description, :alias) ', array(
@@ -135,34 +136,38 @@ class ControllerCourse extends Controller {
 
         return $courses;
     }
-//     protected function selecionarPaginacao($pag) {
-//        $db = new Includes\Db();
-//        $termoInicial = ($pag['pagina'] - 1) * $pag['limite'];
-//        $sql = "select * from course ";
-//        if (!isset($pag['ordenacao'])) {
-//            $sql .= "ORDER BY idCourse DESC ";
-//        } else if ($pag['ordenacao'] == "asc" || $pag['ordenacao'] == "desc") {
-//            $sql .= "ORDER BY name " . $pag['ordenacao'] . " ";
-//        }
-//        $sql .= " LIMIT " . $termoInicial . "," . $pag['limite'];
-//        $lines = $db->query($sql);
-//        $courses = array();
-//        foreach ($lines as $line) {
-//            $course = new \models\course();
-//            $course->setIdCourse($line["idCourse"]);
-//            $course->setName($line["name"]);
-//            $course->setAlias($line["alias"]);
-//            $course->setDescription($line["description"]);
-//            $course->setType($line["type"]);
-//
-//            $courses[] = $course;
-//        }
-//        return $courses;
-//    }
-//
-//    protected function contarPaginas($limite) {
-//        $db = new Includes\Db();
-//        $lines = $db->query("SELECT (count(*)/" . $limite . ") as pages FROM course");
-//        return ceil($lines[0]['pages']);
-//    }
+    
+    protected function selectPagination($pag) {
+        $db = new Includes\Db();
+        $termoInicial = ($pag['pagina'] - 1) * $pag['limite'];
+        $sql = "select * from course ";
+        if (isset($pag['pesquisa'])) {
+            $sql = "select * from course where name like '%" . $pag['pesquisa'] . "%' or registration like '%" . $pag['pesquisa'] . "%' or courseName like '%" . $pag['pesquisa'] . "%'";
+        }
+        if (!isset($pag['ordenacao'])) {
+            $sql .= "ORDER BY name asc ";
+        } else if ($pag['ordenacao'] == "asc" || $pag['ordenacao'] == "desc") {
+            $sql .= "ORDER BY name " . $pag['ordenacao'] . " ";
+        }
+        $sql .= " LIMIT " . $termoInicial . "," . $pag['limite'];
+        
+        $lines = $db->query($sql);
+        $users = array();
+        foreach ($lines as $line) {
+            $course = new Course();
+            $course->setIdCourse($line["idCourse"]);
+            $course->setName($line["name"]);
+            $course->setDescription($line["description"]);
+            $course->setType($line["type"]);
+            $course->setAlias($line["alias"]);
+            $courses[] = $course;
+        }
+        return $courses;
+    }
+
+    protected function countPages($limit) {
+        $db = new Includes\Db();
+        $lines = $db->query("SELECT (count(*)/" . $limit . ") as pages FROM course");
+        return ceil($lines[0]['pages']);
+    }
 }
