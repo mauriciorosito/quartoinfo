@@ -25,11 +25,21 @@ if (isset($_GET['pesquisa'])) {
 }
 $cM = new ControllerMenu();
 
-
 $menus = $cM->actionControl("selecionarPaginacao", $pag);
 
 if (count($menus) <= 0 && $pagina > 1 ) {
-    header("location: menu.list.php");
+    
+    if(isset($_GET['return'])){
+        header("location: menu.list.php?return=".$_GET['return']);
+    }
+    else if(isset($_GET['erro'])){
+        
+        header("location: menu.list.php?erro=".$_GET['erro']);
+        
+    }
+    else {
+        header("location:menu.list.php");
+    }
 }
                                 
 $cont = $cM->actionControl("contarPaginas", 5);
@@ -46,6 +56,11 @@ if (isset($_GET['return']) && $_GET['return'] == "insert"){
 elseif (isset($_GET['return']) && $_GET['return'] == "update"){
     echo "<script type='text/javascript'>";
     echo "alert('Menu Alterado.');";
+    echo "</script>";
+}
+if (isset($_GET['erro']) && $_GET['erro'] == "menuCadastrado"){
+    echo "<script type='text/javascript'>";
+    echo "alert('Menu já cadastrado!!');";
     echo "</script>";
 }
 

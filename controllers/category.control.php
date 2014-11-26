@@ -29,7 +29,7 @@ class ControllerCategory extends Controller {
             $category->setIdCategory($line["idCategory"]);
             $category->setName($line["name"]);
 			$category->setType($line["type"]);
-           
+		   
             $categories[] = $category;
         }
         return $categories;
@@ -64,7 +64,7 @@ class ControllerCategory extends Controller {
         $lines = $db->query("select * from category order by name desc");
         $categorys = array();
         foreach ($lines as $line) {
-            $category = new Category();
+            $category = new \models\Category();
             $category->setIdCategory($line["idCategory"]);
    
             $category->setType($line["type"]);
@@ -76,19 +76,21 @@ class ControllerCategory extends Controller {
         return $categories;
     }
 	
-	
-
 	protected function selecionarPaginacao($pag) {
         $db = new Includes\Db();
 	
         $termoInicial = ($pag['pagina'] - 1) * $pag['limite'];
         $sql = "select * from category ";
+        if(isset($pag['pesquisa'])){
+            $sql = "select * from category where name like '%".$pag['pesquisa']."%' or type like '%".$pag['pesquisa']."%'";
+        }
         if (!isset($pag['ordenacao'])) {
             $sql .= "ORDER BY idCategory DESC ";
         } else if ($pag['ordenacao'] == "asc" || $pag['ordenacao'] == "desc") {
             $sql .= "ORDER BY name " . $pag['ordenacao'] . " ";
         }
         $sql .= " LIMIT " . $termoInicial . "," . $pag['limite'];
+				
         $lines = $db->query($sql);
         $categories = array();
         foreach ($lines as $line) {
@@ -107,5 +109,35 @@ class ControllerCategory extends Controller {
         $db = new Includes\Db();
         $lines = $db->query("SELECT (count(*)/" . $limite . ") as pages FROM category");
         return ceil($lines[0]['pages']);
+    }
+	
+	 protected function contarPaginas2($pesquisa) {
+        $db = new Includes\Db();
+        $lines = $db->query("SELECT (count(*)/ 5 ) as pages FROM category where name like '%".$pesquisa."%' or type like '%".$pesquisa."%'");
+        return ceil($lines[0]['pages']);
+    }
+	
+	public function searchCategories($pag, $page = 1) {
+        $db = new Includes\Db();
+        var_dump($pag);
+        $termoInicial = ($pag['pagina'] - 1) * $pag['limite'];
+        $sql = $db->query("select * from category where name like ".$pag['pesquisa']." or type like ".$pag['pesquisa']);
+        if (!isset($pag['ordenacao'])) {
+            $sql .= "ORDER BY idCategory DESC ";
+        } else if ($pag['ordenacao'] == "asc" || $pag['ordenacao'] == "desc") {
+            $sql .= "ORDER BY name " . $pag['ordenacao'] . " ";
+        }
+        $sql .= " LIMIT " . $termoInicial . "," . $pag['limite'];
+        $lines = $db->query($sql);
+        $categories = array();
+        foreach ($lines as $line) {
+            $category = new \models\Category();
+            $category->setIdCategory($line["idCategory"]);
+            $category->setName($line["name"]);
+            $category->setType($line["type"]);
+
+            $categories[] = $category;
+        }
+        return $categories;
     }
 }

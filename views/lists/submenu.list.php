@@ -215,6 +215,13 @@ elseif (isset($_GET['return']) && $_GET['return'] == "update"){
                             </tbody>
                         </table>
                     </div>
+                     <?php
+                        if (empty($submenus)) {
+                            echo "<div class='col-md-12'><div class='alert alert-info' role='alert'>
+                                    <strong>Alerta!</strong> Não há nenhum item de menu cadastrado, insira um novo!
+                                  </div> </div>";
+                        }
+                        ?>
                     <center>
                         <?php
                         echo "<hr/>";
@@ -251,6 +258,7 @@ elseif (isset($_GET['return']) && $_GET['return'] == "update"){
                         echo "<p>&nbsp;</p>";
                         ?>
                     </center>
+                    
                 </div>
 
             </div>
@@ -260,13 +268,7 @@ elseif (isset($_GET['return']) && $_GET['return'] == "update"){
         glyphicon glyphicon-arrow-up
         glyphicon glyphicon-arrow-down
         -->
-        <?php
-        if (empty($submenus)) {
-            echo "<div class='col-md-12'><div class='alert alert-info' role='alert'>
-                    <strong>Alerta!</strong> Não há nenhum item de menu cadastrado, insira um novo!
-                  </div> </div";
-        }
-        ?>
+       
         <script type="text/javascript" charset="utf-8">
         </script>
 

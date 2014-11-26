@@ -67,24 +67,35 @@ class ControllerSubMenu extends Controller {
 
     protected function insert($submenu) {
         $db = new Includes\Db();
-
-        $sql = "SELECT MAX(position) as position FROM submenu WHERE idMenu ='" . $submenu->getIdMenu() . "'";
-
-        $line = $db->query($sql);
-        $pos = $line[0]['position'] + 1;
-
-        $submenu->setPosition($pos);
-
-        return $db->query('insert into submenu (url, position, type, title, description, idMenu, idCategory) values 
-		(:url, :position, :type, :title, :description, :idMenu, :idCategory)', array(
-                    'url' => $submenu->getUrl(),
-                    'position' => $submenu->getPosition(),
-                    'type' => $submenu->getType(),
-                    'title' => $submenu->getTitle(),
-                    'description' => $submenu->getDescription(),
-                    'idMenu' => $submenu->getIdMenu(),
-                    'idCategory' => $submenu->getIdCategory(),
+        $line = $db->query('select count(*) as quantidade from menu where title = :title', array(
+            'title' => $menu->getTitle(),
         ));
+
+        $qtde = $line[0]["quantidade"];
+
+        if ($qtde > 0) {
+            
+            
+        } else {
+
+            $sql = "SELECT MAX(position) as position FROM submenu WHERE idMenu ='" . $submenu->getIdMenu() . "'";
+
+            $line = $db->query($sql);
+            $pos = $line[0]['position'] + 1;
+
+            $submenu->setPosition($pos);
+
+            return $db->query('insert into submenu (url, position, type, title, description, idMenu, idCategory) values 
+		(:url, :position, :type, :title, :description, :idMenu, :idCategory)', array(
+                        'url' => $submenu->getUrl(),
+                        'position' => $submenu->getPosition(),
+                        'type' => $submenu->getType(),
+                        'title' => $submenu->getTitle(),
+                        'description' => $submenu->getDescription(),
+                        'idMenu' => $submenu->getIdMenu(),
+                        'idCategory' => $submenu->getIdCategory(),
+            ));
+        }
     }
 
     protected function removeSubMenu($submenu) {
