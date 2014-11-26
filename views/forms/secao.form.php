@@ -38,6 +38,10 @@ if (isset($_GET["action"], $_GET["idSecao"])) {
 }
 
 if (isset($_POST["action"])) {
+    if($_POST['cod'] != 5512 ){
+        echo "<script>alert('Página Bloqueada! ');</script>";
+        die;
+    }
     $secao = new Secao();
     $secao->setIdSecao($_POST["idSecao"]);
     $secao->setTitulo($_POST["titulo"]);
@@ -69,6 +73,7 @@ if (isset($_POST["action"])) {
 }
 ?>
 <form action="secao.form.php" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="cod" value="5512" />
     <input type="hidden" name="action" value="<?php
     if (isset($_GET["action"])) {
         echo $_GET["action"];
