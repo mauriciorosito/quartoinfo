@@ -23,13 +23,14 @@ if (isset($_GET["action"], $_GET["idContent"])) {
         $content->setIdContent($_GET["idContent"]);
         $cc = new ControllerContent();
         $cc->actionControl($_GET["action"], $content);
-		if ($_GET['tipo'] = 'pagina') {
-			header("location: ../lists/pages.list.php");
+		if ($_GET['tipo'] == 'pagina') {
+			header("location: ../lists/content.list.php?tipo=P&msg=Deletada");
 		}
 		else {
-			header("location: ../lists/content.list.php");
-		}
-    } else {
+			header("location: ../lists/content.list.php?tipo=C&msg=Deletado");
+		  } 
+	}
+	else {
         $content = new Content();
         $content->setIdContent($_GET["idContent"]);
         $cc = new ControllerContent();
@@ -47,6 +48,7 @@ if (isset($_GET["action"], $_GET["idContent"])) {
         $content->setDescription($content->getDescription());
         $content->setExpirationDate($content->getExpirationDate());
         $content->setPostDate($content->getPostDate());
+		$content->setPublisher($_SESSION["idUser"]);
         $content->setType($content->getType());
     }
 }
@@ -61,6 +63,7 @@ if (isset($_POST["action"])) {
     $content->setExpirationDate($_POST["expirationDate"]);
     $content->setPostDate($_POST["postDate"]);
     $content->setType($_POST["type"]);
+	$content->setPublisher($_SESSION["idUser"]);
     $cc = new ControllerContent();
     $cc->actionControl($_POST["action"], $content);
 
@@ -146,22 +149,25 @@ if (isset($_POST["action"])) {
             }
         }
     }
-	if($_POST["type"] == 'P') {
-		header("location: ../lists/page.list.php?p=$maxIdC");
-	}
-	else if ($_GET['tipo'] = 'pagina') {
-		header("location: ../lists/pages.list.php");
+	if($_POST["action"] == "update"){
+		$tipo = "Atualizad";
 	}
 	else {
-		header("location: ../lists/content.list.php");
+		$tipo = "Inserid";
+	}
+	if($_POST["type"] == 'P') {
+		header("location: ../lists/content.list.php?tipo=P&msg=".$tipo."a");
+	}
+	else {
+		header("location: ../lists/content.list.php?tipo=C&msg=".$tipo."o");
 	}
 }
 ?>
 <form action="content.form.php" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="action" value="<?php if (isset($_GET["action"])) {
+    <input type="hidden" name="action" value="<?php if (isset($_REQUEST["action"])) {
     echo $_GET["action"];
 } ?>">
-    <input type="hidden" name="idContent" value="<?php if (isset($_GET["idContent"])) {
+    <input type="hidden" name="idContent" value="<?php if (isset($_REQUEST["idContent"])) {
     echo $_GET["idContent"];
 } ?>">
     <table style="width:100%;padding:10px;">
@@ -176,7 +182,7 @@ if (isset($_POST["action"])) {
                     <option value="O" <?php if (isset($content) && $content->getType() == "O") {
     echo "selected";
 } ?>> Oportunidades</option>
-<option value="P" <?php if ((isset($content) && $content->getType() == "P") or ($_GET['tipo'] == 'pagina' and $_GET['action'] == 'insert')) {
+<option value="P" <?php if ((isset($content) && $content->getType() == "P") or ($_REQUEST['tipo'] == 'pagina' and $_REQUEST['action'] == 'insert')) {
     echo "selected";
 } ?>> Página</option>
                 </select>
@@ -184,7 +190,7 @@ if (isset($_POST["action"])) {
 		</tr>
             <td>Título: <input type="text" name="title" class="form-control" value="<?php if (isset($content) && $content->getTitle() != "") {
     echo $content->getTitle();
-} ?>"><br></td>
+} ?>"required><br></td>
             <td id="source">Fonte: <input type="text" name="source" class="form-control" value="<?php if (isset($content) && $content->getSource() != "") {
     echo $content->getSource();
 } ?>"><br></td>
@@ -192,15 +198,15 @@ if (isset($_POST["action"])) {
         <tr>
             <td>Descrição: <input type="text" name="description" class="form-control" value="<?php if (isset($content) && $content->getDescription() != "") {
     echo $content->getDescription();
-} ?>"><br></td>
+} ?>"required><br></td>
             
         </tr>
         <tr>
-            <td id="data1">Visualizar desde:<input type="text" name="postDate" class="form-control" pattern="[0-3]{1}[0-9]{1}/[0-1]{1}[0-9]{1}/[2]{1}[0-9]{3}" data-mask="99/99/9999" placeholder="Data"  value="<?php if (isset($content) && $content->getPostDate() != "") {
-    echo Formatter::getDateBrazilianFormat($content->getPostDate());
+            <td id="data1">Visualizar desde:<input type="date" name="postDate" class="form-control"  value="<?php if (isset($content) && $content->getPostDate() != "") {
+    echo ($content->getPostDate());
 } ?>"><br></td>
-            <td id="data2">Visualizar até: <input type="text" name="expirationDate" class="form-control" pattern="[0-3]{1}[0-9]{1}/[0-1]{1}[0-9]{1}/[2]{1}[0-9]{3}" data-mask="99/99/9999" placeholder="Data" value="<?php if (isset($content) && $content->getExpirationDate() != "") {
-    echo Formatter::getDateBrazilianFormat($content->getExpirationDate());
+            <td id="data2">Visualizar até: <input type="date" name="expirationDate" class="form-control" value="<?php if (isset($content) && $content->getExpirationDate() != "") {
+    echo ($content->getExpirationDate());
 } ?>"><br></td>			
         </tr>
         <tr>
