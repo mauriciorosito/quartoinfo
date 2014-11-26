@@ -62,10 +62,12 @@
 
 		public function setPostDate($postDate){
 			$date = explode("/",$postDate);
-			if(!isset($date[2])){
-				$date = explode("-",$postDate);
+			if(isset($date[2])){
+				$this->postDate = $date[2]."-".$date[1]."-".$date[0];
 			}
-			$this->postDate = $date[2]."-".$date[1]."-".$date[0];
+			else {
+				$this->postDate = $postDate;
+			}
 		}
 
 		public function getPostDate(){
@@ -74,10 +76,12 @@
 
 		public function setExpirationDate($expirationDate){
 			$date = explode("/",$expirationDate);
-			if(!isset($date[2])){
-				$date = explode("-",$expirationDate);
+			if(isset($date[2])){
+				$this->expirationDate = $date[2]."-".$date[1]."-".$date[0];
 			}
-			$this->expirationDate = $date[2]."-".$date[1]."-".$date[0];
+			else {
+				$this->expirationDate = $expirationDate;
+			}
 		}
 
 		public function getExpirationDate(){
