@@ -251,6 +251,7 @@ if (isset($_POST["action"])) {
                     }
                     ?>
                     <button class="btn btn-default" type="reset" name="reset"><i class="glyphicon glyphicon-repeat"></i>&nbsp;Limpar Campos</button>
+                    <a href="../lists/user.list.php" class="btn btn-default"><i class="glyphicon glyphicon-arrow-left"></i>&nbsp;Voltar</a>
                     <br>
                     <br>
                 </form>
