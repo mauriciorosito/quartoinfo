@@ -75,11 +75,19 @@ if (isset($_GET['return']) && $_GET['return'] == "insert"){
     echo "<script type='text/javascript'>";
     echo "alert('Novo Item de Menu Cadastrado');";
     echo "</script>";
+    
 }
 elseif (isset($_GET['return']) && $_GET['return'] == "update"){
     echo "<script type='text/javascript'>";
     echo "alert('Item de Menu Alterado.');";
     echo "</script>";
+    
+}
+elseif (isset($_GET['erro']) && $_GET['erro'] == "itemCadastrado"){
+    echo "<script type='text/javascript'>";
+    echo "alert('Item de Menu já Cadastrado.');";
+    echo "</script>";
+    
 }
 
 ?>

@@ -67,14 +67,17 @@ class ControllerSubMenu extends Controller {
 
     protected function insert($submenu) {
         $db = new Includes\Db();
-        $line = $db->query('select count(*) as quantidade from menu where title = :title', array(
-            'title' => $menu->getTitle(),
+        
+        $line = $db->query('select count(*) as quantidade from submenu where title = :title', array(
+            'title' => $submenu->getTitle(),
         ));
 
         $qtde = $line[0]["quantidade"];
 
         if ($qtde > 0) {
             
+            header("location: ../lists/submenu.list.php?erro=itemCadastrado&idMenu=" . $submenu->getIdMenu());
+            die();
             
         } else {
 
