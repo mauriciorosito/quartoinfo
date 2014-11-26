@@ -17,6 +17,8 @@
                 <li><a href="../lists/course.list.php"><i class="glyphicon glyphicon-book"></i> &nbsp; Cursos</a></li>
                 <li><a href="../lists/profile.list.php"><i class="glyphicon glyphicon-tree-deciduous"></i> &nbsp; Perfil</a></li>
                 <li><a href="../lists/secao.list.php"><i class="glyphicon glyphicon-list-alt"></i> &nbsp; Seção</a></li>
+                <li><a href="../lists/banners.php"><i class="glyphicon glyphicon-tree-deciduous"></i> &nbsp; Banners</a></li>
+                <li><a href="../lists/links.list.php"><i class="glyphicon glyphicon-list-alt"></i> &nbsp; Links</a></li>
                 <li><a href="menu.list.php"><i class="glyphicon glyphicon-list"></i> &nbsp; Menus</a></li>
             </ul>
 
