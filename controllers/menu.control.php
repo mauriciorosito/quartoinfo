@@ -39,13 +39,25 @@ class ControllerMenu extends Controller {
 
     protected function insert($menu) {
         $db = new Includes\Db();
-        return $db->query('insert into menu (title, description, localization) values 
-		(:title, :description, :localization) ', array(
-                    'title' => $menu->getTitle(),
-                    'description' => $menu->getDescription(),
-                    'localization' => $menu->getLocalization(),
+        $line = $db->query('select count(*) as quantidade from menu where title = :title', array(
+            'title' => $menu->getTitle(),
         ));
+
+        $qtde = $line[0]["quantidade"];
+
+        if ($qtde > 0) {
+            header("location: ../lists/menu.list.php?erro=menuCadastrado");
+            die();
+        } else {
+            return $db->query('insert into menu (title, description, localization) values 
+		(:title, :description, :localization) ', array(
+                        'title' => $menu->getTitle(),
+                        'description' => $menu->getDescription(),
+                        'localization' => $menu->getLocalization(),
+            ));
+        }
     }
+    
 
     protected function update($menu) {
         $db = new Includes\Db();
