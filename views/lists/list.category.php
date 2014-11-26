@@ -2,9 +2,6 @@
 include_once("../../controllers/controller.class.php");
 include_once("../../controllers/category.control.php");
 
-//$controllerContent = new ControllerContent();
-//$contents = $controllerContent->actionControl('selectAllEvents');
-
 $cCategory = new ControllerCategory();
 $categories = $cCategory->actionControl("selectAll");
 $pagina = (!isset($_GET['pagina'])) ? 1 : filter_var($_GET['pagina'], FILTER_SANITIZE_NUMBER_INT);
@@ -12,27 +9,17 @@ $cCategory = new ControllerCategory();
 $pag = array();
 $pag['pagina'] = $pagina;
 $pag['limite'] = 5;
+
 if (isset($_GET['ordenacao'])) {
     $pag['ordenacao'] = $_GET['ordenacao'];
 }
+if (isset($_GET['pesquisa'])) {
+    $pag['pesquisa'] = $_GET['pesquisa'];
+}
 $categories = $cCategory->actionControl("selecionarPaginacao", $pag);
 $cont = $cCategory->actionControl("contarPaginas", 5);
-
-
-if (isset($_POST["pesquisa"])) {
-    $pesquisa = filter_var($_POST["pesquisa"]);
-} else {
-    $pesquisa = "";
-}
-
-if (isset($_GET["ordenacao"])) {
-    if ($_GET["ordenacao"] == "desc") {
-        $categories = $cCategory->actionControl("selectAllDescending", $pesquisa);
-    } else{
-        $categories = $cCategory->actionControl("selectAllGrowing", $pesquisa);
-    }
-} else {
-    $categories = $cCategory->actionControl("selectAllGrowing", $pesquisa);
+if (isset($_GET['pesquisa'])) {
+    $cont = $cCategory->actionControl("contarPaginas2", $_GET['pesquisa']);
 }
 ?>
 <!DOCTYPE html>
@@ -40,7 +27,7 @@ if (isset($_GET["ordenacao"])) {
 
     <head>
 
-        <!--<meta charset="utf-8">-->
+        <meta charset="utf-8">
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
@@ -69,25 +56,89 @@ if (isset($_GET["ordenacao"])) {
     </head>
 
     <body>
+        <?php include_once'../parts/navigation_admin.php'; ?>
         <div id="content">
-            <div class="container img-rounded BVerde"><br><br>
-			<a href="../forms/content.form.category.php?action=insert" class="btn btn-default standard-margin-10" style="margin-left: -52px; margin-top:0px;">Inserir Categoria</a>
-			<div class="col-md-5 col-sm-12 col-xs-12">
+            <div class="container img-rounded BVerde">
+                <div class="row standard-margin-10">
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="btn-group">
+                            <a class="btn btn-success" href="list.category.php">
+                                <i class="glyphicon glyphicon-home"></i> Início
+                            </a>
+
+                            <a href="../forms/content.form.category.php?action=insert" class="btn btn-default">
+                                <i class="glyphicon glyphicon-plus-sign"></i>
+                                &nbsp; Inserir Categoria
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-sm-12 col-xs-12">
                         <div class="btn-group">
                             <a href="" class="btn btn-success">Ordenar por:</a>
                             <a href="list.category.php?<?php
                             if (isset($_GET['pagina'])) {
                                 echo "pagina=" . $_GET['pagina'] . "&";
                             }
-                            ?>ordenacao=asc" class="btn btn-default">Nome - Crescente</a>
+                            if (isset($_GET['pesquisa'])) {
+                                echo "pesquisa=" . $_GET['pesquisa'] . "&";
+                            }
+                            ?>ordenacao=asc" class="btn btn-default"><i class="glyphicon glyphicon-arrow-up"></i> Nome - Crescente</a>
                             <a href="list.category.php?<?php
                             if (isset($_GET['pagina'])) {
                                 echo "pagina=" . $_GET['pagina'] . "&";
                             }
-                            ?>ordenacao=desc" class="btn btn-default">Nome - Decrescente</a>
+                            if (isset($_GET['pesquisa'])) {
+                                echo "pesquisa=" . $_GET['pesquisa'] . "&";
+                            }
+                            ?>ordenacao=desc" class="btn btn-default"><i class="glyphicon glyphicon-arrow-down"></i> Nome - Decrescente</a>
                         </div>
                     </div>
-                 <hr></hr>
+                    <div class="col-md-4 col-sm-12 col-xs-12">
+                        <form class="form-inline" role="form" method="get" action="list.category.php">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input class="form-control" type="text" name="pesquisa" placeholder="Digite sua Pesquisa">
+                                    <?php
+                                    if (isset($_GET['ordenacao'])) {
+                                        echo "<input type='hidden' name='ordenacao' value='" . $_GET['ordenacao'] . "'>";
+                                    }
+                                    if (isset($_GET['pagina'])) {
+                                        echo "<input type='hidden' name='pagina' value='" . $_GET['pagina'] . "'>";
+                                    }
+                                    ?>
+                                    <span class="input-group-btn">
+                                        <button type="submit" name="botao_pesquisa" class="btn btn-success">&nbsp;<i class="glyphicon glyphicon-search"></i>&nbsp;</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <hr>
+                <?php
+                if (isset($_GET['alert'])) {
+                    if ($_GET['alert'] == "insert") {
+                        $estilo = "success";
+                        $frase = "Categoria inserida com sucesso!";
+                    } else if ($_GET['alert'] == "delete") {
+                        $estilo = "danger";
+                        $frase = "Categoria excluída com sucesso!";
+                    } else if ($_GET['alert'] == "update") {
+                        $estilo = "info";
+                        $frase = "Categoria alterada com sucesso!";
+                    }
+                    if (isset($estilo)) {
+                        echo '
+                        <div class="alert alert-' . $estilo . ' alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" 
+                                    aria-hidden="true">
+                                &times;
+                            </button>
+                            ' . $frase . '
+                        </div>';
+                    }
+                }
+                ?>
                 <table class="table table-striped table-condensed table-bordered table-hover">
                     <thead>
                         <tr>
@@ -106,18 +157,18 @@ if (isset($_GET["ordenacao"])) {
                                 <td><?php echo $category->getName(); ?></td>
                                 <td><?php echo $category->getType(); ?></td>
                                 <td>
-                                    <center>
-                                        <div class="btn-group">
-                                           <a class="btn btn-default" title='Editar' href="../../views/forms/content.form.category.php?action=update&idCategory=<?php echo $category->getIdCategory(); ?>"><span class="glyphicon glyphicon-edit"></span></a>
-                                            <a class="btn btn-default" title='Excluir' href="../../views/forms/content.form.category.php?action=delete&idCategory=<?php echo $category->getIdCategory(); ?>"><span class="glyphicon glyphicon-trash"></span></a>
-                                        </div>
-                                    </center>
+                        <center>
+                            <div class="btn-group">
+                                <a class="btn btn-default" title='Editar' href="../../views/forms/content.form.category.php?action=update&idCategory=<?php echo $category->getIdCategory(); ?>"><span class="glyphicon glyphicon-edit"></span></a>
+                                <a class="btn btn-default" title='Excluir' href="../../views/forms/content.form.category.php?action=delete&idCategory=<?php echo $category->getIdCategory(); ?>"><span class="glyphicon glyphicon-trash"></span></a>
+                            </div>
+                        </center>
                         </td>
                         </tr>
-                    <?php } ?>
-                    </tbody>
-					 </table>
-					 <center>
+						<?php } ?>
+						</tbody>
+                </table>
+                <center>
                     <?php
                     echo "<hr/>";
                     echo "<div class='btn-group'>";
@@ -127,8 +178,11 @@ if (isset($_GET["ordenacao"])) {
                         if (isset($_GET['ordenacao'])) {
                             echo "ordenacao=" . $_GET['ordenacao'] . "&";
                         }
+                        if (isset($_GET['pesquisa'])) {
+                            echo "pesquisa=" . $_GET['pesquisa'] . "&";
+                        }
                         echo "pagina=" . $flag . "'><span class='glyphicon glyphicon-chevron-left'></span></a>";
-                    } else{
+                    } else {
                         $flag = $pagina - 1;
                         echo "<a type='button' disabled class='btn btn-default' href=''><span class='glyphicon glyphicon-chevron-left'></span></a>";
                     }
@@ -138,15 +192,19 @@ if (isset($_GET["ordenacao"])) {
                         if (isset($_GET['ordenacao'])) {
                             echo "ordenacao=" . $_GET['ordenacao'] . "&";
                         }
+                        if (isset($_GET['pesquisa'])) {
+                            echo "pesquisa=" . $_GET['pesquisa'] . "&";
+                        }
                         echo "pagina=" . ($pagina + 1) . "'><span class='glyphicon glyphicon-chevron-right'></span></a>";
-                    } else{
+                    } else {
                         $flag = $pagina - 1;
                         echo "<a type='button' disabled class='btn btn-default' href=''><span class='glyphicon glyphicon-chevron-right'></span></a>";
                     }
                     echo "</div>";
                     echo "<p>&nbsp;</p>";
                     ?>
-                </center>
+					
+				</center>
                
             </div>
             <!-- /.container -->
