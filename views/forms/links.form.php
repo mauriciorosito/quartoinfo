@@ -2,33 +2,38 @@
 require_once('../../models/links.model.php');
 require_once('../../controllers/links.control.php');
 
+require_once('../../system/limited.php');
+$limited = new Limited();
+$limited->check(array('A'));
+
 $link = new Links();
 $cl = new ControllerLinks();
 if(isset($_POST['create'])){
         $erro = null;
-
                 $link->setTitle($_POST['title']);
                 $link->setDescription($_POST['description']);
                 $link->setUrl($_POST['url']);
                 $cl->actionControl('insert', $link);
 
-                header('location:../lists/links.list.php');
+                header('location:../lists/links.list.php?msg=Novo Link ('.$link->getTitle().') cadastrado!'); 
 }
 if(isset($_POST['update'])){
-    $link->setTitle($_POST['title']);
-    $link->setDescription($_POST['description']);
-    $link->setUrl($_POST['url']);
-    
-    $cl->actionControl('update', $link);
-    
-    header('location:../lists/links.list.php');
+        $erro = null;
+        $link->setId($_POST['id']);
+        $link->setTitle($_POST['title']);
+        $link->setDescription($_POST['description']);
+        $link->setUrl($_POST['url']);
+        
+        $cl->actionControl('update', $link);
+
+        header('location:../lists/links.list.php?msg=Item '.$link->getId().' atualizado!');
 }
 if(isset($_GET['action'])){
     if($_GET['action'] == 'delete'){
         $id = $_GET['id'];
         $link->setId($id);
         $cl->actionControl('delete', $link);
-        header('location:../lists/links.list.php');
+        header('location:../lists/links.list.php?msg=Link nº '.$id.' excluído!');
     }
     if($_GET['action'] == 'update'){
 	$id = $_GET['id'];
@@ -80,12 +85,14 @@ $links = $lc->actionControl('selectAll', 1);
         <noscript src="../../packages/wysiwyg/src/bootstrap3-wysihtml5.js"></noscript>
     </head>
     <body>
-        <?php include_once '../parts/navigation_admin.php'; ?>
+        <?php
+            include_once '../parts/navigation_admin.php';
+        ?>
         <div id="content">
             <div class="container img-rounded BVerde">
                 <br>
-                <a href="../lists/links.php" class="btn btn-default">Voltar</a> 
-                <form class="navbar-form navbar-right" role="search" action="links.php" method="GET">
+                <a href="../lists/links.list.php" class="btn btn-default">Voltar</a> 
+                <form class="navbar-form navbar-right" role="search" action="links.search.php" method="GET">
                     <div class="form-group" style="margin-left:-15%;">
                         <label for="pesquisar">
                             <div class="input-group">
@@ -104,15 +111,17 @@ $links = $lc->actionControl('selectAll', 1);
 		<table style="margin:0px auto;width:450px;padding:10px;">
                     <tr>
                         <td>Título</td>
-                        <td><input type="text" name="title" class="form-control" required value="<?php if(isset($dados)){ echo $dados['title']; } ?>"></td>
+                        <td><input type="text" name="title" class="form-control" value="<?php if(isset($dados)){ echo $dados['title']; } ?>" required></td>
                     </tr>
                     <tr>
                         <td>Descrição</td>
-                        <td><input type="text" name="description" class="form-control" required value="<?php if(isset($dados)){ echo $dados['description']; } ?>"></td>
+                        <td>
+                            <textarea  name="description" class="form-control" rows="8" required><?php if(isset($dados)){ echo $dados['description']; } ?></textarea>
+                        </td>
                     </tr>
                     <tr>
                         <td>Direção</td>
-                        <td><input type="text" name="url" class="form-control" required value="<?php if(isset($dados)){ echo $dados['url']; } ?>"></td>
+                        <td><input type="text" name="url" class="form-control" value="<?php if(isset($dados)){ echo $dados['url']; } ?>" required></td>
                     </tr>
                     <tr>
                         <td colspan="2">
@@ -120,8 +129,8 @@ $links = $lc->actionControl('selectAll', 1);
                         </td>
                     </tr>
 		</table>
-                    <input type="hidden" name="id" value="<?php if(isset($dados)){ echo $dados['id'];} ?>">
-	</form>
+                <input type="hidden" name="id" value="<?php if(isset($dados)){ echo $dados['id'];} ?>">
+            </form>
             </div>
         </div>
     </body>

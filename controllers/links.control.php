@@ -60,11 +60,11 @@ class ControllerLinks extends Controller {
         $line = $db->query($query);
         return $line;
     }
-    protected function search($name){
+    public function search($title){
 	$db = new Includes\Db();
         $lines = $db->query(
-           "select * from links where title :title",
-            array('title'=>$title)
+           "SELECT * FROM links WHERE title LIKE :title",
+            array('title' => '%'.$title.'%')
         );
         $links = array();
         foreach($lines as $line){
