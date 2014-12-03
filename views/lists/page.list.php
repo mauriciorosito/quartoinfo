@@ -6,7 +6,7 @@ if (isset($_GET['p'])) {
     $content = new Content();
     $content->setIdContent($_GET['p']);
     $cc = new ControllerContent();
-    $content = $cc->actionControl('selectOne', $content);
+    $content = $cc->actionControl('selectOnePage', $content);
     if ($content === null) {
         header('Location: 404.list.php');
     }
