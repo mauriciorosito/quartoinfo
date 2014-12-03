@@ -50,8 +50,17 @@ class ControllerLinks extends Controller {
         $query = "update links set ";
         $query .= "title = ".$obj->getTitle().", ";
         $query .= "description = ".$obj->getDescription().", ";
-        $query .= "url = ".$obj->getUrl().", ";
-        $line = $db->query($query);
+        $query .= "url = ".$obj->getUrl()." ";
+        $query .= "where id= '".$obj->getId()."'";
+        $line = $db->query(
+                'update links set title = :title, description = :description, url = :url where id = :id',
+                array(
+                    'title' => $obj->getTitle(),
+                    'description' => $obj->getDescription(),
+                    'url' => $obj->getUrl(),
+                    'id' => $obj->getId()
+                )
+                );
         return $line;
     }
     protected function delete($obj){

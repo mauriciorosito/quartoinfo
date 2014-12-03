@@ -75,7 +75,7 @@ $links = $lc->actionControl('selectAll', 1);
                             </label>
                         </div>
                     </form>
-                    <div class="btn-group"><a href="" class="btn btn-success">Ordenar por:</a><a href="?ordem=c" class="btn btn-default"> <i class="glyphicon glyphicon-arrow-up"></i>Nome - Crescente</a> <a href="?ordem=d" class="btn btn-default"><i class="glyphicon glyphicon-arrow-down"></i>Nome - Decrescente</a></div>
+                    <div class="btn-group"><a href="" class="btn btn-success">Ordenar por:</a><a href="?ordem=c" class="btn btn-default"> <i class="glyphicon glyphicon-arrow-up"></i>Crescente</a> <a href="?ordem=d" class="btn btn-default"><i class="glyphicon glyphicon-arrow-down"></i>Decrescente</a></div>
                     <?php if(!isset($_GET['search'])){ ?>
                     <table cellspacing="5px" id="tabelaDados" class="table table-striped table-condensed table-bordered table-hover">
 
@@ -108,7 +108,7 @@ $links = $lc->actionControl('selectAll', 1);
                 </table>
                 <?php
                 $f = new functions();
-                $f->pagination($lc->total[0]['count(*)']);
+                $f->pagination($lc->total[0]['count(*)'], 1, 10);
                 ?>
                 <script src="../../publics/js/jquery-1.10.2.js"></script>
                 <script>
