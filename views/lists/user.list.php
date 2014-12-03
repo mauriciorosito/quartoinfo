@@ -146,7 +146,7 @@ if (isset($_POST['pesquisa'])) {
                             <center>
                                 <div class="btn-group">
                                     <a class="btn btn-default" title='Editar' href="../../views/forms/user.form.php?action=update&idUser=<?php echo $user->getIdUser(); ?>"><span class="glyphicon glyphicon-edit"></span></a>
-                                    <a href="../../views/forms/user.form.php?action=delete&idUser=<?php echo $user->getIdUser(); ?>"class="btn btn-default" title='Excluir'><span class="glyphicon glyphicon-trash"></span></a>
+                                    <a href="#" onclick="confirmarExclusao(<?php echo $user->getIdUser(); ?>);" class="btn btn-default" title='Excluir'><span class="glyphicon glyphicon-trash"></span></a>
 
                                 </div>
                             </center>
@@ -212,6 +212,16 @@ if (isset($_POST['pesquisa'])) {
         <script type="text/javascript" src="publics/js/rhinoslider-1.05.js"></script>
         <script type="text/javascript" src="publics/js/mousewheel.js"></script>
         <script type="text/javascript" src="publics/js/easing.js"></script>
+        
+        <script>
+            
+            function confirmarExclusao(id){
+                if(confirm("Deseja realmente excluir este registro?")){
+                    window.location.href = "../../views/forms/user.form.php?action=delete&idUser=" + id;
+                }
+            }
+            
+        </script>
 
         <?php
         if (isset($_GET["msg"])) {
