@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 include_once("../../controllers/secao.control.php");
 require_once("../../packages/system/functions.model.php");
 
@@ -11,14 +11,20 @@ $pagina = (!isset($_GET['pagina'])) ? 1 : filter_var($_GET['pagina'], FILTER_SAN
 $pag = array();
 $pag['pagina'] = $pagina;
 $pag['limite'] = 5;
+
+if (isset($_GET['ordenacao'])) {
+    $pag['ordenacao'] = $_GET['ordenacao'];
+}
+if (isset($_GET['pesquisa'])) {
+    $pag['pesquisa'] = $_GET['pesquisa'];
+}
+
+
 $profiles = $controllerSecao->actionControl("selecionarPaginacao", $pag);
 $cont = $controllerSecao->actionControl("contarPaginas", 5);
 if (isset($_GET['pesquisa'])) {
     $cont = $controllerSecao->actionControl("contarPaginas2", $_GET['pesquisa']);
 }
-
-
-
 if (!isset($_POST['pesquisa'])){
     $contents = $controllerSecao->actionControl('selectAllDescending');
 }
@@ -27,7 +33,7 @@ if (isset($_POST["pesquisa"])) {
 } else {
     $pesquisa = "";
 }
-
+/**
 if (isset($_GET["ordenacao"])) {
     if ($_GET["ordenacao"] == "desc") {
         $users = $controllerSecao->actionControl("selectAllDescending", $pesquisa);
@@ -37,6 +43,8 @@ if (isset($_GET["ordenacao"])) {
 } else {
     $users = $controllerSecao->actionControl("selectAllGrowing", $pesquisa);
 }
+**/
+
 
 if(@$_GET['erro'] == 'Nomeduplicado'){
     echo"<script>alert('Esta seção ja existe !');</script>";
@@ -134,7 +142,15 @@ if(@$_GET['erro'] == 'Nomeduplicado'){
                     <tbody data-link="row" class="rowlink">
                         <?php
                         if (!isset($_POST['pesquisa'])) {
-                            foreach ($users as $user) {
+/**
+if(@$_GET['ordenacao'] == 'desc' || @$_GET['ordenacao'] == 'asc'){
+	$aaa = $users;
+}else{
+	$aaa = $profiles;
+}
+foreach ($aaa as $user) {
+**/
+foreach ($profiles as $user) {
                                 ?>
                                 <tr>
                                     <td><a href="#"><?php echo $user->getIdSecao(); ?></a></td>
