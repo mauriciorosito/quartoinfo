@@ -233,7 +233,7 @@ Else {
                             foreach ($contents as $content) {
                                 ?>
                                 <tr>
-                                    <td><?php echo $content->getTitle(); ?></td>
+                                    <td><?php echo "<a href='page.list.php?p=".$content->getIdContent()."'>".$content->getTitle()."</a>"; ?></td>
                                     <td><?php echo $content->getDescription(); ?></td>
                                     <td>
 										<center>
@@ -253,7 +253,7 @@ Else {
 						foreach ($resultados as $resultado) {
 							?>
 							<tr>
-								<td><?php echo $resultado["title"]; ?></td>
+								<td><?php echo "<a href='page.list.php?p=".$resultado["idContent"]."'>".$resultado["title"]."</a>"; ?></td>
 								<td><?php echo $resultado["description"]; ?></td>
 								<td>
 									<center>
