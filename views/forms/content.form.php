@@ -1,6 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!-- Login http://www.html5dev.com.br/category/bootstrap/-->
+<html lang="en">
+
+    <head>
+
+        <meta charset="utf-8">
+            <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <meta name="description" content="">
+                        <meta name="author" content="">
+                            <link rel="shortcut icon" href="../../publics/imgs/logo.png">
+
+                                <title>Informática</title>
+
+
+                                <!-- Bootstrap core CSS -->
+                                <link href="../../publics/css/bootstrap.css" rel="stylesheet">
+                                    <!-- Add custom CSS here -->
+                                    <link href="../../publics/css/small-business.css" rel="stylesheet">
+                                        <link rel="stylesheet" href="../../publics/css/craftyslide.css" />
+                                        <link type="text/css" rel="stylesheet" href="../../publics/css/rhinoslider-1.05.css" />
+                                        <link rel="stylesheet" type="text/css" href="../../packages/wysiwyg/src/bootstrap-wysihtml5.css" />
+                                        <script src="../../packages/wysiwyg/lib/js/wysihtml5-0.3.0.js"></script>
+                                        <script src="../../packages/wysiwyg/lib/js/jquery-1.7.2.min.js"></script>
+                                        <script src="../../packages/wysiwyg/lib/js/bootstrap.min.js"></script>
+                                        <script src="../../packages/wysiwyg/src/bootstrap3-wysihtml5.js"></script>
+
+
+                                        <link type="text/css" rel="stylesheet" href="../../publics/css/jasny-bootstrap.min.css" />
+                                        <link href="../../publics/css/style.css" rel="stylesheet">
+
+                                            <!-- Add WYSIWYG CSS and JS here -->
+                                            <link rel="stylesheet" type="text/css" href="../../packages/wysiwyg/src/bootstrap-wysihtml5.css" />
+                                            <!--noscript src="../../packages/wysiwyg/lib/js/wysihtml5-0.3.0.js"></noscript>
+                                            <noscript src="../../packages/wysiwyg/lib/js/jquery-1.7.2.min.js"></noscript>
+                                            <noscript src="../../packages/wysiwyg/lib/js/bootstrap.min.js"></noscript>
+                                            <noscript src="../../packages/wysiwyg/src/bootstrap3-wysihtml5.js"></noscript-->
+
+
+                                            <noscript src="../../publics/js/jasny-bootstrap.min.js"></noscript>
+                                            <script src="../../publics/js/script.js"></script>
+                                            
+                                            </head>
+
+                                            <body>
+                                                <div id="content">
+                                                    <div class="container img-rounded BVerde">
+                                                        <div class="cinza">
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                  
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+        <?php include_once '../parts/navigation_admin.php'; ?>
+
 <?php
 include_once("../../utilities/Formatter.class.php");
-include_once("../parts/header.php");
 include_once('../../system/limited.php');
 
 $limited = new Limited();
@@ -232,7 +289,9 @@ if (isset($_POST["action"])) {
     </table>
     <input type="submit" class="btn btn-primary" name="button" value="<?php if (isset($_GET["action"])) {
     echo ucwords($_GET["action"]);
-} ?>"><br>
+} ?>">
+	<a href="../lists/content.list.php?tipo=<?php if (@$_GET["tipo"] == "pagina" or (isset($content) && $content->getType() == "P")) echo "P"; else echo "C"; ?>" class="btn btn-default">Voltar</a>
+	<br>
 </form>
 
 <script type="text/javascript">
