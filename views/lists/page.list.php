@@ -36,37 +36,44 @@ include_once("../parts/header.php");
             $contentMedia->setIdContent($content->getIdContent());
                         
             $controllerContentMedia = new ControllerContentMedia();
-            $contentMedia = $controllerContentMedia->actionControl('selectIdMedia', $contentMedia);
+            $contentMedia = $controllerContentMedia->actionControl('selectAll', $contentMedia);
             
             $controllerMedia = new ControllerMedia();
-            
-            if (isset($contentMedia)) {
-                $m = new contentMedia();
-                $m->setIdMedia($contentMedia->getIdMedia());
-                $media = $controllerMedia->actionControl('selectOne', $m);
-                $path = $media->getPath();
-                var_dump($media);
-            } else {
-                $path = "publics/imgs/noticia.jpg";
-            }
+            			
+			foreach ($contentMedia as $media) {
+				$m = new contentMedia();
+				$m->setIdMedia($media->getIdMedia());
+				$m = $controllerMedia->actionControl('selectOne', $m);
+				
+				if ($media->getisMain()) {
+					$principal['path'] = $m->getPath();
+					$principal['alt']  = $m->getDescription();
+				}
+				else {
+					$mediaa['path'] = $m->getPath();
+					$mediaa['alt']  = $m->getDescription();
+					$medias[] = $mediaa;
+				}
+			}
             
             ?>
             
-            <img class="img-circle" data-src="holder.publics/js/140x140" alt="..." src="localhost/4info/<?php echo $path; ?>" style="width: 200px; height: 200px;">
-            
             <?php
-            
+			if (isset($principal)) {
+			?>
+				<img class="img-circle" data-src="holder.publics/js/140x140" alt="<?php echo $principal['alt']; ?>" src="../../<?php echo $principal['path']; ?>" style="width: 200px; height: 200px;">
+			<?php
+			}
             echo $content->getText();
             echo "<br>";
                       
             if (isset($medias)) {
-                echo "<h4 style='margin-top:100px;'>Arquivos</h4>";
+                echo "<h4 style='margin-top:100px;'>Galeria</h4>";
                 foreach ($medias as $med) {
-                    $m = new contentMedia();
-                    $m->setIdMedia($med->getIdMedia());
-                    $media = $controllerMedia->actionControl('selectOne', $m);
-                    echo "<a href='../../" . $media->getPath() . "'>" . $media->getPath() . "</a><br>";
-                }
+				?>
+                    <img data-src="holder.publics/js/140x140" alt="<?php echo $med['alt']; ?>" src="../../<?php echo $med['path']; ?>" style="width: 200px; height: 200px;">
+                <?php
+				}
             }
             
             ?>

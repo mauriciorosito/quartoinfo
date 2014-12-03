@@ -1,22 +1,9 @@
 <?php
-    require_once '../../controllers/banners.control.php';
-    $cb = new ControllerBanners();
-    if(!isset($_POST['page'])){
-        $page = 1;
-    }
-    else{
-        $page = $_POST['page'];
-    }
-    $banners = $cb->actionControl('selectAll', $page);
-    if(isset($_GET['ordem'])){
-        if($_GET['ordem'] == 'c'){
-            asort($banners);
-        }
-        elseif($_GET['ordem'] == 'd'){
-            arsort($banners);
-        }
-    }
+require_once '../../controllers/banners.control.php';
+$bc = new ControllerBanners();
+$banners = $bc->search($_GET['pesquisa']);
 ?>
+<table>
 <tr>
     <th>Id</th>
     <th>Título</th>
@@ -40,3 +27,4 @@
     </td> 
 </tr>
 <?php endforeach; ?>
+</table>

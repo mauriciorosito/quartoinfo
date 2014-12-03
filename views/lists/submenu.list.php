@@ -14,7 +14,6 @@ if (isset($_GET['idMenu'])) {
 
 if (isset($_GET['action']) && $_GET['action'] == "delete") {
     $cM = new ControllerSubMenu();
-
     $menu = new subMenu();
     $menu->setIdSubMenu($_GET['idSubMenu']);
     $menu->setIdMenu($_GET['idMenu']);
@@ -44,6 +43,53 @@ if (isset($_GET['action']) && $_GET['action'] == "down") {
     $cM->actionControl("downOneLevel", $submenu);
     header("location: submenu.list.php?idMenu=$idMenu");
 }
+
+
+$pagina = (!isset($_GET['pagina'])) ? 1 : filter_var($_GET['pagina'], FILTER_SANITIZE_NUMBER_INT);
+$pag = array();
+$pag['pagina'] = $pagina;
+$pag['limite'] = 5;
+
+if (isset($_GET['ordenacao'])) {
+    $pag['ordenacao'] = $_GET['ordenacao'];
+}
+if (isset($_GET['pesquisa'])) {
+    $pag['pesquisa'] = $_GET['pesquisa'];
+}
+
+$pag['idMenu'] = $idMenu;
+
+$cM = new ControllerSubMenu();
+
+$submenus = $cM->actionControl("selecionarPaginacao", $pag);
+
+$cont = $cM->actionControl("contarPaginas", $pag);
+
+if (isset($_GET['pesquisa'])) {
+    $cont = $cM->actionControl("contarPaginas2", $pag);
+}
+
+$fim = $cM->getLastPos($pag);
+
+if (isset($_GET['return']) && $_GET['return'] == "insert"){
+    echo "<script type='text/javascript'>";
+    echo "alert('Novo Item de Menu Cadastrado');";
+    echo "</script>";
+    
+}
+elseif (isset($_GET['return']) && $_GET['return'] == "update"){
+    echo "<script type='text/javascript'>";
+    echo "alert('Item de Menu Alterado.');";
+    echo "</script>";
+    
+}
+elseif (isset($_GET['erro']) && $_GET['erro'] == "itemCadastrado"){
+    echo "<script type='text/javascript'>";
+    echo "alert('Item de Menu já Cadastrado.');";
+    echo "</script>";
+    
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -79,7 +125,7 @@ if (isset($_GET['action']) && $_GET['action'] == "down") {
     </head>
 
     <body>
-<?php include_once '../parts/navigation_admin.php'; ?>
+        <?php include_once '../parts/navigation_admin.php'; ?>
         <div style="margin-left: 5%;">
             <span><a href="menu.list.php">Listagem de Menus</a> -> </span>
             <span>Listagem de Itens do Menu</span>
@@ -90,28 +136,32 @@ if (isset($_GET['action']) && $_GET['action'] == "down") {
                 <div class="row">
                     <div class="col-md-4"><a class="btn btn-default" href="../forms/submenu.form.php?action=insert&idMenu=<?php echo $idMenu; ?>">Criar Novo</a></div>
 
-                    <form class="form-horizontal" onsubmit="return false;">
 
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="order" class="col-sm-4 control-label">Ordenar por</label>
-                                <div class="col-sm-8">
-                                    <select id="order" class="form-control" name="order">
-                                        <option value="localization">Localização</option>
-                                        <option value="a-z">Nome A-Z</option>
-                                        <option value="z-a">Nome Z-A</option>
-                                    </select>
+
+                    <div class="col-md-4"></div>
+
+                    <div class="col-md-4">
+                        <form class="form-inline" role="form" method="get" action="submenu.list.php">
+                            <div  style="padding-right: 10px;" class="form-group">
+                                <div class="input-group">
+                                    <input class="form-control" type="text" name="pesquisa" placeholder="Digite sua Pesquisa">
+                                    <?php
+                                    if (isset($_GET['ordenacao'])) {
+                                        echo "<input type='hidden' name='ordenacao' value='" . $_GET['ordenacao'] . "'>";
+                                    }
+                                    if (isset($_GET['pagina'])) {
+                                        echo "<input type='hidden' name='pagina' value='" . $_GET['pagina'] . "'>";
+                                    }
+                                   
+                                    ?>
+                                     <input type='hidden' name="idMenu" value='<?php echo $idMenu; ?>'>
+                                    <span class="input-group-btn">
+                                        <button type="submit" name="botao_pesquisa" class="btn btn-success">&nbsp;<i class="glyphicon glyphicon-search"></i>&nbsp;</button>
+                                    </span>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="filter" class="col-sm-4 control-label">Filtrar por:</label>
-                                <div class="col-sm-8">
-                                    <input class="form-control" id="filter" type="text" name="filter">
-                                </div>
-                            </div>
-                        </div>
+
+                    </div>
                     </form>
                 </div>
                 <br/>
@@ -130,12 +180,7 @@ if (isset($_GET['action']) && $_GET['action'] == "down") {
                                 </tr>
                             </thead>
                             <tbody data-link="row" class="rowlink">
-                            <?php
-                                $submenu = new subMenu();
-                                $submenu->setIdMenu($idMenu);
-                                $cSM = new ControllerSubMenu();
-                                $fim = $cSM->getLastPos($idMenu);
-                                $submenus = $cSM->actionControl("selectAllFromMenu", $submenu);
+                                <?php
                                 foreach ($submenus as $submenu) {
                                     echo "<tr>";
                                     echo "<td>" . $submenu->getPosition() . " </td>";
@@ -174,39 +219,79 @@ if (isset($_GET['action']) && $_GET['action'] == "down") {
                                     echo "<a  title='Excluir' class='act-excluir btn btn-default' href='submenu.list.php?action=delete&idSubMenu=" . $submenu->getIdSubMenu() . "&idMenu=" . $idMenu . "'><span class='glyphicon glyphicon-trash'></span></a>";
                                     echo "</div></td></tr>";
                                 }
-                            ?>
+                                ?>
                             </tbody>
                         </table>
                     </div>
+                     <?php
+                        if (empty($submenus)) {
+                            echo "<div class='col-md-12'><div class='alert alert-info' role='alert'>
+                                    <strong>Alerta!</strong> Não há nenhum item de menu cadastrado, insira um novo!
+                                  </div> </div>";
+                        }
+                        ?>
+                    <center>
+                        <?php
+                        echo "<hr/>";
+                        echo "<div class='btn-group'>";
+                        if ($pagina > 1) {
+                            $flag = $pagina - 1;
+                            echo "<a type='button' class='btn btn-default' href='submenu.list.php?";
+                            if (isset($_GET['ordenacao'])) {
+                                echo "ordenacao=" . $_GET['ordenacao'] . "&";
+                            }
+                            if (isset($_GET['pesquisa'])) {
+                                echo "pesquisa=" . $_GET['pesquisa'] . "&";
+                            }
+                            echo "pagina=" . $flag . "&idMenu=".$idMenu."'><span class='glyphicon glyphicon-chevron-left'></span></a>";
+                        } else {
+                            $flag = $pagina - 1;
+                            echo "<a type='button' disabled class='btn btn-default' href=''><span class='glyphicon glyphicon-chevron-left'></span></a>";
+                        }
+                        echo "<a href='#' class='btn btn-default disabled'>Página " . $pagina . " de " . $cont . "</a>";
+                        if ($pagina < $cont) {
+                            echo "<a type='button' class='btn btn-default' href='submenu.list.php?";
+                            if (isset($_GET['ordenacao'])) {
+                                echo "ordenacao=" . $_GET['ordenacao'] . "&";
+                            }
+                            if (isset($_GET['pesquisa'])) {
+                                echo "pesquisa=" . $_GET['pesquisa'] . "&";
+                            }
+                            echo "pagina=" . ($pagina + 1) . "&idMenu=".$idMenu."'><span class='glyphicon glyphicon-chevron-right'></span></a>";
+                        } else {
+                            $flag = $pagina - 1;
+                            echo "<a type='button' disabled class='btn btn-default' href=''><span class='glyphicon glyphicon-chevron-right'></span></a>";
+                        }
+                        echo "</div>";
+                        echo "<p>&nbsp;</p>";
+                        ?>
+                    </center>
+                    
                 </div>
-            </div></div>
+
+            </div>
+        </div>
 
         <!-- 
         glyphicon glyphicon-arrow-up
         glyphicon glyphicon-arrow-down
         -->
-<?php
-if (empty($submenus)) {
-    echo "<div class='col-md-12'><div class='alert alert-info' role='alert'>
-                    <strong>Alerta!</strong> Não há nenhum item de menu cadastrado, insira um novo!
-                  </div> </div";
-}
-?>
+       
         <script type="text/javascript" charset="utf-8">
         </script>
 
         <!-- FIM DO contentE-->
-       
-    <!-- JavaScript -->
+
+        <!-- JavaScript -->
 
 
-    <script src="../../publics/js/jquery-1.10.2.js"></script>
-    <!--script src="../../publics/js/bootstrap.js"></script-->
-    <script src="../../publics/js/craftyslide.js"></script>
-    <script src="../../publics/js/script.js"></script>
-    <script type="text/javascript" src="../../publics/js/rhinoslider-1.05.js"></script>
-    <script type="text/javascript" src="../../publics/js/mousewheel.js"></script>
-    <script type="text/javascript" src="../../publics/js/easing.js"></script>
-</body>
+        <script src="../../publics/js/jquery-1.10.2.js"></script>
+        <!--script src="../../publics/js/bootstrap.js"></script-->
+        <script src="../../publics/js/craftyslide.js"></script>
+        <script src="../../publics/js/script.js"></script>
+        <script type="text/javascript" src="../../publics/js/rhinoslider-1.05.js"></script>
+        <script type="text/javascript" src="../../publics/js/mousewheel.js"></script>
+        <script type="text/javascript" src="../../publics/js/easing.js"></script>
+    </body>
 
 </html>

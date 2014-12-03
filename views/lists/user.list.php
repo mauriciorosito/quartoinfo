@@ -1,4 +1,4 @@
-﻿<?php
+G﻿<?php
 include_once("../../controllers/user.control.php");
 include_once("../../controllers/profile.control.php");
 include_once("../../models/course.model.php");

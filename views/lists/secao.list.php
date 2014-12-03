@@ -1,7 +1,24 @@
 ﻿<?php
 include_once("../../controllers/secao.control.php");
 require_once("../../packages/system/functions.model.php");
+
+
+//$cProfile = new ControllerSecao();
+
 $controllerSecao = new ControllerSecao();
+
+$pagina = (!isset($_GET['pagina'])) ? 1 : filter_var($_GET['pagina'], FILTER_SANITIZE_NUMBER_INT);
+$pag = array();
+$pag['pagina'] = $pagina;
+$pag['limite'] = 5;
+$profiles = $controllerSecao->actionControl("selecionarPaginacao", $pag);
+$cont = $controllerSecao->actionControl("contarPaginas", 5);
+if (isset($_GET['pesquisa'])) {
+    $cont = $controllerSecao->actionControl("contarPaginas2", $_GET['pesquisa']);
+}
+
+
+
 if (!isset($_POST['pesquisa'])){
     $contents = $controllerSecao->actionControl('selectAllDescending');
 }
@@ -121,11 +138,25 @@ if(@$_GET['erro'] == 'Nomeduplicado'){
                                 ?>
                                 <tr>
                                     <td><a href="#"><?php echo $user->getIdSecao(); ?></a></td>
-                                    <td><?php echo $user->getTitulo(); ?></td>
-                                    <td><?php echo $user->getAlias(); ?></td>
+                                    <td><?php echo filter_var($user->getTitulo(), FILTER_SANITIZE_STRING); ?></td>
+                                    <td><?php echo filter_var($user->getAlias(), FILTER_SANITIZE_STRING); ?></td>
                        
-                                    <td><a href="../forms/secao.form.php?action=update&idSecao=<?php echo $user->getIdSecao(); ?> " class="btn btn-default">Editar</a> <a href="../forms/secao.form.php?action=delete&idSecao=<?php echo $user->getIdSecao(); ?>" class="btn btn-default">Excluir</a></td>	
-                                    <?php
+                                    <td>
+                                        <a href="../forms/secao.form.php?action=update&idSecao=<?php echo $user->getIdSecao(); ?> " class="btn btn-default">Editar</a> 
+                                        <a onclick="myFunction()"  class="btn btn-default">Excluir</a>
+                                    </td>	
+<script>
+    function myFunction() {
+        var x;
+        if (confirm("Tem certeza que deseja excluir ?") == true) {
+            x = "You pressed OK!";
+            location.href="../forms/secao.form.php?action=delete&idSecao=<?php echo $user->getIdSecao(); ?>";
+        } else {
+            alert("Processo cancelado!");
+        }
+    }
+</script> 
+                                   <?php
                                 }
                             } else {
                                 if (isset($resultados)) {
@@ -135,7 +166,7 @@ if(@$_GET['erro'] == 'Nomeduplicado'){
                                         <td><?php echo $resultado["idsecao"]; ?></td>
                                         <td><?php echo $resultado["titulo"]; ?></td>
                                         <td><?php echo $resultado["alias"]; ?></td>
-                                        <td><a href="../forms/secao.form.php?action=update&idSecao=<?php echo $resultado["idsecao"]; ?> " class="btn btn-default">Editar</a> <a href="../forms/secao.form.php?action=delete&idSecao=<?php echo $resultado["idSecao"]; ?>" class="btn btn-default">Excluir</a></td>
+                                        <td><a  href="../forms/secao.form.php?action=update&idSecao=<?php echo $resultado["idsecao"]; ?> " class="btn btn-default">Editar</a> <a href="../forms/secao.form.php?action=delete&idSecao=<?php echo $resultado["idSecao"]; ?>" class="btn btn-default">Excluir</a></td>
                                     </tr>
             <?php
         }
@@ -145,6 +176,45 @@ if(@$_GET['erro'] == 'Nomeduplicado'){
                         </tr>
                     </tbody>
                 </table>
+                
+<center>
+                    <?php
+                    echo "<hr/>";
+                    echo "<div class='btn-group'>";
+                    if ($pagina > 1) {
+                        $flag = $pagina - 1;
+                        echo "<a type='button' class='btn btn-default' href='secao.list.php?";
+                        if (isset($_GET['ordenacao'])) {
+                            echo "ordenacao=" . $_GET['ordenacao'] . "&";
+                        }
+                        if (isset($_GET['pesquisa'])) {
+                            echo "pesquisa=" . $_GET['pesquisa'] . "&";
+                        }
+                        echo "pagina=" . $flag . "'><span class='glyphicon glyphicon-chevron-left'></span></a>";
+                    } else {
+                        $flag = $pagina - 1;
+                        echo "<a type='button' disabled class='btn btn-default' href=''><span class='glyphicon glyphicon-chevron-left'></span></a>";
+                    }
+                    echo "<a href='#' class='btn btn-default disabled'>Página " . $pagina . " de " . $cont . "</a>";
+                    if ($pagina < $cont) {
+                        echo "<a type='button' class='btn btn-default' href='secao.list.php?";
+                        if (isset($_GET['ordenacao'])) {
+                            echo "ordenacao=" . $_GET['ordenacao'] . "&";
+                        }
+                        if (isset($_GET['pesquisa'])) {
+                            echo "pesquisa=" . $_GET['pesquisa'] . "&";
+                        }
+                        echo "pagina=" . ($pagina + 1) . "'><span class='glyphicon glyphicon-chevron-right'></span></a>";
+                    } else {
+                        $flag = $pagina - 1;
+                        echo "<a type='button' disabled class='btn btn-default' href=''><span class='glyphicon glyphicon-chevron-right'></span></a>";
+                    }
+                    echo "</div>";
+                    echo "<p>&nbsp;</p>";
+                    ?>
+                </center>                
+                
+                
 <?php
 //if (isset($pesquisa)) {
 //    $pesquisa->pagination($pesquisa->total, $page);

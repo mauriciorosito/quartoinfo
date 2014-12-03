@@ -30,7 +30,7 @@ if (isset($_POST['action'])) {
         @$smenu->setIdCategory($_POST['category']);
         @$smenu->setIdPage($_POST['page']);
         $cSm->actionControl("insert", $smenu);
-        header("location: ../lists/submenu.list.php?idMenu=" . $_POST['idMenu']);
+        header("location: ../lists/submenu.list.php?return=insert&idMenu=" . $_POST['idMenu']);
     }
     if ($_POST['action'] == 'update') {
         @$smenu->setDescription($_POST['description']);
@@ -43,7 +43,7 @@ if (isset($_POST['action'])) {
         @$smenu->setIdSubMenu($_POST['idSubMenu']);
         @$smenu->setPosition($_POST['position']);
         $cSm->actionControl("update", $smenu);
-        header("location: ../lists/submenu.list.php?idMenu=" . $_POST['idMenu']);
+        header("location: ../lists/submenu.list.php?return=update&idMenu=" . $_POST['idMenu']);
     } else {
         echo "sem ação";
         die();
@@ -95,35 +95,35 @@ if (isset($_GET['action']) && isset($_GET['idSubMenu'])) {
         <div id="content">
             <div class="container img-rounded BVerde">
 
-     
+
 
                 <div class="col-md-12"><h2><center>Cadastro de Item do Menu</center></h2><hr></div>
 
                 <form class="form-horizontal" action="submenu.form.php" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="action" value="<?php echo $_GET['action']; ?>">
                     <input type="hidden" name="idSubMenu" value="<?php
-        if (isset($_GET["idSubMenu"])) {
-            echo $_GET["idSubMenu"];
-        }
-        ?>">
+                    if (isset($_GET["idSubMenu"])) {
+                        echo $_GET["idSubMenu"];
+                    }
+                    ?>">
                     <input type="hidden" name="position" value="<?php
                     if (isset($submenu) && $submenu->getPosition() != "") {
                         echo $submenu->getPosition();
                     }
-        ?>">
+                    ?>">
                     <div class="col-md-8">
                         <div class="form-group">
-                            <label for="title" class="col-sm-2 control-label">Título</label>
+                            <label for="title" class="col-sm-2 control-label">Título <span style="color: red;">*</span></label>
                             <div class="col-sm-10">
-                                <input type="text" name="title" class="form-control" placeholder="Max: 30 caractéres." pattern="[a-zA-Z-0-9]+{3,30}" value="<?php
-                    if (isset($submenu) && $submenu->getTitle() != "") {
-                        echo $submenu->getTitle();
-                    }
-        ?>">
+                                <input required type="text" name="title" class="form-control" placeholder="Max: 30 caractéres." pattern="[a-zA-Z-0-9]+{3,30}" value="<?php
+                                if (isset($submenu) && $submenu->getTitle() != "") {
+                                    echo $submenu->getTitle();
+                                }
+                                ?>">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="type" class="col-sm-2 control-label">Tipo de Item</label>
+                            <label for="type" class="col-sm-2 control-label">Tipo de Item <span style="color: red;">*</span></label>
                             <div class="col-sm-10">
                                 <select id="type" name="type" class="form-control">
                                     <option <?php if (isset($submenu) && $submenu->getType() == "semlink") echo "selected"; ?> value="semlink">Sem Link</option>
@@ -135,17 +135,17 @@ if (isset($_GET['action']) && isset($_GET['idSubMenu'])) {
                         </div>
 
                         <div id="link_type" style="display: none;" class="form-group" >
-                            <label for="url"  class="col-sm-2 control-label">URL</label>
+                            <label for="url"  class="col-sm-2 control-label">URL<span style="color: red;">*</span></label>
                             <div class="col-sm-10">
                                 <input type="text" name="url" id="url" class="form-control" value="<?php
                                 if (isset($submenu) && $submenu->getUrl() != "") {
                                     echo $submenu->getUrl();
                                 }
-        ?>">
+                                ?>">
                             </div>
                         </div>
                         <div id="category_type"  style="display: none;" class="form-group">
-                            <label for="category"  class="col-sm-2 control-label">Categoria</label>
+                            <label for="category"  class="col-sm-2 control-label">Categoria <span style="color: red;">*</span></label>
                             <div class="col-sm-10">
                                 <select name="idMenu" class="form-control">
                                     <option value="0" > - - - - - - - </option>
@@ -162,7 +162,7 @@ if (isset($_GET['action']) && isset($_GET['idSubMenu'])) {
                             </div>
                         </div>
                         <div id="page" class="form-group" style="display: none;">
-                            <label for="page"  class="col-sm-2 control-label">Página</label>
+                            <label for="page"  class="col-sm-2 control-label">Página <span style="color: red;">*</span></label>
                             <div class="col-sm-10">
                                 <select name="page" class="form-control">
                                     <option value="0" > - - - - - - - </option>
@@ -182,9 +182,9 @@ if (isset($_GET['action']) && isset($_GET['idSubMenu'])) {
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="description" class="col-sm-2 control-label">Descrição</label>
+                            <label for="description" class="col-sm-2 control-label">Descrição </label>
                             <div class="col-sm-10">
-                                <textarea name="description" class="form-control" placeholder="Max: 120 caractéres." pattern="[a-zA-Z-0-9]{3,120}"><?php
+                                <textarea required name="description" class="form-control" placeholder="Max: 120 caractéres." pattern="[a-zA-Z-0-9]{3,120}"><?php
                                     if (isset($submenu) && $submenu->getDescription() != "") {
                                         echo $submenu->getDescription();
                                     }
@@ -195,7 +195,8 @@ if (isset($_GET['action']) && isset($_GET['idSubMenu'])) {
                         <div class="form-group">
                             <input type="hidden" name="idMenu" value="<?php echo $idMenu; ?>">
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
+                            <a class='btn btn-default' title='Cancelar' style="margin-bottom: 20px" href='../lists/submenu.list.php'>Cancelar</a>
                             <input class="btn btn-success" type="submit" name="button" style="margin-bottom: 20px" value="Cadastrar">
                         </div>
                     </div> 
@@ -206,39 +207,39 @@ if (isset($_GET['action']) && isset($_GET['idSubMenu'])) {
         <script type="text/javascript" charset="utf-8">
         </script>
 
-      
-
-    <!-- JavaScript -->
 
 
-    <script src="../../publics/js/jquery-1.10.2.js"></script>
-    <!--script src="../../publics/js/bootstrap.js"></script-->
-    <script src="../../publics/js/craftyslide.js"></script>
-    <script src="../../publics/js/script.js"></script>
-    <script type="text/javascript" src="../../publics/js/rhinoslider-1.05.js"></script>
-    <script type="text/javascript" src="../../publics/js/mousewheel.js"></script>
-    <script type="text/javascript" src="../../publics/js/easing.js"></script>
-    <script type="text/javascript" src="../../publics/js/link_category_subMenu.js"></script>
-    <?php
-    if (isset($submenu)) {
-        /*
-         *  $("#category_type").hide();
-          $("#link_type").hide();
-          $("#page").hide();
-         */
+        <!-- JavaScript -->
 
-        if ($submenu->getIdPage() > 0) {
-            echo "<script> $('#page').show(); </script>";
+
+        <script src="../../publics/js/jquery-1.10.2.js"></script>
+        <!--script src="../../publics/js/bootstrap.js"></script-->
+        <script src="../../publics/js/craftyslide.js"></script>
+        <script src="../../publics/js/script.js"></script>
+        <script type="text/javascript" src="../../publics/js/rhinoslider-1.05.js"></script>
+        <script type="text/javascript" src="../../publics/js/mousewheel.js"></script>
+        <script type="text/javascript" src="../../publics/js/easing.js"></script>
+        <script type="text/javascript" src="../../publics/js/link_category_subMenu.js"></script>
+        <?php
+        if (isset($submenu)) {
+            /*
+             *  $("#category_type").hide();
+              $("#link_type").hide();
+              $("#page").hide();
+             */
+
+            if ($submenu->getIdPage() > 0) {
+                echo "<script> $('#page').show(); </script>";
+            }
+            if ($submenu->getIdCategory() > 0) {
+                echo "<script> $('#category_type').show(); </script>";
+            }
+            if ($submenu->getUrl() != "") {
+                echo "<script> $('#link_type').show(); </script>";
+            }
         }
-        if ($submenu->getIdCategory() > 0) {
-            echo "<script> $('#category_type').show(); </script>";
-        }
-        if ($submenu->getUrl() != "") {
-            echo "<script> $('#link_type').show(); </script>";
-        }
-    }
-    ?>
-</body>
+        ?>
+    </body>
 
 </html>
 

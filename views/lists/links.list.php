@@ -1,7 +1,7 @@
 <?php
 $requires = array(
-    'controllers/banners.control.php',
-    'models/banners.model.php',
+    'controllers/links.control.php',
+    'models/links.model.php',
     'packages/system/functions.model.php'
 );
 
@@ -9,8 +9,8 @@ foreach ($requires as $require) {
     require_once '../../' . $require;
 }
 
-$bc = new ControllerBanners();
-$banners = $bc->actionControl('selectAll', 1);
+$lc = new ControllerLinks();
+$links = $lc->actionControl('selectAll', 1);
 ?>
 <html>
     <head>
@@ -21,7 +21,7 @@ $banners = $bc->actionControl('selectAll', 1);
         <meta name="author" content="">
         <link rel="shortcut icon" href="publics/imgs/logo.png">
 
-        <title>Banners</title>
+        <title>Links</title>
 
         <!-- Bootstrap core CSS -->
         <link href="../../publics/css/bootstrap.css" rel="stylesheet">
@@ -55,19 +55,19 @@ $banners = $bc->actionControl('selectAll', 1);
                 <br>
                 <?php if(isset($_GET['search'])){
                     
-                    require_once '../../controllers/banners.control.php';
-                    $bc = new ControllerBanners();
-                    $banners = $bc->search($_GET['search']);
-                    echo '<div class="alert alert-success col-md-5" role="alert"> A pesquisa retornou '.count($banners).' resultados</div><br><br><br><br>'; 
-                    echo '<a href="banners.php" class="btn btn-default"><i class="glyphicon glyphicon-arrow-left"></i> Voltar</a><br><br>';} ?>
-                    <?php if(!isset($_GET['search'])){ echo '<a href="../forms/banners.form.php?action=create" class="btn btn-default">Inserir</a>'; } ?>
-                    <form class="navbar-form navbar-right" role="search" action="banners.php" method="GET">
-                        <div class="form-group" style="margin-left:-15%;">
+                    require_once '../../controllers/links.control.php';
+                    $lc = new ControllerLinks();
+                    $links = $lc->search($_GET['search']);
+                    echo '<div class="alert alert-success col-md-5" role="alert"> A pesquisa retornou '.count($links).' resultados</div><br><br><br><br>'; 
+                    echo '<a href="links.list.php" class="btn btn-default"><i class="glyphicon glyphicon-arrow-left"></i> Voltar</a><br><br>';} ?>
+                    <?php if(!isset($_GET['search'])){ echo '<a href="../forms/links.form.php?action=create" class="btn btn-default"><i class="glyphicon glyphicon-plus-sign"></i>  Inserir Link</a>'; } ?>
+                    <form class="navbar-form navbar-right" role="search" action="links.list.php" method="GET">
+                        <div class="form-group" style="margin-left:-25%;">
                             <label for="pesquisar">
                                 <div class="input-group">
-                                    <input name="search" type="text" class="form-control col-lg-1 col-md-1 col-sm-1 col-xs-1" placeholder="Pesquisar">
+                                    <input name="search" type="text"  class="form-control col-lg-1 col-md-1 col-sm-1 col-xs-1" placeholder="Pesquisar">
                                     <span class="input-group-btn">
-                                        <button type="submit" class="btn btn-default" name="botaoPesquisa">
+                                        <button type="submit" class="btn btn-success"  name="botaoPesquisa"> 
                                             <span class="glyphicon glyphicon-search"></span>
                                         </button>
                                     </span>
@@ -75,7 +75,7 @@ $banners = $bc->actionControl('selectAll', 1);
                             </label>
                         </div>
                     </form>
-                    Nome em ordem <a href="?ordem=c">Crescente</a> / <a href="?ordem=d">Decrescente</a>
+                    <div class="btn-group"><a href="" class="btn btn-success">Ordenar por:</a><a href="?ordem=c" class="btn btn-default"> <i class="glyphicon glyphicon-arrow-up"></i>Nome - Crescente</a> <a href="?ordem=d" class="btn btn-default"><i class="glyphicon glyphicon-arrow-down"></i>Nome - Decrescente</a></div>
                     <?php if(!isset($_GET['search'])){ ?>
                     <table cellspacing="5px" id="tabelaDados" class="table table-striped table-condensed table-bordered table-hover">
 
@@ -91,28 +91,24 @@ $banners = $bc->actionControl('selectAll', 1);
                         <th>Título</th>
                         <th>Descrição</th>
                         <th>Link</th>
-                        <th>Imagem</th>
-                        <th>Legenda</th>
                         <th>Ação</th>
                     </tr>
-                    <?php foreach($banners as $banner): ?>
+                    <?php foreach($links as $link): ?>
                     <tr>
-                        <td><?php echo $banner->getId();?></td>
-                        <td><?php echo $banner->getTitle();?></td>
-                        <td><?php echo $banner->getDescription();?></td>
-                        <td><?php echo $banner->getHref();?></td>
-                        <td><?php echo $banner->getSrc();?></td>
-                        <td><?php echo $banner->getAlt();?></td>
+                        <td><?php echo $link->getId();?></td>
+                        <td><?php echo $link->getTitle();?></td>
+                        <td><?php echo $link->getDescription();?></td>
+                        <td><?php echo $link->getUrl();?></td>
                         <td>
-                            <a href="../forms/banners.form.php?action=update&id=<?php echo $banner->getId(); ?>"> Alterar </a>
-                            <a href="../forms/banners.form.php?action=delete&id=<?php echo $banner->getId(); ?>"> Deletar </a>
+                            <a href="../forms/links.form.php?action=update&id=<?php echo $link->getId(); ?>"> Alterar </a>
+                            <a href="../forms/links.form.php?action=delete&id=<?php echo $link->getId(); ?>"> Deletar </a>
                         </td> 
                     </tr>
                 <?php endforeach; }?>
                 </table>
                 <?php
                 $f = new functions();
-                $f->pagination($bc->total[0]['count(*)']);
+                $f->pagination($lc->total[0]['count(*)']);
                 ?>
                 <script src="../../publics/js/jquery-1.10.2.js"></script>
                 <script>
@@ -120,7 +116,7 @@ $banners = $bc->actionControl('selectAll', 1);
                         $.ajax({
                             type: 'post',
                             data: 'page=1',
-                            url: '../parts/loaderBanners.php?ordem=<?php echo $_GET['ordem']; ?>',
+                            url: '../parts/loaderLinks.php?ordem=<?php echo $_GET['ordem']; ?>',
                             success: function(retorno) {
                                 $('#tabelaDados').html(retorno);
                             }
@@ -133,7 +129,7 @@ $banners = $bc->actionControl('selectAll', 1);
                         $.ajax({
                             type: 'post',
                             data: 'page=' + page,
-                            url: '../parts/loaderBanners.php',
+                            url: '../parts/loaderLinks.php',
                             success: function(retorno) {
                                 $('#tabelaDados').html(retorno);
                             }

@@ -117,6 +117,43 @@ class ControllerSecao extends Controller {
         ));
     }
 
+    protected function selecionarPaginacao($pag) {
+        $db = new Includes\Db();
+        $termoInicial = ($pag['pagina'] - 1) * $pag['limite'];
+        $sql = "select * from secao ";
+        if(isset($pag['pesquisa'])){
+            $sql = "select * from secao where name like '%".$pag['pesquisa']."%' or description like '%".$pag['pesquisa']."%'";
+        }
+        if (!isset($pag['ordenacao'])) {
+            $sql .= "ORDER BY idSecao DESC ";
+        } else if ($pag['ordenacao'] == "asc" || $pag['ordenacao'] == "desc") {
+            $sql .= "ORDER BY titulo " . $pag['ordenacao'] . " ";
+        }
+        $sql .= " LIMIT " . $termoInicial . "," . $pag['limite'];
+        $lines = $db->query($sql);
+        $profiles = array();
+        foreach ($lines as $line) {
+            $profile = new Secao();
+            $profile->setIdSecao($line["idsecao"]);
+            $profile->setTitulo($line["titulo"]);
+            $profile->setAlias($line["alias"]);
+            $profile->setDescricao($line["descricao"]);
+            $profiles[] = $profile;
+        }
+        return $profiles;
+    }
+
+    protected function contarPaginas($limite) {
+        $db = new Includes\Db();
+        $lines = $db->query("SELECT (count(*)/" . $limite . ") as pages FROM secao");
+        return ceil($lines[0]['pages']);
+    }
+    protected function contarPaginas2($pesquisa) {
+        $db = new Includes\Db();
+        $lines = $db->query("SELECT (count(*)/ 5 ) as pages FROM secao where titulo like '%".$pesquisa."%' or alias like '%".$pesquisa."%'");
+        return ceil($lines[0]['pages']);
+    }    
+    
     protected function delete($secao) {
         $db = new Includes\Db();
 

@@ -18,19 +18,23 @@ if (isset($_POST['action'])) {
         $menu->setLocalization($_POST['localization']);
         $menu->setTitle($_POST['title']);
         $cM->actionControl("insert", $menu);
-        header("location: ../lists/menu.list.php");
+        
+        header("location: ../lists/menu.list.php?return=insert");
     }
+        
+    
     if ($_POST['action'] == 'update') {
         $menu->setIdMenu($_POST['idMenu']);
         $menu->setDescription($_POST['description']);
         $menu->setLocalization($_POST['localization']);
         $menu->setTitle($_POST['title']);
         $cM->actionControl("update", $menu);
-        header("location: ../lists/menu.list.php");
+        header("location: ../lists/menu.list.php?return=update");
     } else {
         echo "sem ação";
+        die();
     }
-}if (isset($_GET['action']) && $_GET['action'] == "update") {
+} if (isset($_GET['action']) && $_GET['action'] == "update") {
 
     $men = new Menu();
     $men->setIdMenu($_GET['idMenu']);
@@ -76,6 +80,7 @@ if (isset($_POST['action'])) {
         <div id="content">
             <div class="col-md-12"><h2><center>Cadastro de Menus</center></h2><hr></div>
             <div class="container img-rounded BVerde">
+                
                 <form action="menu.form.php" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="action" value="<?php
                     if (isset($_GET["action"])) {
@@ -88,15 +93,15 @@ if (isset($_POST['action'])) {
                     }
                     ?>">
 
-                    <div class="col-md-6">
-                        <label> Título: </label> <input type="text" name="title" class="form-control" placeholder="Max: 30 caractéres." pattern="[a-zA-Z-0-9]+{3,30}" value="<?php
+                    <div class="form-group">
+                        <label> Título: <span style="color: red;">*</span></label> <input required type="text" name="title" class="form-control" placeholder="Max: 30 caractéres." pattern="[a-zA-Z-0-9]+{3,30}" value="<?php
                         if (isset($menu) && $menu->getTitle() != "") {
                             echo $menu->getTitle();
                         }
                         ?>">
                     </div>
-                    <div class="col-md-6">
-                        <label>Localização Menu:</label> <select name="localization" class="form-control">
+                    <div class="form-group">
+                        <label>Localização Menu: <span style="color: red;">*</span></label> <select name="localization" class="form-control">
                             <option  value="E" <?php
                             if (isset($menu) && $menu->getLocalization() == "E") {
                                 echo "selected";
@@ -111,18 +116,19 @@ if (isset($_POST['action'])) {
                         </select>
                     </div>
 
-                    <div class="col-md-12">
-                        <label>Descrição:</label> <textarea name="description" class="form-control" placeholder="Max: 120 caractéres" pattern="[a-zA-Z-0-9]+{3,120}"> <?php
+                    <div class="for-group">
+                        <label>Descrição: </label> <textarea  name="description" class="form-control"  required> <?php
                             if (isset($menu) && $menu->getDescription() != "") {
                                 echo $menu->getDescription();
                             }
                             ?></textarea><br/>
                     </div>
 
-
+                    <a class='btn btn-default' title='Cancelar' href='../lists/menu.list.php'>Cancelar</a>
                     <input type="submit" name="button" class="btn btn-success" value="Cadastrar"><br>
                 </form>
-            </div></div>
+            </div>
+        </div>
         <script type="text/javascript" charset="utf-8">
         </script>
 

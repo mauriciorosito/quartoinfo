@@ -13,7 +13,7 @@ require_once('../../system/limited.php');
 
 if (isset($_GET["action"], $_GET["idSecao"])) {
     if ($_GET["action"] == "delete") {
-        echo "<script>Alert('Tem certeza que deseja excluir');</script>";
+        //echo "<script>alert('Tem certeza que deseja excluir');</script>";
         $secao = new Secao();
         $secao->setIdSecao($_GET["idSecao"]);
         $cu = new ControllerSecao();
@@ -38,30 +38,42 @@ if (isset($_GET["action"], $_GET["idSecao"])) {
 }
 
 if (isset($_POST["action"])) {
+    if($_POST['cod'] != 5512 ){
+        echo "<script>alert('Página Bloqueada! ');</script>";
+        die;
+    }
     $secao = new Secao();
     $secao->setIdSecao($_POST["idSecao"]);
     $secao->setTitulo($_POST["titulo"]);
-    $secao->setAlias($_POST["alias"]);
+    
+    $varLimpa = preg_replace( '/[`^~\'"]/', null, iconv( 'UTF-8', 'ASCII//TRANSLIT', $_POST["alias"] ) );
+    $varLimpa = str_replace(" ", "_", $varLimpa);
+    $secao->setAlias($varLimpa);
+    
     $secao->setDescricao($_POST["descricao"]);
    
     $cu = new ControllerSecao();
     $compTitle = $cu->verifyExistenceSecao($secao);
     //var_dump($compTitle[0]['titulo']);
     //break;
-    if($compTitle[0]['titulo'] != $_POST["titulo"]){
-        
+    if($_POST['action'] == 'update'){
         $cu->actionControl($_POST["action"], $secao);
         echo "<script>$('#ol-caminho').html('Cadastro Realizado com Sucesso !!!');</script>";
-        header('location: ../lists/secao.list.php');
-
-     }else{
-        header('location: ../lists/secao.list.php?erro=Nomeduplicado');
-     }
-    
-    
+        header('location: ../lists/secao.list.php');        
+    }else{            
+        if($compTitle[0]['titulo'] != $_POST["titulo"]){
+            $cu->actionControl($_POST["action"], $secao);
+            echo "<script>$('#ol-caminho').html('Cadastro Realizado com Sucesso !!!');</script>";
+            header('location: ../lists/secao.list.php');
+         }else{
+            echo "<script>alert('Seção já existente !');</script>";
+            //header('location: ../lists/secao.list.php?erro=Nomeduplicado');
+         }
+    }
 }
 ?>
 <form action="secao.form.php" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="cod" value="5512" />
     <input type="hidden" name="action" value="<?php
     if (isset($_GET["action"])) {
         echo $_GET["action"];
@@ -75,7 +87,7 @@ if (isset($_POST["action"])) {
     <input type="hidden" name="canReceiveContent" value="0">
     <table style="width:100%;padding:10px;">
         <tr>
-            <td>Titulo: <input type="text" name="titulo" class="form-control" value="<?php
+            <td>Titulo: <input type="text" size="255" name="titulo" class="form-control" value="<?php
                 if (isset($secao) && $secao->getTitulo() != "") {
                     echo $secao->getTitulo();
                 }
@@ -91,7 +103,7 @@ if (isset($_POST["action"])) {
 			</td>
         </tr>
         <tr>
-            <td colspan=2>Descrição: <textarea name="descricao" value="" class="textarea form-control" placeholder="Enter text ..." style="width: 810px; height: 200px"> <?php
+            <td colspan=2>Descrição: <textarea name="descricao" value="" class="textarea form-control" placeholder="texto ..." style="width: 810px; height: 200px"> <?php
                     if (isset($secao) && $secao->getDescricao() != "") {
                         echo $secao->getDescricao();
                     }
@@ -111,6 +123,7 @@ if (isset($_POST["action"])) {
     }
     ?>
     <button class="btn btn-default" type="reset" name="reset"><i class="glyphicon glyphicon-repeat"></i>&nbsp;Limpar Campos</button>
+    <a href="../lists/secao.list.php" class="btn btn-default"  ><i class="glyphicon glyphicon-repeat"></i>&nbsp;Voltar</a>
     <br>
 </form>
 

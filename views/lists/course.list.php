@@ -14,6 +14,18 @@ $limited->check(array('A'));
 
 $cCourse = new ControllerCourse();
 
+$pagina = (!isset($_GET['pagina'])) ? 1 : filter_var($_GET['pagina'], FILTER_SANITIZE_NUMBER_INT);
+
+$pag = array();
+$pag['pagina'] = $pagina;
+$pag['limite'] = 5;
+
+$courses= $cCourse->actionControl("selecionarPaginacao", $pag);
+$cont = $cCourse->actionControl("contarPaginas", 5);
+if (isset($_GET['pesquisa'])) {
+    $cont = $cCourse->actionControl("contarPaginas2", $_GET['pesquisa']);
+}
+
 if (isset($_POST["pesquisa"])) {
     $pesquisa = filter_var($_POST["pesquisa"]);
 } else {
@@ -29,6 +41,7 @@ if (isset($_GET["ordenacao"])) {
 } else {
     $courses = $cCourse->actionControl("selectAllGrowing", $pesquisa);
 }
+
 
 //$cCourse = new ControllerCourse();
 //$courses = $cCourse->actionControl("selectAll");
@@ -89,6 +102,7 @@ if (isset($_GET["ordenacao"])) {
                             &nbsp; Inserir Curso
                         </a> 
                     </div>
+                   
                     <div class="col-md-5 col-sm-12 col-xs-12">
                         <div class="btn-group">
                             <a href="" class="btn btn-success">Ordenar por:</a>
@@ -109,6 +123,11 @@ if (isset($_GET["ordenacao"])) {
                         </form>
                     </div>
                 </div>
+                   <?php
+        if (isset($_GET["msg"])) {
+            echo $_GET['msg'];
+        }
+        ?>
                 <hr/>
                  <?php if (count($courses) != 0) { ?>
                 <table class="table table-striped table-condensed table-bordered table-hover">
@@ -160,7 +179,7 @@ if (isset($_GET["ordenacao"])) {
                     </tbody>
                 </table>
                                 
-<!--                <center>
+<center>
                     <?php
                     echo "<hr/>";
                     echo "<div class='btn-group'>";
@@ -170,8 +189,11 @@ if (isset($_GET["ordenacao"])) {
                         if (isset($_GET['ordenacao'])) {
                             echo "ordenacao=" . $_GET['ordenacao'] . "&";
                         }
+                        if (isset($_GET['pesquisa'])) {
+                            echo "pesquisa=" . $_GET['pesquisa'] . "&";
+                        }
                         echo "pagina=" . $flag . "'><span class='glyphicon glyphicon-chevron-left'></span></a>";
-                    } else{
+                    } else {
                         $flag = $pagina - 1;
                         echo "<a type='button' disabled class='btn btn-default' href=''><span class='glyphicon glyphicon-chevron-left'></span></a>";
                     }
@@ -181,15 +203,18 @@ if (isset($_GET["ordenacao"])) {
                         if (isset($_GET['ordenacao'])) {
                             echo "ordenacao=" . $_GET['ordenacao'] . "&";
                         }
+                        if (isset($_GET['pesquisa'])) {
+                            echo "pesquisa=" . $_GET['pesquisa'] . "&";
+                        }
                         echo "pagina=" . ($pagina + 1) . "'><span class='glyphicon glyphicon-chevron-right'></span></a>";
-                    } else{
+                    } else {
                         $flag = $pagina - 1;
                         echo "<a type='button' disabled class='btn btn-default' href=''><span class='glyphicon glyphicon-chevron-right'></span></a>";
                     }
                     echo "</div>";
                     echo "<p>&nbsp;</p>";
                     ?>
-                </center>-->
+                </center>
             </div>
             <!-- /.container -->
         </div>
@@ -204,7 +229,7 @@ if (isset($_GET["ordenacao"])) {
         <script type="text/javascript" src="publics/js/rhinoslider-1.05.js"></script>
         <script type="text/javascript" src="publics/js/mousewheel.js"></script>
         <script type="text/javascript" src="publics/js/easing.js"></script>
-
+      
     </body>
 
 </html>

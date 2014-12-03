@@ -39,13 +39,25 @@ class ControllerMenu extends Controller {
 
     protected function insert($menu) {
         $db = new Includes\Db();
-        return $db->query('insert into menu (title, description, localization) values 
-		(:title, :description, :localization) ', array(
-                    'title' => $menu->getTitle(),
-                    'description' => $menu->getDescription(),
-                    'localization' => $menu->getLocalization(),
+        $line = $db->query('select count(*) as quantidade from menu where title = :title', array(
+            'title' => $menu->getTitle(),
         ));
+
+        $qtde = $line[0]["quantidade"];
+
+        if ($qtde > 0) {
+            header("location: ../lists/menu.list.php?erro=menuCadastrado");
+            die();
+        } else {
+            return $db->query('insert into menu (title, description, localization) values 
+		(:title, :description, :localization) ', array(
+                        'title' => $menu->getTitle(),
+                        'description' => $menu->getDescription(),
+                        'localization' => $menu->getLocalization(),
+            ));
+        }
     }
+    
 
     protected function update($menu) {
         $db = new Includes\Db();
@@ -71,11 +83,21 @@ class ControllerMenu extends Controller {
 
         $termoInicial = ($pag['pagina'] - 1) * $pag['limite'];
         $sql = "select * from menu ";
+        
+        if (isset($pag['pesquisa'])){
+            $sql .= " where title like '%" . $pag['pesquisa'] . "%' or description like '%".$pag['pesquisa']."%'";
+        }
+        
+        
         if (!isset($pag['ordenacao'])) {
             $sql .= "ORDER BY idMenu DESC ";
         } else if ($pag['ordenacao'] == "asc" || $pag['ordenacao'] == "desc") {
             $sql .= "ORDER BY title " . $pag['ordenacao'] . " ";
+        } else if ($pag['ordenacao'] == "localizacao") {
+            $sql .= "ORDER BY localization asc ";
         }
+        
+       
 
         $sql .= " LIMIT " . $termoInicial . "," . $pag['limite'];
         $lines = $db->query($sql);

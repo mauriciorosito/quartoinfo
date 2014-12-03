@@ -1,5 +1,5 @@
 <?php
-class secao {
+class Secao {
 
     private $idsecao;
 	private $titulo;

@@ -18,7 +18,7 @@ if (isset($_GET["action"], $_GET["idCategory"])) {
         $category->setIdCategory($_GET["idCategory"]);
         $cc = new ControllerCategory();
         $cc->actionControl($_GET["action"], $category);
-       header("location: ../lists/list.category.php");
+       header("location: ../lists/list.category.php?alert=delete");
     } else {
         $category = new \models\Category();
         $category->setIdCategory($_GET["idCategory"]);
@@ -44,9 +44,7 @@ if (isset($_POST["action"])) {
     $cc = new ControllerCategory();
     $cc->actionControl($_POST["action"], $category);
 
-   
-   
-    header("location: ../lists/list.category.php");
+    header("location: ../lists/list.category.php?alert=".$_POST['action']);
 }
 ?>
 <form action="content.form.category.php" method="post" enctype="multipart/form-data">
@@ -85,7 +83,7 @@ if (isset($_POST["action"])) {
 	<br>
     <input type="submit" name="button" value="<?php if (isset($_GET["action"])) {
     echo ucwords($_GET["action"]);
-} ?>"><br>
+} ?>">&nbsp;&nbsp;&nbsp;<a href="../lists/list.category.php">Voltar</a><br>
 </form>
 
 <!-- FIM DO categoryE-->
