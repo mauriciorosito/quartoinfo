@@ -89,6 +89,43 @@ class ControllerContent extends Controller {
 		return $contents;
 	}
 	
+	protected function selectOnePage($content){
+		$db = new Includes\Db();
+		$lines = $db->query("select * from content where idContent = :idContent and type='P'", array(
+			'idContent' => $content->getIdContent(),
+		));
+		
+		if($lines == null) {
+			return null;
+		}
+		
+		$content = new Content();
+		$content->setIdContent($lines[0]["idContent"]);
+		$content->setPublisher($lines[0]["publisher"]);
+		$content->setSource($lines[0]["source"]);
+		$content->setTitle($lines[0]["title"]);
+		$content->setText($lines[0]["text"]);
+		$content->setDescription($lines[0]["description"]);
+		$content->setPostDate($lines[0]["postDate"]);
+		$content->setExpirationDate($lines[0]["expirationDate"]);
+		$content->setType($lines[0]["type"]);
+
+		$contentMedia = new contentMedia;
+		$contentMedia->setIdContent($content->getIdContent());
+		$controllerContentMedia = new ControllerContentMedia();
+		$contentMedia = $controllerContentMedia->actionControl('selectAll', $contentMedia);
+
+		$content->set_Medias($contentMedia);
+
+
+		$contentCategory = new contentCategory;
+		$contentCategory->setIdContent($content->getIdContent());
+		$controllerContentMedia = new ControllerContentCategory();
+		$contentCategory = $controllerContentMedia->actionControl('selectAll', $contentCategory);
+		$content->set_Category($contentCategory);
+			
+		return $content;
+	}
 	
 	protected function selectOne($content){
 		$db = new Includes\Db();
